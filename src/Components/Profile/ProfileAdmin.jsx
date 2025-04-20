@@ -4,7 +4,7 @@ import axios from 'axios';
 import { GrCircleInformation } from 'react-icons/gr';
 import { IoIosLogOut } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
-import { AdminContext } from '../../context/AdminContext';
+import { AdminContext } from '../../Context/AdminContext';
 export default function ProfileAdmin() {
 
     let {setAdminLogin} = useContext(AdminContext);
