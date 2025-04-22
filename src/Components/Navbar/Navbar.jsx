@@ -16,6 +16,7 @@ export default function Navbar() {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    // Function to handle logout
     function logOut() {
         localStorage.removeItem("UserToken");
         localStorage.removeItem("TechnicalToken");
@@ -29,7 +30,7 @@ export default function Navbar() {
         navigate('/login', { replace: true });
     }
 
-    
+
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     // Render links based on role
@@ -40,30 +41,30 @@ export default function Navbar() {
             return (
                 <>
                     <NavLink to="/home" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Home</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/services" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Services</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/about" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">About</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/contactus" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Contact Us</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/cars" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Cars</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/requestsuser" className="text-2xl text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">
                         <FaClipboardList />
                     </NavLink>
                 </>
             );
-        } 
+        }
 
         // Check if the technical logged in and render links accordingly
         else if (TechnicalLogin) {
             return (
                 <>
                     <NavLink to="/requeststechnical" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">All Requests</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/requestspending" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Request Pending</NavLink>
-                    <hr className='text-white w-full p-0 m-0 md:hidden'/>
+                    <hr className='text-white w-full p-0 m-0 md:hidden' />
                     <NavLink to="/requestssorted" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Request Sorted</NavLink>
                 </>
             );
@@ -80,11 +81,11 @@ export default function Navbar() {
 
     return (
         <div className="bg-[#0B4261] p-3 flex items-center justify-between rounded-lg relative">
-        {/* Logo */}
-        <div className="flex items-center">
-            <img src={logo} className="w-[50px] h-[50px] mr-2" alt="Logo" />
-            <h1 className="text-3xl text-white font-bold">CarCare</h1>
-        </div>
+            {/* Logo */}
+            <div className="flex items-center">
+                <img src={logo} className="w-[50px] h-[50px] mr-2" alt="Logo" />
+                <h1 className="text-3xl text-white font-bold">CarCare</h1>
+            </div>
 
             {/* Desktop Links */}
             <div className="hidden md:flex space-x-6 items-center">
@@ -126,7 +127,7 @@ export default function Navbar() {
 
             {/* Dropdown Mobile Menu */}
             {isMenuOpen && (
-                <div className="absolute top-full right-0 w-[200px] rounded-md bg-[#2352a1] flex flex-col items-start p-4 space-y-3 md:hidden z-50">
+                <div className="absolute top-full right-0 w-[200px] rounded-md bg-[#0B4261] flex flex-col items-start p-4 space-y-3 md:hidden z-50">
                     {renderLinks()}
                     {(UserLogin || AdminLogin || TechnicalLogin) ? null : (
                         <>

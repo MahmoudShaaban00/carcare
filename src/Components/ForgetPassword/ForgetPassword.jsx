@@ -43,10 +43,11 @@ export default function ForgetPassword() {
   return (
     <div className="mt-2 ">
       <div className="mt-10 place-items-center">
-        <h1 className="text-5xl text-blue-950">Forget Password</h1>
+        <h1 className="lg:text-5xl text-3xl text-blue-950">Forget Password</h1>
         <p className="text-lg font-semibold mt-2 text-blue-950">Enter your email to reset your password</p>
       </div>
 
+      {/* Form for email input and submit button */}
       <form onSubmit={formik.handleSubmit} className="place-items-center">
         {/* Email Input */}
         <div className="mt-10">
@@ -63,7 +64,7 @@ export default function ForgetPassword() {
 
         {/* Submit Button */}
         <div>
-          <button type="submit" className="text-lg mt-10 bg-blue-800 text-white sm:w-[500px] w-[300px] p-3 rounded-full cursor-pointer hover:bg-slate-400 hover:text-white">
+          <button type="submit" className="md:text-lg text-sm mt-10 bg-blue-800 text-white sm:w-[500px] w-[300px] p-3 rounded-full cursor-pointer hover:bg-slate-400 hover:text-white">
             SEND RESET LINK
           </button>
         </div>

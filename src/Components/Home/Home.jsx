@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div>
 
-<button onClick={() => {document.getElementById('add-car-section')?.scrollIntoView({ behavior: 'smooth' });}}
+      <button onClick={() => { document.getElementById('add-car-section')?.scrollIntoView({ behavior: 'smooth' }); }}
         className="fixed top-24 right-4 z-50 bg-[#0B4261] text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 flex items-center gap-2">
         <span>Add Car</span>
         <FaPlus />
@@ -107,27 +107,36 @@ export default function Home() {
       {/* end advantage */}
 
       {/* start section google play */}
-      <div className='mt-40 w-full  pb-10 bg-[#0B4261] flex justify-around relative font-serif' data-aos='fade-right' data-aos-delay='600' data-aos-duration='1000'>
-        <div>
-          <img src={imageapp} className='absolute lg:bottom-[-100px] bottom-[-60px] lg:w-[200px] w-[160px] ' />
+      <div className='mt-40 w-full pb-10 bg-[#0B4261] flex flex-col-reverse lg:flex-row items-center justify-between px-6 lg:px-16 relative font-serif'
+        data-aos='fade-right' data-aos-delay='600' data-aos-duration='1000'>
+
+
+        {/* Text Content */}
+        <div className='w-full lg:w-1/2 text-center lg:text-left mt-10 lg:mt-0'>
+          <h1 className='text-white text-xl sm:text-2xl md:text-3xl pt-4'>Download the App Now</h1>
+          <p className='bg-white w-20 h-1 my-2 mx-auto lg:mx-0'></p>
+          <p className='text-white text-sm md:text-base'>
+            The CarCare app is available on Apple, Google, and Huawei stors.
+          </p>
+          <img src={googleplay} className='mt-4 mx-auto lg:mx-0 w-[120px] md:w-[170px]' alt='Google Play' />
         </div>
 
-        <div className='place-items-left '>
-          <h1 className='text-white md:text-3xl text-xl pt-12 text-left'>Download the App Now</h1>
-          <p className="bg-white w-20 my-2 h-1 "></p>
-          <p className="text-white ml-auto">The Care Car app is available on Apple, Google, and Huawei stores.</p>
-          <img src={googleplay} className='mt-3 mx-auto md:w-[170px] w-[120px]' />
+        {/* App Image */}
+        <div className='w-full lg:w-1/2 flex justify-center lg:justify-end relative'>
+          <img src={imageapp} className='w-[140px] md:w-[180px] lg:w-[180px] lg:absolute lg:bottom-[-150px]' alt='App Screenshot' />
         </div>
-
       </div>
       {/* end section google play */}
 
       {/* start section slider */}
-      <div className='mt-52 font-serif ml-28' data-aos='fade-up' data-aos-delay='600' data-aos-duration='1000'>
-        <h1 className='text-2xl text-left mr-16 text-[#0B4261] font-bold'>Cars We Can Repair</h1>
-        <p className="bg-[#0B4261] w-16 mr-16 mt-2 h-1 "></p>
+      <div className='mt-52 font-serif px-6 sm:px-16 md:px-28' data-aos='fade-up' data-aos-delay='600' data-aos-duration='1000'>
+        <h1 className='text-2xl sm:text-3xl md:text-4xl text-left mr-16 text-[#0B4261] font-bold'>
+          Cars We Can Repair
+        </h1>
+        <p className="bg-[#0B4261] w-16 sm:w-20 md:w-24 mt-2 h-1"></p>
         <ImageSlider />
       </div>
+
       {/* end section slider */}
 
 
@@ -169,7 +178,7 @@ export default function Home() {
 
       {/* start questions */}
       <div className='mt-36 mb-40 font-serif' data-aos='fade-up' data-aos-delay='600' data-aos-duration='1000'>
-        <h1 className='text-5xl text-center bg-[#0B4261]font-bold'>Frequently Asked Questions</h1>
+        <h1 className='md:text-5xl text-3xl text-center bg-[#0B4261]font-bold'>Frequently Asked Questions</h1>
 
         <div className="space-y-6 mt-16">
           {/* Accordion 1 */}

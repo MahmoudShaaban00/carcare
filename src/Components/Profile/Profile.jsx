@@ -14,12 +14,12 @@ export default function Profile() {
   // varaibles for store data
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({fullName: '', email: '',phoneNumber: ''});
+  const [formData, setFormData] = useState({ fullName: '', email: '', phoneNumber: '' });
 
-    // Feedback state
-    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-    const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState("");
+  // Feedback state
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
 
   let navigate = useNavigate();
@@ -86,56 +86,56 @@ export default function Profile() {
       console.error("Error updating user data:", error);
     }
   };
- 
- //create feed back
- const createFeedBack = async () => {
-  try {
-    const token = localStorage.getItem('UserToken');  
-    console.log('Token:', token);  
-    if (!token) {
-      console.error('Token not found');
-      return;  
-    }
 
-    if (comment.trim() === "") {
-      console.error('Comment cannot be empty');
-      return;  
-    }
-
-    const feedbackData = {
-      comment: comment,
-      rating: rating
-    };
-
-    console.log('Feedback Data:', feedbackData);  
-
-    const response = await axios.post('https://carcareapp.runasp.net/api/FeedBack/CreateFeedBack', feedbackData, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+  //create feed back
+  const createFeedBack = async () => {
+    try {
+      const token = localStorage.getItem('UserToken');
+      console.log('Token:', token);
+      if (!token) {
+        console.error('Token not found');
+        return;
       }
-    });
 
-    console.log('Feedback submitted successfully:', response.data);
-    
-    if (response.data && response.data.id) {
-      localStorage.setItem('FeedBackId' , response.data.id )
-      console.log('Feedback ID:', response.data.id);
+      if (comment.trim() === "") {
+        console.error('Comment cannot be empty');
+        return;
+      }
+
+      const feedbackData = {
+        comment: comment,
+        rating: rating
+      };
+
+      console.log('Feedback Data:', feedbackData);
+
+      const response = await axios.post('https://carcareapp.runasp.net/api/FeedBack/CreateFeedBack', feedbackData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Feedback submitted successfully:', response.data);
+
+      if (response.data && response.data.id) {
+        localStorage.setItem('FeedBackId', response.data.id)
+        console.log('Feedback ID:', response.data.id);
+      }
+
+      setIsFeedbackOpen(false);
+    } catch (error) {
+      if (error.response?.data?.message === "You Already Add FeedBack Please Update Your FeedBack or Enter a Comment") {
+        console.error('Feedback already submitted. Please update your feedback.');
+      } else {
+        console.error('Error submitting feedback:', error.response?.data || error.message);
+      }
     }
+  };
 
-    setIsFeedbackOpen(false);  
-  } catch (error) {
-    if (error.response?.data?.message === "You Already Add FeedBack Please Update Your FeedBack or Enter a Comment") {
-      console.error('Feedback already submitted. Please update your feedback.');
-    } else {
-      console.error('Error submitting feedback:', error.response?.data || error.message);
-    }
-  }
-};
-
-useEffect(() => {
-  getCurrentUser();
-}, []);
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
@@ -144,7 +144,7 @@ useEffect(() => {
         Manage your account settings and personal details.
       </p>
 
-        {/*show infromation of user */}
+      {/*show infromation of user */}
       {userData ? (
         <div className="bg-white shadow-lg p-6 rounded-2xl place-items-center w-3/4 md:w-1/2 text-center">
           <img src={imguser} alt="User" className="rounded-full mx-auto w-32 h-32 mb-4" />
@@ -158,7 +158,7 @@ useEffect(() => {
             <FaRegEdit size={20} />
             <button className="text-xl ml-1 ">Edit</button>
           </div>
-          
+
           {/*edit information */}
           {isEditing && (
             <div className="mt-4 p-4 border border-gray-300 rounded-lg">
@@ -180,48 +180,49 @@ useEffect(() => {
 
       {/*actions for in profile user */}
       <div className="mt-8 bg-white shadow-lg p-6 rounded-2xl w-3/4 md:w-1/2">
+      
         {/*action for change password */}
         <div className="flex items-center gap-2 text-blue-800 mb-4">
           <MdOutlinePublishedWithChanges className="text-2xl" />
           <Link to="/changepassword" className="text-lg hover:underline">Change Password</Link>
         </div>
 
-  {/* Feedback button */}
-  <div className="flex items-center gap-2 text-blue-800 mb-4">
-        <MdOutlinePublishedWithChanges className="text-2xl" />
-        <button onClick={() => setIsFeedbackOpen(true)} className="text-lg hover:underline">Feedback</button>
-      </div>
-
-      {/* Handle feedback modal */}
-      {isFeedbackOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-            <button  onClick={() => setIsFeedbackOpen(false)}  className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"> ✖</button>
-            <h2 className="text-xl font-semibold text-center">Rate Your Experience</h2>
-
-            {/* Star Rating */}
-            <div className="flex justify-center space-x-2 mt-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar key={star} className={`cursor-pointer text-3xl ${rating >= star ? "text-yellow-500" : "text-gray-400"}`} onClick={() => handleStarClick(star)}/>
-              ))}
-            </div>
-
-            {/* Rating Slider */}
-            <div className="flex justify-center mt-4">
-              <input type="range" min="0" max="5" step="0.1" value={rating} onChange={(e) => setRating(parseFloat(e.target.value))} className="w-3/4"/>
-            </div>
-
-            {/* Feedback Input */}
-            <textarea className="w-full mt-4 p-2 border rounded-lg" placeholder="Write your feedback..." value={comment} onChange={(e) => setComment(e.target.value)} />
-
-            {/* Submit Button */}
-            <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg w-full" onClick={createFeedBack} disabled={rating === 0 || comment.trim() === ""} >
-              Submit
-            </button>
-          </div>
-
+        {/* Feedback button */}
+        <div className="flex items-center gap-2 text-blue-800 mb-4">
+          <MdOutlinePublishedWithChanges className="text-2xl" />
+          <button onClick={() => setIsFeedbackOpen(true)} className="text-lg hover:underline">Feedback</button>
         </div>
-      )}
+
+        {/* Handle feedback modal */}
+        {isFeedbackOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 md:mx-0 mx-3">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+              <button onClick={() => setIsFeedbackOpen(false)} className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"> ✖</button>
+              <h2 className="text-xl font-semibold text-center">Rate Your Experience</h2>
+
+              {/* Star Rating */}
+              <div className="flex justify-center space-x-2 mt-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <FaStar key={star} className={`cursor-pointer text-3xl ${rating >= star ? "text-yellow-500" : "text-gray-400"}`} onClick={() => handleStarClick(star)} />
+                ))}
+              </div>
+
+              {/* Rating Slider */}
+              <div className="flex justify-center mt-4">
+                <input type="range" min="0" max="5" step="0.1" value={rating} onChange={(e) => setRating(parseFloat(e.target.value))} className="w-3/4" />
+              </div>
+
+              {/* Feedback Input */}
+              <textarea className="w-full mt-4 p-2 border rounded-lg" placeholder="Write your feedback..." value={comment} onChange={(e) => setComment(e.target.value)} />
+
+              {/* Submit Button */}
+              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg w-full" onClick={createFeedBack} disabled={rating === 0 || comment.trim() === ""} >
+                Submit
+              </button>
+            </div>
+
+          </div>
+        )}
 
         {/*action for legal information */}
         <div className="flex items-center gap-2 text-blue-800 mb-4">

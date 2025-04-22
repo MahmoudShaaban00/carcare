@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
-    
+
     // Initialize navigate for programmatic navigation
     let navigate = useNavigate();
 
@@ -55,7 +55,7 @@ export default function ResetPassword() {
     return (
         <div className='mt-2 '>
             <div className='mt-10 place-items-center'>
-                <h1 className='text-5xl text-blue-950'>Reset Password</h1>
+                <h1 className='md:text-5xl text-3xl text-blue-950'>Reset Password</h1>
                 <p className='text-lg font-semibold mt-2 text-blue-950'>Enter your new password</p>
             </div>
 
@@ -63,7 +63,7 @@ export default function ResetPassword() {
             <form onSubmit={formik.handleSubmit} className='place-items-center'>
                 <div className="mt-10">
                     <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="email" name="email" id="email" value={formik.values.email} placeholder="Email"
-                        className="border-2 sm:w-[500px] p-3 rounded-full placeholder-black text-left w-[300px]"/>
+                        className="border-2 sm:w-[500px] p-3 rounded-full placeholder-black text-left w-[300px]" />
                     {formik.errors.email && formik.touched.email ? (
                         <div className="flex items-center mx-auto sm:w-[500px] w-[300px] p-4 mt-2 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
                             {formik.errors.email}
@@ -72,16 +72,8 @@ export default function ResetPassword() {
                 </div>
 
                 <div className='mt-4'>
-                    <input
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        type="password"
-                        name='newPassword'
-                        id='newPassword'
-                        value={formik.values.newPassword}
-                        className="border-2 sm:w-[500px] w-[300px] p-3 rounded-full placeholder-black text-left"
-                        placeholder='New Password'
-                    />
+                    <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="password" name='newPassword' id='newPassword'
+                        value={formik.values.newPassword} className="border-2 sm:w-[500px] w-[300px] p-3 rounded-full placeholder-black text-left" placeholder='New Password' />
                     {formik.errors.newPassword && formik.touched.newPassword ? (
                         <div className="flex items-center mx-auto sm:w-[500px] w-[300px] p-4 mt-2 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
                             {formik.errors.newPassword}
@@ -90,7 +82,7 @@ export default function ResetPassword() {
                 </div>
 
                 <div>
-                    <button type="submit" className='text-lg mt-10 bg-blue-800 text-white sm:w-[500px] w-[300px] p-3 rounded-full cursor-pointer hover:bg-slate-400 hover:text-white'>
+                    <button type="submit" className='md:text-lg text-sm mt-10 bg-blue-800 text-white sm:w-[500px] w-[300px] p-3 rounded-full cursor-pointer hover:bg-slate-400 hover:text-white'>
                         RESET PASSWORD
                     </button>
                 </div>

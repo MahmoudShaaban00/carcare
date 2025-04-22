@@ -56,15 +56,8 @@ const ImageSlider = () => {
           }}
         >
           {images.map((image, index) => (
-            <div
-              key={index}
-              className="w-1/3 flex-shrink-0 flex justify-center items-center p-2"
-            >
-              <img
-                src={image}
-                alt={`Slide ${index + 1}`}
-                className="w-[170px] h-auto rounded-lg"
-              />
+            <div key={index} className="w-1/3 flex-shrink-0 flex justify-center items-center p-2" >
+              <img src={image} alt={`Slide ${index + 1}`} className="w-[170px] h-auto rounded-lg"/>
             </div>
           ))}
         </div>

@@ -75,7 +75,7 @@ export default function ProfileTech() {
 
   //function logout data
   function logOut() {
-    localStorage.removeItem("UserToken");
+    localStorage.removeItem("TechnicalToken");
     setUserLogin(null);
     navigate('/login');
   }

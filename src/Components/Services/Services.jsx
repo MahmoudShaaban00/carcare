@@ -7,6 +7,7 @@ import { LocationContext } from '../../Context/LocationContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Services() {
+    
     const { coordinates } = useContext(LocationContext);
     const navigate = useNavigate();
 
@@ -37,23 +38,30 @@ export default function Services() {
 
     // Function to handle service selection
     const startStatusCheck = () => {
+        isCheckingDoneRef.current = false;
+        setShowLoadingModal(true);
+
         intervalRef.current = setInterval(() => {
             checkStatusRequest();
         }, 30000); // every 30s
-    
+
         timeoutRef.current = setTimeout(() => {
             if (!isCheckingDoneRef.current) {
-                isCheckingDoneRef.current = true;
-                clearInterval(intervalRef.current);
-                clearTimeout(timeoutRef.current);
-                setShowLoadingModal(false);
+                console.log("5 minutes passed — no response.");
+                stopStatusCheck();
                 setIsCanceled(true);
                 setShowCard(true);
-                console.log('5 minutes passed — stopped checking and showing card again.');
             }
-        }, 300000); // 5 mins
+        }, 300000); // 5 minutes
     };
-     
+
+    const stopStatusCheck = () => {
+        clearInterval(intervalRef.current);
+        clearTimeout(timeoutRef.current);
+        isCheckingDoneRef.current = true;
+        setShowLoadingModal(false);
+    };
+
     // Function to handle map close
     useEffect(() => {
         getServices();
@@ -62,7 +70,7 @@ export default function Services() {
             getAllTechnicals(selectedService.id, coordinates[1], coordinates[0]);
             getNearestTechnical(selectedService.id, coordinates[1], coordinates[0]);
         }
-        
+
         return () => {
             clearInterval(intervalRef.current);
             clearTimeout(timeoutRef.current);
@@ -289,33 +297,27 @@ export default function Services() {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            const status = 'InProgress';
+            const status = response.data.status; // Make sure your API response has this structure
             console.log('Current status:', status);
 
             if (status === 'InProgress') {
-                isCheckingDoneRef.current = true;
-                clearInterval(intervalRef.current);
-                clearTimeout(timeoutRef.current);
-                setShowLoadingModal(false);
+                console.log('Status is InProgress — navigating to payment.');
+                stopStatusCheck();
                 navigate('/payment');
-                console.log('Status is InProgress — navigating to payment.')
             } else if (status === 'Canceled') {
-                isCheckingDoneRef.current = true;
-                clearInterval(intervalRef.current);
-                clearTimeout(timeoutRef.current);
-                console.log('Status is Canceled — stopped checking.');
-                setShowLoadingModal(false);
+                console.log('Status is Canceled — return to previous step.');
+                stopStatusCheck();
                 setIsCanceled(true);
                 setShowCard(true);
             } else if (status === 'Pending') {
-                console.log('Pending status, continue checking...');
+                console.log('Pending status — continue checking...');
+                // Do nothing
             }
         } catch (error) {
             console.error('Error checking status:', error);
-            setShowLoadingModal(false);
+            stopStatusCheck();
         }
     }
-
 
     // Function to update the technician in the service request
     async function updateTechnical(technicalId) {
@@ -323,12 +325,12 @@ export default function Services() {
             const token = localStorage.getItem('UserToken');
             const serviceId = localStorage.getItem('ServiceId');
             const requestId = localStorage.getItem('RequestId');
-    
+
             if (!token || !technicalId || !serviceId || !requestId) {
                 alert('Missing required data.');
                 return;
             }
-    
+
             const { data } = await axios.put(
                 `https://carcareapp.runasp.net/api/ServiceRequest/Update-Technical-in-Request?RequestId=${requestId}&ServiceId=${serviceId}&TechnicalId=${technicalId}`,
                 {},
@@ -339,24 +341,28 @@ export default function Services() {
                     },
                 }
             );
-    
+
             console.log('Technician updated:', data);
             alert('Technician updated successfully!');
-            
+
             // Reset & restart checking
             isCheckingDoneRef.current = false;
             startStatusCheck();
-    
+
         } catch (error) {
             console.error('Error updating technician:', error);
         }
     }
-    
+
 
     // Function to handle the request button click
-    const handleRequestClick = () => {
-        setShowLoadingModal(true);
-    }
+    const handleRequestClick = async () => {
+        setLoading(true);
+        // logic to create request
+        startStatusCheck();
+        setLoading(false);
+    };
+
 
 
     return (
@@ -656,19 +662,25 @@ export default function Services() {
                                             className={`px-4 py-2 text-white ${loading ? 'bg-gray-500' : 'bg-blue-700'} rounded-lg hover:bg-blue-800`}
                                             onClick={async () => {
                                                 setLoading(true);
+
                                                 if (isCanceled) {
-                                                     updateTechnical(technician.id);
+                                                    // Only update technician
+                                                    await updateTechnical(technician.id);
                                                 } else {
-                                                    handleSelectTechnician(technician.id);
+                                                    // Only for new request flow
+                                                    await handleSelectTechnician(technician.id);
+                                                    await handleContinue();
                                                 }
-                                                handleContinue();
-                                                handleRequestClick();
+
+                                                handleRequestClick(); // Starts 5-minute status check
+                                                setShowCard(false);
                                                 setLoading(false);
                                             }}
                                             disabled={loading}
                                         >
                                             {loading ? 'Processing...' : isCanceled ? 'Update' : 'Request'}
                                         </button>
+
 
                                     </div>
                                 </div>

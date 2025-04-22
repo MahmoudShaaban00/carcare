@@ -93,8 +93,8 @@ export default function RequestsSorted() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-6">Technical Service Requests Sorted</h1>
 
-          {/* Global Status Buttons */}
-          <div className="flex gap-5 justify-center m-3" data-aos='fade-right' data-aos-delay='600' data-aos-duration='700'>
+      {/* Global Status Buttons */}
+      <div className="flex gap-5 justify-center m-3" data-aos='fade-right' data-aos-delay='600' data-aos-duration='700'>
         <button onClick={() => {
           activateTechnical(); setStatusMap((prev) => ({ ...prev, globalStatus: "On" }));
           localStorage.setItem("globalStatus", "On");
@@ -141,28 +141,36 @@ export default function RequestsSorted() {
               </div>
 
               {/* Beautiful Button Container */}
-              <div className="mt-4 p-3 bg-gradient-to-r from-blue-500 bg-[#0B4261] rounded-lg shadow-md flex gap-3 justify-center">
+              <div className="mt-4 p-3 bg-gradient-to-r from-blue-500 bg-[#0B4261] rounded-lg shadow-md flex flex-wrap gap-3 justify-center">
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition shadow-md"
-                  onClick={() => handleAccept(request.id)}>
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition shadow-md w-full md:w-auto"
+                  onClick={() => handleAccept(request.id)}
+                >
                   Accept
                 </button>
+
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md"
-                  onClick={() => handleReject(request.id)}>
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md w-full md:w-auto"
+                  onClick={() => handleReject(request.id)}
+                >
                   Reject
                 </button>
+
                 <button
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md"
-                  onClick={() => setSelectedRequest(request)}>
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md w-full md:w-auto"
+                  onClick={() => setSelectedRequest(request)}
+                >
                   View Details
                 </button>
+
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition shadow-md"
-                  onClick={() => handleShowLocationClick(request)}>
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition shadow-md w-full md:w-auto"
+                  onClick={() => handleShowLocationClick(request)}
+                >
                   Show Location
                 </button>
               </div>
+
             </div>
           ))}
         </div>

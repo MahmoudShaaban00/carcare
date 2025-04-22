@@ -68,25 +68,25 @@ export default function RequestsTechnical() {
     }));
   };
 
-// Accept a request
-const handleAccept = (id) => {
-  acceptRequest(id);
-  deactivateTechnical();
-  setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
-  localStorage.setItem("globalStatus", "Off");
-};
+  // Accept a request
+  const handleAccept = (id) => {
+    acceptRequest(id);
+    deactivateTechnical();
+    setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
+    localStorage.setItem("globalStatus", "Off");
+  };
 
-// Reject a request
-const handleReject = (id) => {
-  rejectRequest(id);
-  deactivateTechnical();
-  setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
-  localStorage.setItem("globalStatus", "Off");
-};
+  // Reject a request
+  const handleReject = (id) => {
+    rejectRequest(id);
+    deactivateTechnical();
+    setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
+    localStorage.setItem("globalStatus", "Off");
+  };
 
 
-   // complete a request
-   const handleComplete = (id) => {
+  // complete a request
+  const handleComplete = (id) => {
     completeRequest(id);
   };
 
@@ -121,61 +121,67 @@ const handleReject = (id) => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-6" data-aos='fade-right' data-aos-delay='600' data-aos-duration='1000'>Technical Service Requests</h1>
 
-      {/* Global Status Buttons */}
-      <div className="flex gap-5 justify-center m-3" data-aos='fade-right' data-aos-delay='600' data-aos-duration='1000'>
-        <button onClick={() => {
-          activateTechnical(); setStatusMap((prev) => ({ ...prev, globalStatus: "On" }));
-          localStorage.setItem("globalStatus", "On");
-        }}
-          className="bg-green-500 px-4 py-2 text-white rounded-xl">
-          Set Active
-        </button>
+      {/* Status Buttons and Filter Dropdown */}
+      <div className="flex flex-col md:flex-row gap-3 md:gap-5 justify-center items-center m-3" data-aos="fade-right" data-aos-delay="600" data-aos-duration="1000">
+        <div className="flex flex-row gap-3 w-full md:w-auto">
+          <button
+            onClick={() => { activateTechnical(); setStatusMap((prev) => ({ ...prev, globalStatus: "On" })); localStorage.setItem("globalStatus", "On"); }}
+            className="bg-green-500 px-4 py-2 text-white rounded-xl flex-1">
+            Set Active
+          </button>
 
-        <button onClick={() => {
-          deactivateTechnical(); setStatusMap((prev) => ({ ...prev, globalStatus: "Off" }));
-          localStorage.setItem("globalStatus", "Off");
-        }}
-          className="bg-red-500 px-4 py-2 text-white rounded-xl">
-          Set Inactive
-        </button>
+          <button
+            onClick={() => { deactivateTechnical(); setStatusMap((prev) => ({ ...prev, globalStatus: "Off" })); localStorage.setItem("globalStatus", "Off"); }}
+            className="bg-red-500 px-4 py-2 text-white rounded-xl flex-1">
+            Set Inactive
+          </button>
+        </div>
 
-        <button className={`px-4 py-2 rounded-xl transition shadow-md ${statusMap.globalStatus === "On" ? "bg-green-500 text-white" : "bg-gray-500 text-white"
+
+        <button className={`px-4 py-2 rounded-xl transition shadow-md w-full md:w-auto ${statusMap.globalStatus === "On"
+          ? "bg-green-500 text-white"
+          : "bg-gray-500 text-white"
           }`}
           onClick={() => {
             const newStatus = statusMap.globalStatus === "On" ? "Off" : "On";
             setStatusMap((prev) => ({ ...prev, globalStatus: newStatus }));
             localStorage.setItem("globalStatus", newStatus);
-          }}>
+          }}
+        >
           {statusMap.globalStatus === "On" ? "On" : "Off"}
         </button>
 
-         {/* Filter Buttons */}
-        <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-4 py-2 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-auto"
+        >
           <option value="All">All Requests</option>
           <option value="Pending">Pending</option>
           <option value="In Progress">In Progress</option>
           <option value="Canceled">Canceled</option>
           <option value="Completed">Completed</option>
         </select>
-
       </div>
 
       {/* Search Input */}
-      <div className="flex gap-4 justify-center mb-6" data-aos='fade-right' data-aos-delay='600' data-aos-duration='1000'>
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center items-center mb-6" data-aos="fade-right" data-aos-delay="600" data-aos-duration="1000">
+        {/* Input: Full width on mobile */}
         <input type="number" value={searchId} onChange={(e) => setSearchId(e.target.value)} placeholder="Enter request ID"
-          className="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition shadow-md">
-          Search
-        </button>
+          className="w-full md:w-auto border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
 
-        <button onClick={getAllTechnicalRequests}
-          className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition shadow-md" >
-          Reset
-        </button>
+        {/* Mobile: Wrap buttons in a row */}
+        <div className="flex w-full md:w-auto gap-3">
+          <button onClick={handleSearch} className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition shadow-md">
+            Search
+          </button>
+
+          <button onClick={getAllTechnicalRequests} className="flex-1 bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition shadow-md" >
+            Reset
+          </button>
+        </div>
       </div>
+
 
       {/* Requests List */}
       {requests.length === 0 ? (
@@ -195,42 +201,49 @@ const handleReject = (id) => {
                 </div>
               </div>
 
-              <div className="mt-4 p-3 bg-gradient-to-r from-blue-400 bg-[#0B4261] rounded-lg shadow-md flex gap-3 justify-center">
+              <div className="mt-4 p-3 bg-gradient-to-r from-blue-400 bg-[#0B4261] rounded-lg shadow-md flex flex-wrap gap-3 justify-center">
                 {request.busnissStatus !== "Completed" && request.busnissStatus !== "Canceled" && request.busnissStatus !== 'InProgress' && (
                   <>
-                    <button onClick={() => handleAccept(request.id)}
-                      className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition shadow-md">
+                    <button
+                      onClick={() => handleAccept(request.id)}
+                      className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition shadow-md w-full md:w-auto"
+                    >
                       Accept
                     </button>
 
-                    <button onClick={() => handleReject(request.id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md">
+                    <button
+                      onClick={() => handleReject(request.id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md w-full md:w-auto"
+                    >
                       Reject
                     </button>
-
-              
                   </>
                 )}
 
-                {/* Show Complete button only if the request is in progress */}
                 {request.busnissStatus === "InProgress" && (
-                  <button onClick={() => handleComplete(request.id)}
-                    className="bg-fuchsia-800 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md">
+                  <button
+                    onClick={() => handleComplete(request.id)}
+                    className="bg-fuchsia-800 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md w-full md:w-auto"
+                  >
                     Complete
                   </button>
                 )}
 
-                {/* Show Details and Location buttons for all requests */}
-                <button onClick={() => setSelectedRequest(request)}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md">
+                <button
+                  onClick={() => setSelectedRequest(request)}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md w-full md:w-auto"
+                >
                   View Details
                 </button>
 
-                <button onClick={() => handleShowLocationClick(request)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition shadow-md">
+                <button
+                  onClick={() => handleShowLocationClick(request)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition shadow-md w-full md:w-auto"
+                >
                   Show Location
                 </button>
               </div>
+
             </div>
           ))}
         </div>

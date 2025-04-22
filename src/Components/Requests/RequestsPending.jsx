@@ -38,6 +38,7 @@ export default function RequestsPending() {
     setShowLocationMap(true);  // Show the map when location button is clicked
   };
 
+  // Function to close the map
   const handleCloseMap = () => {
     setShowLocationMap(false); // Hide map when closing
   };
@@ -94,7 +95,7 @@ export default function RequestsPending() {
         </button>
       </div>
 
-      {/* Loading Spinner */}
+      {/* request list */}
       {pendingRequests.length === 0 ? (
         <p className="text-center text-gray-500">No requests available</p>
       ) : (
@@ -116,31 +117,36 @@ export default function RequestsPending() {
               </div>
 
               {/* Beautiful Button Container */}
-              <div className="mt-4 p-3 bg-gradient-to-r from-blue-500 bg-[#0B4261] rounded-lg shadow-md flex gap-3 justify-center">
+              <div className="mt-4 p-3 bg-gradient-to-r from-blue-500 bg-[#0B4261] rounded-lg shadow-md flex flex-wrap gap-3 justify-center">
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition shadow-md"
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition shadow-md w-full md:w-auto"
                   onClick={() => handleAccept(request.id)}
                 >
                   Accept
                 </button>
+
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md"
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition shadow-md w-full md:w-auto"
                   onClick={() => handleReject(request.id)}
                 >
                   Reject
                 </button>
+
                 <button
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md"
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition shadow-md w-full md:w-auto"
                   onClick={() => setSelectedRequest(request)}
                 >
                   View Details
                 </button>
+
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition shadow-md"
-                  onClick={() => handleShowLocationClick(request)}>
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition shadow-md w-full md:w-auto"
+                  onClick={() => handleShowLocationClick(request)}
+                >
                   Show Location
                 </button>
               </div>
+
             </div>
           ))}
         </div>

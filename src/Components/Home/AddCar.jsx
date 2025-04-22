@@ -49,7 +49,7 @@ export default function AddCar() {
     return (
         <div className='place-items-center w-full bg-slate-100 py-10 font-serif'>
             <h1 className='text-4xl text-[#0B4261] font-semibold'>Enter Your Car</h1>
-            <p className='font-semibold my-2'>Enter your car information to assist you quickly and easily</p>
+            <p className='font-semibold my-2 text-center'>Enter your car information to assist you quickly and easily</p>
 
             <div className='w-full flex justify-center mt-10'>
                 <div className='w-full sm:w-3/4 sm:px-0 px-5'>

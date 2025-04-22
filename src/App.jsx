@@ -38,6 +38,8 @@ import Requests from './Components/DashBoard/Requests/Requests';
 import {RequestsProvider} from './Context/RequestsTechContext';
 import ContactUs from './Components/ContactUs/ContactUs';
 import About from './Components/About/About';
+import CreateContact from './Components/DashBoard/Contact/CreateContact';
+import { ContactProvider } from './Context/ContactContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -88,6 +90,8 @@ function App() {
         { path: "requests" , element:<Requests/>},
         {path: "contactus" , element:<ContactUs/>},
         {path: "about" , element:<About/>},
+        {path: "createcontact" , element:<CreateContact/>},
+
       ]
     },
   ]);
@@ -99,7 +103,9 @@ function App() {
       <TechnicalContextProvider>
       <AdminContextProvider>
         <RequestsProvider>
+          <ContactProvider>
       <RouterProvider router={x}></RouterProvider>
+      </ContactProvider>
       </RequestsProvider>
       </AdminContextProvider>
       </TechnicalContextProvider>

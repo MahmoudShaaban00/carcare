@@ -112,9 +112,9 @@ export default function Login() {
   });
 
   return (
-    <div className="mt-10 flex flex-col items-center justify-center">
-      <h1 className="text-5xl font-bold text-[#0B4261]">Log in</h1>
-      <p className="text-lg font-semibold mt-2 text-gray-600">Nice to see you again</p>
+    <div className="mt-10 flex flex-col items-center justify-center px-4 sm:px-6 md:px-0">
+    <h1 className="text-5xl font-bold text-[#0B4261]">Log in</h1>
+    <p className="text-lg font-semibold mt-2 text-gray-600">Nice to see you again</p>
 
       {/* Form for login */}
       <form onSubmit={formik.handleSubmit} className="w-full max-w-md mt-8">

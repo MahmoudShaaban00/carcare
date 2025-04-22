@@ -21,6 +21,7 @@ export default function Layout() {
     "/verfiycode",
     "/resetpassword",
     "/control",
+    "/createcontact"
   ];
 
   const shouldShowFooter = !noFooterRoutes.includes(location.pathname);
