@@ -53,45 +53,67 @@ export default function PhonePrefixChart() {
   };
 
   return (
-    <Card sx={{ boxShadow: 6, borderRadius: 4, p: 2, bgcolor: 'background.paper' }}>
-      <CardContent>
-        <Typography variant="h5" textAlign="center" gutterBottom sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
-          Users Phone Distribution
-        </Typography>
+  <Card
+  sx={{
+    boxShadow: 6,
+    borderRadius: 4,
+    p: 2,
+    bgcolor: 'background.paper',
+    height: { xs: 550, sm: 450, md: 400 },
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  }}
+>
+  <CardContent sx={{ flex: 1 }}>
+    <Typography
+      variant="h5"
+      textAlign="center"
+      gutterBottom
+      sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}
+    >
+      Users Phone Distribution
+    </Typography>
 
-        <Box sx={{ height: 330 }}>
-          {users.length > 0 ? (
-            <ResponsiveBar
-              data={prepareChartData()}
-              keys={['count']}
-              indexBy="prefix"
-              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-              padding={0.3}
-              colors={{ scheme: 'nivo' }}
-              axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'Phone Prefix',
-                legendPosition: 'middle',
-                legendOffset: 32,
-              }}
-              axisLeft={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'Number of Users',
-                legendPosition: 'middle',
-                legendOffset: -40,
-              }}
-              borderRadius={5}
-              borderWidth={2}
-            />
-          ) : (
-            <Typography textAlign="center">Loading chart...</Typography>
-          )}
-        </Box>
-      </CardContent>
-    </Card>
+    <Box
+      sx={{
+        height: { xs: 400, sm: 300, md: 280 }, // increased for small screens
+        mt: 2,
+      }}
+    >
+      {users.length > 0 ? (
+        <ResponsiveBar
+          data={prepareChartData()}
+          keys={['count']}
+          indexBy="prefix"
+          margin={{ top: 40, right: 40, bottom: 60, left: 30 }}
+          padding={0.4} // wider bars
+          colors={{ scheme: 'nivo' }}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Phone Prefix',
+            legendPosition: 'middle',
+            legendOffset: 36,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Users',
+            legendPosition: 'middle',
+            legendOffset: -40,
+          }}
+          borderRadius={5}
+          borderWidth={2}
+        />
+      ) : (
+        <Typography textAlign="center">Loading chart...</Typography>
+      )}
+    </Box>
+  </CardContent>
+</Card>
+
   );
 }

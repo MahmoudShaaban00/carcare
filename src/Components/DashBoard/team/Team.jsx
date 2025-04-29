@@ -220,12 +220,12 @@ export default function Team() {
       </Typography>
 
        {/* Pie Chart for user phones */}
-       <Box sx={{ height: 300, marginBottom: 30}}>
+       <Box sx={{ height: 300, marginBottom: 35}}>
         <PhonePrefixChart />
       </Box>
 
       {/* DataGrid for displaying user data */}
-      <Grid container>
+      <Grid container >
         <Grid item xs={12}>
           <Box sx={{ width: '100%', backgroundColor: 'white', borderRadius: 2, boxShadow: 2,}}>
             <DataGrid rows={rows} columns={columns} pageSize={5}

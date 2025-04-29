@@ -25,25 +25,50 @@ const Control = () => {
         Control of Dashboard
       </Typography>
 
-      {/* Final box with increased margin-bottom on large screens */}
-      <Box sx={{ display: 'flex', gap: 3, margin: 5, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
+      <Box
+  sx={{
+    display: 'flex',
+    gap: 3,
+    margin: 5,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 20,
+  }}
+>
+  <Box
+    sx={{
+      width: { xs: '100%', sm: 380, md: 380 },
+      height: { xs: 500, sm: 350, md: 350 }, // Increased height on mobile
+      mb: { xs: '100px', sm: '100px', md: '50px' },
+    }}
+  >
+    <RequestsPieChart />
+  </Box>
 
-        <Box sx={{ width: { xs: '100%', sm: 380, md: 380 }, height: 350, mb: { xs: '100px', sm: '100px', md: '50px' }}}>
-          <RequestsPieChart />
-        </Box>
+  <Box
+    sx={{
+      width: { xs: '100%', sm: 380, md: 380 },
+      height: { xs: 500, sm: 350, md: 350 }, // Increased height on mobile
+      mb: { xs: '100px', sm: '100px', md: '50px' },
+    }}
+  >
+    <PhonePrefixChart />
+  </Box>
 
-        <Box sx={{ width: { xs: '100%', sm: 380, md: 380 }, height: 350,mb: { xs: '100px', sm: '100px', md: '50px' }}}>
-          <PhonePrefixChart />
-        </Box>
-
-        {/* Final box with special margin-top for 927px - 1110px */}
-        <Box sx={{ width: { xs: '100%', sm: 380, md: 380 }, height: 350, mb: { xs: '100px', sm: '100px', md: '50px' }, mt: { xs: 0, sm: 0, md: 0 }, // Default no margin-top
-          '@media (min-width:927px) and (max-width:1110px)': {
-            mt: '50px' }
-        }}>
-          <TechnicalPrefixChart />
-        </Box>
-      </Box>
+  <Box
+    sx={{
+      width: { xs: '100%', sm: 380, md: 380 },
+      height: { xs: 500, sm: 350, md: 350 }, // Increased height on mobile
+      mb: { xs: '100px', sm: '100px', md: '50px' },
+      mt: { xs: 0, sm: 0, md: 0 },
+      '@media (min-width:927px) and (max-width:1110px)': {
+        mt: '50px',
+      },
+    }}
+  >
+    <TechnicalPrefixChart />
+  </Box>
+</Box>
 
 
       <Grid container justifyContent="center" alignItems="center" marginTop={3} spacing={3}>

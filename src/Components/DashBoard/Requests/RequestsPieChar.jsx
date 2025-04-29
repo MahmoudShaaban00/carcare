@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ResponsivePie } from '@nivo/pie';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import { Typography, Box, Card, CardContent } from '@mui/material';
 
 const RequestsPieChart = () => {
   const [requests, setRequests] = useState([]);
@@ -54,16 +54,30 @@ const RequestsPieChart = () => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <Card sx={{ boxShadow: 6, borderRadius: 4, p: 2, bgcolor: 'background.paper' }}>
+    <Card
+      sx={{
+        boxShadow: 6,
+        borderRadius: 4,
+        p: 2,
+        bgcolor: 'background.paper',
+        height: { xs: 600, sm: 450, md: 400 }, // Bigger on mobile
+        width: '100%',
+      }}
+    >
       <CardContent>
-        <Typography variant="h5" textAlign="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+        <Typography
+          variant="h5"
+          textAlign="center"
+          gutterBottom
+          sx={{ fontWeight: 'bold' }}
+        >
           Business Status Overview
         </Typography>
 
-        <Box sx={{ height: 330 }}>
+        <Box sx={{ height: { xs: 450, sm: 350, md: 300 } }}>
           <ResponsivePie
             data={prepareChartData()}
-            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+            margin={{ top: 30, right: 40, bottom: 40, left: 40 }}
             innerRadius={0.5}
             padAngle={0.7}
             cornerRadius={3}
