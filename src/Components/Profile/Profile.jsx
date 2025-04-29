@@ -236,6 +236,12 @@ export default function Profile() {
           <Link to="/feedback" className="text-lg hover:underline">View FeedBack</Link>
         </div>
 
+         {/*action for contact */}
+         <div className="flex items-center gap-2 text-blue-800 mb-4">
+          <GrCircleInformation className="text-2xl" />
+          <Link to="/contact" className="text-lg hover:underline">Contact Message</Link>
+        </div>
+
         {/*action for logout */}
         <div className="flex items-center gap-2 text-blue-800">
           <IoIosLogOut className="text-2xl" />

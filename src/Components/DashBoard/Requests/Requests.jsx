@@ -45,39 +45,14 @@ export default function Requests() {
 
             console.log("✅ Response Data:", data);
             setRequests(data);
+
         } catch (error) {
             console.error("❌ Error fetching requests:", error.response?.data || error.message);
             setError(`Error: ${error.response?.data?.message || error.message}`);
         }
     };
 
-    // Prepare data for the pie chart based on BusinessStatus
-    const prepareChartData = () => {
-        // Define the business statuses you want to track
-        const businessStatuses = ['Pending', 'Completed', 'InProgress', 'Canceled']; // Modify as per actual statuses
-
-        // Count the occurrences of each business status
-        const statusCounts = businessStatuses.reduce((acc, status) => {
-            acc[status] = 0; // Initialize count for each status
-            return acc;
-        }, {});
-
-        // Filter requests by business status and count them
-        requests.forEach((request) => {
-            const status = request.busnissStatus; // Assuming the status is stored as 'busnissStatus'
-            if (businessStatuses.includes(status)) {
-                statusCounts[status] += 1; // Increment the count for the matched status
-            }
-        });
-
-        // Convert the status counts into a format suitable for the pie chart
-        return Object.keys(statusCounts).map((status) => ({
-            id: status,
-            label: status,
-            value: statusCounts[status],
-        }));
-    };
-
+   
 
 
     useEffect(() => {
@@ -90,7 +65,7 @@ export default function Requests() {
         <div>
             <h1 className="text-3xl font-bold mb-3 text-center mt-2">Requests</h1>
             {/* Pie Chart for user roles */}
-            <div className="mb-6" style={{ height: '400px', width: '100%' }}>
+            <div className="mb-6" style={{ height: '400px', width: '70%'  , marginBottom:'100px' , marginLeft:'auto' , marginRight:'auto'}}>
                 <RequestsPieChart />
             </div>
 

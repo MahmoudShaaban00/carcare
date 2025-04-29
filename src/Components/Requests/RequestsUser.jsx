@@ -52,8 +52,7 @@ export default function RequestsUser() {
       const token = localStorage.getItem("UserToken");
       if (!token) throw new Error("UserToken not found in localStorage");
 
-      const { data } = await axios.delete(
-        `https://carcareapp.runasp.net/api/ServiceRequest/DeleteRequestForUser/${requestId}`,
+      const { data } = await axios.delete(`https://carcareapp.runasp.net/api/ServiceRequest/DeleteRequestForUser/${requestId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -64,6 +63,7 @@ export default function RequestsUser() {
       );
 
       console.log("Request deleted:", data);
+      alert("Request deleted successfully!");
       getAllRequests();
     } catch (error) {
       console.error("Error deleting request:", error);

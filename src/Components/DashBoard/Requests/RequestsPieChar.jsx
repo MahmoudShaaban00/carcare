@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ResponsivePie } from '@nivo/pie';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 
 const RequestsPieChart = () => {
   const [requests, setRequests] = useState([]);
@@ -50,28 +51,35 @@ const RequestsPieChart = () => {
     fetchRequests();
   }, []);
 
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <div style={{ height: '400px', width: '100%' }}>
-      <h2 className="text-2xl font-bold text-center mb-2">Business Status Overview</h2>
-      <ResponsivePie
-        data={prepareChartData()}
-        margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-        innerRadius={0.5}
-        padAngle={0.7}
-        cornerRadius={3}
-        activeOuterRadiusOffset={8}
-        colors={{ scheme: 'nivo' }}
-        borderWidth={1}
-        borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
-        arcLinkLabelsSkipAngle={10}
-        arcLinkLabelsTextColor="#333"
-        arcLinkLabelsThickness={2}
-        arcLabelsSkipAngle={10}
-        arcLabelsTextColor="white"
-      />
-    </div>
+    <Card sx={{ boxShadow: 6, borderRadius: 4, p: 2, bgcolor: 'background.paper' }}>
+      <CardContent>
+        <Typography variant="h5" textAlign="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+          Business Status Overview
+        </Typography>
+
+        <Box sx={{ height: 330 }}>
+          <ResponsivePie
+            data={prepareChartData()}
+            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+            innerRadius={0.5}
+            padAngle={0.7}
+            cornerRadius={3}
+            activeOuterRadiusOffset={8}
+            colors={{ scheme: 'nivo' }}
+            borderWidth={1}
+            borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
+            arcLinkLabelsSkipAngle={10}
+            arcLinkLabelsTextColor="#333"
+            arcLinkLabelsThickness={2}
+            arcLabelsSkipAngle={10}
+            arcLabelsTextColor="white"
+          />
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -212,12 +212,12 @@ export default function Technical() {
 
 
       {/* Pie Chart for user roles */}
-      <Box sx={{ height: 400 }}>
-       <TechnicalPrefixChart />
-      </Box>
+      <div className="mb-6" style={{ height: '400px', width: '70%'  , marginBottom:'100px' , marginLeft:'auto' , marginRight:'auto'}}>
+      <TechnicalPrefixChart />
+      </div>
 
       {/* DataGrid for technicals list */}
-      <Paper sx={{ width: '100%', height: 500, borderRadius: 3, boxShadow: 3 }}>
+      <Paper sx={{ width: '100%',  borderRadius: 3, boxShadow: 3 }}>
         <DataGrid rows={rows} columns={columns} autoHeight pageSize={5} rowsPerPageOptions={[5, 10, 20]} disableSelectionOnClick />
       </Paper>
 

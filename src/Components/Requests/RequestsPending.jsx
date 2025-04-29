@@ -23,6 +23,7 @@ export default function RequestsPending() {
     deactivateTechnical();
     setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
     localStorage.setItem("globalStatus", "Off");
+    getPendingRequests(); // Refresh list
   };
 
   // Reject a request
@@ -31,8 +32,10 @@ export default function RequestsPending() {
     deactivateTechnical();
     setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
     localStorage.setItem("globalStatus", "Off");
+    getPendingRequests(); // Refresh list
   };
 
+  // Function to show the map with user location
   const handleShowLocationClick = (request) => {
     setSelectedRequest(request);
     setShowLocationMap(true);  // Show the map when location button is clicked
@@ -57,9 +60,7 @@ export default function RequestsPending() {
     }
   }, []);
 
-  useEffect(() => {
-    getPendingRequests();
-  }, [])
+
 
   return (
     <div className="container mx-auto p-4">

@@ -55,6 +55,7 @@ export default function Services() {
         }, 300000); // 5 minutes
     };
 
+    // Function to stop the status check
     const stopStatusCheck = () => {
         clearInterval(intervalRef.current);
         clearTimeout(timeoutRef.current);
@@ -90,12 +91,15 @@ export default function Services() {
             const { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetAll`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setServices(data);
+    
+            // Set only the first 5 services
+            setServices(data.slice(0, 5));
         } catch (error) {
             console.error("Error fetching services:", error);
             alert("Failed to fetch services. Please try again.");
         }
     }
+    
 
     // Function to fetch service by ID
     async function getServiceById(id) {

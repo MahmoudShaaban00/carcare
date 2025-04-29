@@ -49,6 +49,8 @@ export default function RequestsSorted() {
     deactivateTechnical();
     setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
     localStorage.setItem("globalStatus", "Off");
+    getAllTechnicalRequestsSorted();
+
   };
 
   // Reject a request
@@ -57,6 +59,8 @@ export default function RequestsSorted() {
     deactivateTechnical();
     setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
     localStorage.setItem("globalStatus", "Off");
+    getAllTechnicalRequestsSorted();
+
   };
 
   // This function sets the selected request and shows the map
@@ -70,10 +74,7 @@ export default function RequestsSorted() {
     setShowLocationMap(false); // Hide map when closing
   };
 
-  // Set default status to "On" or "Off" based on localStorage
-  useEffect(() => {
-    getAllTechnicalRequestsSorted();
-  }, [])
+  
 
   // Set default status to "On" or "Off" based on localStorage
   useEffect(() => {

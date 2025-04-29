@@ -1,41 +1,53 @@
 import React from 'react';
 import { LiaHandPointLeftSolid } from "react-icons/lia";
 import logo from '../../assets/logo.png';
+import { Link } from "react-router-dom";
 
 export default function Footer() {
     return (
         <div className='bg-[#0B4261]'>
             <div className='flex flex-col md:flex-row md:justify-around md:items-start text-right py-10 text-white gap-8 px-6 md:px-12'>
-                
+
                 {/* Quick Links */}
                 <div className='md:w-1/3 w-full'>
                     <h1 className='text-2xl md:text-3xl font-semibold text-center md:text-right'>Quick Links</h1>
 
-                    <div className='flex justify-center md:justify-end mt-6 items-center gap-2'>
-                        <p className='text-lg md:text-xl font-semibold'>Our Services</p>
+                    <div className='flex justify-center md:justify-end mt-3 items-center gap-2'>
+                        <Link to="/home" className='text-lg md:text-xl font-semibold hover:underline'>
+                           Home
+                        </Link>
                         <LiaHandPointLeftSolid className='text-xl' />
                     </div>
 
                     <div className='flex justify-center md:justify-end mt-3 items-center gap-2'>
-                        <p className='text-lg md:text-xl font-semibold'>About Us</p>
+                        <Link to="/services" className='text-lg md:text-xl font-semibold hover:underline'>
+                            Our Services
+                        </Link>
                         <LiaHandPointLeftSolid className='text-xl' />
                     </div>
 
                     <div className='flex justify-center md:justify-end mt-3 items-center gap-2'>
-                        <p className='text-lg md:text-xl font-semibold'>Blog</p>
+                        <Link to="/about" className='text-lg md:text-xl font-semibold hover:underline'>
+                            About Us
+                        </Link>
                         <LiaHandPointLeftSolid className='text-xl' />
                     </div>
 
                     <div className='flex justify-center md:justify-end mt-3 items-center gap-2'>
-                        <p className='text-lg md:text-xl font-semibold'>FAQs</p>
+                        <Link to="/contactus" className='text-lg md:text-xl font-semibold hover:underline'>
+                            Contact Us
+                        </Link>
                         <LiaHandPointLeftSolid className='text-xl' />
                     </div>
 
                     <div className='flex justify-center md:justify-end mt-3 items-center gap-2'>
-                        <p className='text-lg md:text-xl font-semibold'>Diagnostics</p>
+                        <Link to="/legalinformation" className='text-lg md:text-xl font-semibold hover:underline'>
+                            Legal Information
+                        </Link>
                         <LiaHandPointLeftSolid className='text-xl' />
                     </div>
                 </div>
+
 
                 {/* What We Offer */}
                 <div className='md:w-1/3 w-full text-center md:text-left'>

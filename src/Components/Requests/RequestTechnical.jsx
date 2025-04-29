@@ -74,6 +74,8 @@ export default function RequestsTechnical() {
     deactivateTechnical();
     setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
     localStorage.setItem("globalStatus", "Off");
+    getPendingRequests(); // Refresh list
+
   };
 
   // Reject a request
@@ -82,12 +84,14 @@ export default function RequestsTechnical() {
     deactivateTechnical();
     setStatusMap((prev) => ({ ...prev, globalStatus: "Off", [id]: "Off" }));
     localStorage.setItem("globalStatus", "Off");
+    getPendingRequests(); // Refresh list
   };
 
 
   // complete a request
   const handleComplete = (id) => {
     completeRequest(id);
+    getCompletedRequests();
   };
 
   // Filter requests based on status

@@ -35,13 +35,17 @@ import RequestsSorted from './Components/Requests/RequestsSorted';
 import ProfileTech from './Components/Profile/ProfileTech';
 import ProfileAdmin from './Components/Profile/ProfileAdmin';
 import Requests from './Components/DashBoard/Requests/Requests';
-import {RequestsProvider} from './Context/RequestsTechContext';
+import { RequestsProvider } from './Context/RequestsTechContext';
 import ContactUs from './Components/ContactUs/ContactUs';
 import About from './Components/About/About';
 import CreateContact from './Components/DashBoard/Contact/CreateContact';
 import { ContactProvider } from './Context/ContactContext';
+import Contact from './Components/Profile/Contact';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import ProtectedRouteUser from './Components/ProtectedRoute/ProtectedRouteUser';
+import ProtectedRouteAdmin from './Components/ProtectedRoute/ProtectedRouteAdmin';
+import ProtectedRouteTechnical from './Components/ProtectedRoute/ProtectedRouteTechnical';
 
 
 import { useEffect } from 'react';
@@ -54,62 +58,66 @@ function App() {
 
   let x = createBrowserRouter([
     {
-      path: '', 
+      path: '',
       element: <Layout />,
       children: [
         { index: true, element: <Login /> }, // Set login as the default route
-        { path: 'home', element: <Home /> },
         { path: 'login', element: <Login /> },
         { path: 'forgetpassword', element: <ForgetPassword /> },
         { path: 'register', element: <Register /> },
         { path: 'registeruser', element: <RegisterUser /> },
         { path: 'registertechnical', element: <RegisterTechnical /> },
-        { path: 'team', element: <Team /> },
-        { path: 'profile', element: <Profile /> },
-        { path: 'changepassword', element: <ChangePassword /> },
+        { path: 'resetpassword', element: <ResetPassword /> },
         { path: 'legalinformation', element: <LegalInformation /> },
         { path: 'confiromemail', element: <Confiromemail /> },
         { path: 'verfiycode', element: <VerfiyCode /> },
-        { path: 'resetpassword', element: <ResetPassword /> },
-        { path:  'vehicle' , element: <Vehicle/>},
-        { path:  'technical' , element: <Technical/>},
-        { path: 'cars' , element:<Cars/>},
-        { path: 'services' , element:<Services/>},
-        { path: 'servicestype' , element:<ServicesType/>},
-        { path: "feedback" , element:<FeedBack/>},
-        { path: "feedbacks" , element:<FeedBacks/>},
-        { path: "map" , element:<Map/>},
-        { path: "requestsuser" , element:<RequestsUser/>},
-        { path: "requeststechnical" , element:<RequestsTechnical/>},
-        { path: "requestspending" , element:<RequestsPending/>},
-        { path: "requestssorted" , element:<RequestsSorted/>},
-        { path: "profiletech" , element:<ProfileTech/>},
-        { path: "profileadmin" , element:<ProfileAdmin/>},
-        { path: "payment" , element:<Payment/>},
-        { path: "control" , element:<Control/>},
-        { path: "requests" , element:<Requests/>},
-        {path: "contactus" , element:<ContactUs/>},
-        {path: "about" , element:<About/>},
-        {path: "createcontact" , element:<CreateContact/>},
+        { path: "map", element: <Map /> },
 
+        { path: 'changepassword', element:< ProtectedRouteUser><ChangePassword /></ProtectedRouteUser>  },
+        { path: 'home', element: <ProtectedRouteUser><Home /></ProtectedRouteUser> },
+        { path: 'profile', element: <ProtectedRouteUser><Profile /></ProtectedRouteUser> },
+        { path: 'services', element: <ProtectedRouteUser><Services /></ProtectedRouteUser> },
+        { path: 'feedback', element: <ProtectedRouteUser><FeedBack /></ProtectedRouteUser> },
+        { path: 'contactus', element: <ProtectedRouteUser><ContactUs /></ProtectedRouteUser> },
+        { path: 'about', element: <ProtectedRouteUser><About /></ProtectedRouteUser> },
+        { path: 'requestsuser', element: <ProtectedRouteUser><RequestsUser /></ProtectedRouteUser> },
+        { path: 'contact', element: <ProtectedRouteUser><Contact /></ProtectedRouteUser> },
+        { path: 'cars', element: <ProtectedRouteUser><Cars /></ProtectedRouteUser> },
+        { path: 'payment', element: <ProtectedRouteUser><Payment /></ProtectedRouteUser> },
+
+        { path: 'team', element: <ProtectedRouteAdmin><Team /></ProtectedRouteAdmin> },
+        { path: 'vehicle', element: <ProtectedRouteAdmin><Vehicle /></ProtectedRouteAdmin> },
+        { path: 'technical', element: <ProtectedRouteAdmin><Technical /></ProtectedRouteAdmin> },
+        { path: 'servicestype', element: <ProtectedRouteAdmin><ServicesType /></ProtectedRouteAdmin> },
+        { path: 'feedbacks', element: <ProtectedRouteAdmin><FeedBacks /></ProtectedRouteAdmin> },
+        { path: 'profileadmin', element: <ProtectedRouteAdmin><ProfileAdmin /></ProtectedRouteAdmin> },
+        { path: 'requests', element: <ProtectedRouteAdmin><Requests /></ProtectedRouteAdmin> },
+        { path: 'createcontact', element: <ProtectedRouteAdmin><CreateContact /></ProtectedRouteAdmin> },
+        { path: 'control', element: <ProtectedRouteAdmin><Control /></ProtectedRouteAdmin> },
+
+        { path: "requeststechnical", element: <ProtectedRouteTechnical><RequestsTechnical /></ProtectedRouteTechnical> },
+        { path: "requestspending", element: <ProtectedRouteTechnical><RequestsPending /></ProtectedRouteTechnical> },
+        { path: "requestssorted", element: <ProtectedRouteTechnical><RequestsSorted /></ProtectedRouteTechnical> },
+        { path: "profiletech", element: <ProtectedRouteTechnical><ProfileTech /></ProtectedRouteTechnical> },
+        
       ]
     },
   ]);
 
   return (
     <>
-    <LocationProvider>
-    <UserContextProvider>
-      <TechnicalContextProvider>
-      <AdminContextProvider>
-        <RequestsProvider>
-          <ContactProvider>
-      <RouterProvider router={x}></RouterProvider>
-      </ContactProvider>
-      </RequestsProvider>
-      </AdminContextProvider>
-      </TechnicalContextProvider>
-      </UserContextProvider>
+      <LocationProvider>
+        <UserContextProvider>
+          <TechnicalContextProvider>
+            <AdminContextProvider>
+              <RequestsProvider>
+                <ContactProvider>
+                  <RouterProvider router={x}></RouterProvider>
+                </ContactProvider>
+              </RequestsProvider>
+            </AdminContextProvider>
+          </TechnicalContextProvider>
+        </UserContextProvider>
       </LocationProvider>
     </>
   );

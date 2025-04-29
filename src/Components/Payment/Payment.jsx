@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom"; // ✅ Step 1
+
 import axios from "axios";
 
 const stripePromise = loadStripe("pk_test_51QPMWrJqPNUV240JiWLMmVP7St5TrTBUlrY3jPdmSxCFRlFJPorrk4xgBLA4rYmocqEmgMuOmdAQXs0p0eSWzdw700pBnZfokd");
@@ -8,6 +10,7 @@ const stripePromise = loadStripe("pk_test_51QPMWrJqPNUV240JiWLMmVP7St5TrTBUlrY3j
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate(); // ✅ Step 2
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -64,6 +67,8 @@ const CheckoutForm = () => {
       });
   
       console.log("✅ Payment Confirmation Response:", response.data);
+      navigate("/requestsuser");
+
     } catch (err) {
       console.error("❌ Payment Confirmation Failed:", err.response?.data || err.message);
     }

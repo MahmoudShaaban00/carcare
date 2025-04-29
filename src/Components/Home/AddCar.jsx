@@ -22,9 +22,7 @@ export default function AddCar() {
         }
 
         try {
-            const response = await axios.post(
-                'https://carcareapp.runasp.net/api/Vehicle/Create-Vehicle',
-                carData,
+            const response = await axios.post('https://carcareapp.runasp.net/api/Vehicle/Create-Vehicle', carData,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -33,6 +31,14 @@ export default function AddCar() {
                 }
             );
             console.log('Success:', response.data);
+            alert('Car added successfully!');
+
+            // Clear input fields
+            setModel('');
+            setColor('');
+            setYear('');
+            setVinNumber('');
+            setPlateNumber('');
         } catch (error) {
             if (error.response) {
                 console.log('Error data:', error.response.data);

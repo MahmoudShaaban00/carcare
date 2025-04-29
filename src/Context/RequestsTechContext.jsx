@@ -45,6 +45,7 @@ export const RequestsProvider = ({ children }) => {
       );
       getAllTechnicalRequests();
       alert("Request has been accepted.");
+      getPendingRequests()
     } catch (err) {
       console.error("Accept error:", err);
     }
@@ -66,6 +67,7 @@ export const RequestsProvider = ({ children }) => {
       );
       alert("Request has been rejected.");
       getAllTechnicalRequests();
+      getPendingRequests()
     } catch (err) {
       console.error("Reject error:", err);
     }
@@ -87,6 +89,7 @@ export const RequestsProvider = ({ children }) => {
       );
       alert("Request has been completed.");
       getAllTechnicalRequests();
+      getCompletedRequests();
     } catch (err) {
       console.error("Reject error:", err);
     }

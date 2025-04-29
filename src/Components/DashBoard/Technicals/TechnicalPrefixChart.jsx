@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
-import { ResponsivePie } from '@nivo/pie';
 import axios from 'axios';
+import { ResponsivePie } from '@nivo/pie';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 
 export default function TechnicalPrefixChart() {
-    const theme = useTheme();
     const [dataTechnicals, setDataTechnicals] = useState([]);
 
-    // Function to fetch technical data
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -23,7 +21,6 @@ export default function TechnicalPrefixChart() {
         fetchData();
     }, []);
 
-    // Function to prepare chart data
     const prepareChartData = () => {
         const validPrefixes = ['010', '011', '012', '015'];
         const prefixCounts = validPrefixes.reduce((acc, prefix) => {
@@ -52,31 +49,35 @@ export default function TechnicalPrefixChart() {
     };
 
     return (
-        <Box sx={{ height: 400 }}>
-            <Typography variant="h5" textAlign="center" gutterBottom sx={{ color: 'black' ,fontWeight: 'bold'}}>
-                Technicals Phone Distribution
-            </Typography>
+        <Card sx={{ boxShadow: 6, borderRadius: 4, p: 2, bgcolor: 'background.paper' }}>
+            <CardContent>
+                <Typography variant="h5" textAlign="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    Technicals Phone Distribution
+                </Typography>
 
-            {dataTechnicals.length > 0 ? (
-                <ResponsivePie
-                    data={prepareChartData()}
-                    margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                    innerRadius={0.5}
-                    padAngle={0.7}
-                    cornerRadius={3}
-                    activeOuterRadiusOffset={8}
-                    colors={{ scheme: 'nivo' }}
-                    borderWidth={1}
-                    borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
-                    arcLinkLabelsSkipAngle={10}
-                    arcLinkLabelsTextColor="#333"
-                    arcLinkLabelsThickness={2}
-                    arcLabelsSkipAngle={10}
-                    arcLabelsTextColor="white"
-                />
-            ) : (
-                <Typography align="center">Loading chart...</Typography>
-            )}
-        </Box>
+                <Box sx={{ height: 300 }}>
+                    {dataTechnicals.length > 0 ? (
+                        <ResponsivePie
+                            data={prepareChartData()}
+                            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+                            innerRadius={0.5}
+                            padAngle={0.7}
+                            cornerRadius={3}
+                            activeOuterRadiusOffset={8}
+                            colors={{ scheme: 'nivo' }}
+                            borderWidth={1}
+                            borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
+                            arcLinkLabelsSkipAngle={10}
+                            arcLinkLabelsTextColor="#333"
+                            arcLinkLabelsThickness={2}
+                            arcLabelsSkipAngle={10}
+                            arcLabelsTextColor="white"
+                        />
+                    ) : (
+                        <Typography align="center">Loading chart...</Typography>
+                    )}
+                </Box>
+            </CardContent>
+        </Card>
     );
 }

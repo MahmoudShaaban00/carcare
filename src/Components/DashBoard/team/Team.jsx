@@ -208,33 +208,6 @@ export default function Team() {
   };
   
 
-// Prepare data for the pie chart
-const prepareChartData = () => {
-  // Define the phone number prefixes to filter
-  const validPrefixes = ['010', '011', '012', '015'];
-
-  // Count the occurrences of each prefix in the users' phone numbers
-  const prefixCounts = validPrefixes.reduce((acc, prefix) => {
-    acc[prefix] = 0; // Initialize count for each prefix
-    return acc;
-  }, {});
-
-  // Filter users by phone number prefixes and count them
-  users.forEach((user) => {
-    const phonePrefix = user.phoneNumber?.slice(0, 3); // Get the first 3 digits of the phone number
-    if (validPrefixes.includes(phonePrefix)) {
-      prefixCounts[phonePrefix] += 1; // Increment the count for the matched prefix
-    }
-  });
-
-  // Convert the prefix counts into a format suitable for the pie chart
-  return Object.keys(prefixCounts).map((prefix) => ({
-    id: prefix,
-    label: prefix,
-    value: prefixCounts[prefix],
-  }));
-};
-
 
   useEffect(() => {
     getDataUser();
@@ -247,7 +220,7 @@ const prepareChartData = () => {
       </Typography>
 
        {/* Pie Chart for user phones */}
-       <Box sx={{ height: 400 }}>
+       <Box sx={{ height: 300, marginBottom: 30}}>
         <PhonePrefixChart />
       </Box>
 
