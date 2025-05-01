@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { TechnicalContext } from '../../Context/TechnicalContext';
+import Swal from 'sweetalert2';
 
 export default function RegisterTechnical() {
 
@@ -24,14 +24,27 @@ export default function RegisterTechnical() {
             localStorage.setItem('tecId', data.id);
             localStorage.setItem('TechnicalToken', data.token);
             console.log("Technical ID:", data.id);
+
+            Swal.fire({
+                title: 'Registered Successfully!',
+                text: 'Welcome on board!',
+                icon: 'success',
+                confirmButtonText: 'Continue',
+            });
+
             navigate("/map");
 
         } catch (error) {
             console.error('Registration Failed:', error.response?.data || error.message);
+            Swal.fire({
+                title: 'Registration Failed!',
+                text: error.response?.data?.errors || 'Something went wrong. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
         }
     }
 
-    // Validation schema using Yup
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Email is required'),
         FullName: Yup.string().required('Full name is required'),
@@ -43,7 +56,6 @@ export default function RegisterTechnical() {
         serviceId: Yup.number().required('Service ID is required').min(1).max(8),
     });
 
-    // Create a formik instance
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -64,9 +76,7 @@ export default function RegisterTechnical() {
                 <h1 className="text-3xl font-bold text-center text-blue-800">Register Technical</h1>
                 <p className="text-center text-gray-600 mt-2">Nice to see you again!</p>
 
-                {/* Registration Form */}
                 <form onSubmit={formik.handleSubmit} className="mt-6 space-y-4">
-                    {/* Full Name */}
                     <div>
                         <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="text" name="FullName" value={formik.values.FullName}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
@@ -76,7 +86,6 @@ export default function RegisterTechnical() {
                         )}
                     </div>
 
-                    {/* Phone Number */}
                     <div>
                         <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="tel" name="phoneNumber" value={formik.values.phoneNumber}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
@@ -87,7 +96,6 @@ export default function RegisterTechnical() {
                         )}
                     </div>
 
-                    {/* Email */}
                     <div>
                         <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="email" name="email" value={formik.values.email}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
@@ -97,7 +105,6 @@ export default function RegisterTechnical() {
                         )}
                     </div>
 
-                    {/* Password */}
                     <div>
                         <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="password" name="password" value={formik.values.password}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
@@ -107,7 +114,6 @@ export default function RegisterTechnical() {
                         )}
                     </div>
 
-                    {/* National ID */}
                     <div>
                         <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="text" name="nationalId" value={formik.values.nationalId}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
@@ -117,7 +123,6 @@ export default function RegisterTechnical() {
                         )}
                     </div>
 
-                    {/* Service ID */}
                     <div>
                         <select
                             onBlur={formik.handleBlur}
@@ -133,7 +138,6 @@ export default function RegisterTechnical() {
                                 { id: 3, name: "Fuel" },
                                 { id: 4, name: "Battery" },
                                 { id: 5, name: "Oil" },
-                                { id: 6, name: "Mechanic" },
                             ].map((service) => (
                                 <option key={service.id} value={service.id}>
                                     {service.name}
@@ -145,10 +149,8 @@ export default function RegisterTechnical() {
                         )}
                     </div>
 
-
                     <input type="hidden" name="type" value={formik.values.type = 0} />
 
-                    {/* Submit Button */}
                     <div>
                         <button
                             type="submit"
@@ -158,11 +160,10 @@ export default function RegisterTechnical() {
                     </div>
                 </form>
 
-                {/* Footer */}
                 <div className="text-center mt-4">
                     <p className="text-gray-600">Don't have an account?</p>
-                    <a href="#" className="text-blue-600 font-semibold hover:underline">
-                        Create account
+                    <a href="login" className="text-blue-600 font-semibold hover:underline">
+                        Log in
                     </a>
                 </div>
             </div>

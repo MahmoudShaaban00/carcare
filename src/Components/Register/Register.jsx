@@ -10,9 +10,6 @@ import imgtec from '../../assets/tec.jpg'
 import { useNavigate } from 'react-router-dom';
 
 
-
-
-
 export default function Register() {
 
     let navigator=useNavigate()

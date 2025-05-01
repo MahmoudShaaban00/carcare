@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
+import Swal from 'sweetalert2';
 
 export default function RegisterUser() {
     let navigate = useNavigate();
@@ -18,26 +19,56 @@ export default function RegisterUser() {
                 password: formValues.password,
                 type: parseInt(formValues.type, 10) // Ensure `type` is a number if required
             };
-
+    
             console.log("Sending data:", JSON.stringify(payload, null, 2));
-
+    
             const { data } = await axios.post("https://carcareapp.runasp.net/api/account/register", payload, {
                 headers: { "Content-Type": "application/json" },
             });
-
+    
             console.log("Registration successful:", data);
             navigate("/confiromemail");
+    
         } catch (error) {
             if (error.response) {
+                // If error response exists (e.g. from API)
                 console.error("API Error:", error.response.data);
-                alert(`Registration failed: ${JSON.stringify(error.response.data)}`);
+    
+                // Handle specific validation errors (e.g. from form validation)
+                if (error.response.data.errors) {
+                    const errorMessages = Object.values(error.response.data.errors)
+                        .flat()
+                        .join('\n');  // Join multiple errors into a single string separated by newlines
+    
+                    Swal.fire({
+                        title: 'Registration Failed!',
+                        text: errorMessages, // Show the error messages
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                } else {
+                    // Handle other errors (e.g., server errors)
+                    Swal.fire({
+                        title: 'Registration Failed!',
+                        text: error.response?.data?.message || 'Something went wrong. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    });
+                }
+    
             } else {
+                // If no response, it’s an unexpected error (e.g., network issues)
                 console.error("Unexpected Error:", error);
-                alert("An unexpected error occurred. Please try again.");
+                Swal.fire({
+                    title: 'Registration Failed!',
+                    text: 'An unexpected error occurred. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
             }
         }
     }
-
+    
     // Create a validation schema using Yup
     const validationSchema = Yup.object().shape({
         fullName: Yup.string().required('Full name is required'),
@@ -109,7 +140,7 @@ export default function RegisterUser() {
 
                     <input type="hidden" name="type" value={formik.values.type} />
 
-                    <div>
+                    <div>  
                         <button
                             type="submit"
                             className="w-full bg-blue-800 text-white py-3 rounded-lg font-semibold text-lg shadow-md hover:bg-blue-600 transition-all duration-300"
@@ -121,7 +152,7 @@ export default function RegisterUser() {
 
                 <div className="text-center mt-4">
                     <p className="text-gray-600">Already have an account?</p>
-                    <a href="#" className="text-blue-600 font-semibold hover:underline">
+                    <a href="login" className="text-blue-600 font-semibold hover:underline">
                         Log in
                     </a>
                 </div>
