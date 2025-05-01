@@ -40,14 +40,13 @@ import ContactUs from './Components/ContactUs/ContactUs';
 import About from './Components/About/About';
 import CreateContact from './Components/DashBoard/Contact/CreateContact';
 import { ContactProvider } from './Context/ContactContext';
-import Contact from './Components/Profile/Contact';
+import ContactUser from './Components/Profile/ContactUser';
+import ContactTechnical from './Components/Profile/ContactTechnical';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ProtectedRouteUser from './Components/ProtectedRoute/ProtectedRouteUser';
 import ProtectedRouteAdmin from './Components/ProtectedRoute/ProtectedRouteAdmin';
 import ProtectedRouteTechnical from './Components/ProtectedRoute/ProtectedRouteTechnical';
-
-
 import { useEffect } from 'react';
 
 function App() {
@@ -81,7 +80,7 @@ function App() {
         { path: 'contactus', element: <ProtectedRouteUser><ContactUs /></ProtectedRouteUser> },
         { path: 'about', element: <ProtectedRouteUser><About /></ProtectedRouteUser> },
         { path: 'requestsuser', element: <ProtectedRouteUser><RequestsUser /></ProtectedRouteUser> },
-        { path: 'contact', element: <ProtectedRouteUser><Contact /></ProtectedRouteUser> },
+        { path: 'contactuser', element: <ProtectedRouteUser><ContactUser /></ProtectedRouteUser> },
         { path: 'cars', element: <ProtectedRouteUser><Cars /></ProtectedRouteUser> },
         { path: 'payment', element: <ProtectedRouteUser><Payment /></ProtectedRouteUser> },
 
@@ -99,7 +98,7 @@ function App() {
         { path: "requestspending", element: <ProtectedRouteTechnical><RequestsPending /></ProtectedRouteTechnical> },
         { path: "requestssorted", element: <ProtectedRouteTechnical><RequestsSorted /></ProtectedRouteTechnical> },
         { path: "profiletech", element: <ProtectedRouteTechnical><ProfileTech /></ProtectedRouteTechnical> },
-        
+        { path: "contacttechnical", element: <ProtectedRouteTechnical><ContactTechnical /></ProtectedRouteTechnical> },
       ]
     },
   ]);

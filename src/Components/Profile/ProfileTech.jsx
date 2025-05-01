@@ -134,6 +134,11 @@ export default function ProfileTech() {
           <Link to="/legalinformation" className="text-lg hover:underline">Legal Information</Link>
         </div>
 
+        <div className="flex items-center gap-2 text-blue-800 mb-4">
+          <GrCircleInformation className="text-2xl" />
+          <Link to="/contacttechnical" className="text-lg hover:underline">Contact Technical</Link>
+        </div>
+
         {/*action for logout */}
         <div className="flex items-center gap-2 text-blue-800">
           <IoIosLogOut className="text-2xl" />

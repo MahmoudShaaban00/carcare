@@ -10,6 +10,7 @@ export const ContactProvider = ({ children }) => {
   const [sentMessageFor, setSentMessageFor] = useState('');
   const [contactMessages, setContactMessages] = useState([]);
   const [contactMessagesUser, setContactMessagesUser] = useState([]);
+  const [contactMessageTechnical, setContactMessageTechnical] = useState({});
 
   // Function to create a contact message
   const createContact = async (e) => {
@@ -77,24 +78,6 @@ export const ContactProvider = ({ children }) => {
     }
   };
 
-  // Function to get messages for user (not admin)
-  const getContactMessagesUser = async () => {
-    try {
-      const token = localStorage.getItem('UserToken');
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setContactMessagesUser(data);
-      return data;
-    } catch (error) {
-      console.error('Error fetching user contact messages:', error);
-      alert('Error fetching contact messages. Please try again later.');
-      throw error;
-    }
-  };
-
   // Function to update a contact message
   const updateContactMessage = async (id, updatedMessage, updatedMessageFor) => {
     try {
@@ -125,6 +108,43 @@ export const ContactProvider = ({ children }) => {
     }
   };
 
+  // Function to get messages for user (not admin)
+  const getContactMessagesUser = async () => {
+    try {
+      const token = localStorage.getItem('UserToken');
+      const { data } = await axios.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setContactMessagesUser(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching user contact messages:', error);
+      alert('Error fetching contact messages. Please try again later.');
+      throw error;
+    }
+  };
+
+  // Function to get messages for user (not admin)
+  const getContactMessagesTechnical = async () => {
+    try {
+      const token = localStorage.getItem('TechnicalToken');
+      const { data } = await axios.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setContactMessageTechnical(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching user contact messages:', error);
+      alert('Error fetching contact messages. Please try again later.');
+      throw error;
+    }
+  };
+
+
   return (
     <ContactContext.Provider
       value={{
@@ -141,6 +161,8 @@ export const ContactProvider = ({ children }) => {
         getContactMessagesUser,
         contactMessagesUser,
         updateContactMessage,
+        getContactMessagesTechnical,
+        contactMessageTechnical,
       }}
     >
       {children}

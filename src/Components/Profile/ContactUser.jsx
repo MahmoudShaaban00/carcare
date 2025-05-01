@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useContact } from '../../Context/ContactContext'
 
-export default function Contact() {
+export default function ContactUser() {
   let { getContactMessagesUser, contactMessagesUser } = useContact()
 
   useEffect(() => {

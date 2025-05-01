@@ -5,7 +5,7 @@ import { CgProfile } from "react-icons/cg";
 import { UserContext } from '../../Context/UserContext';
 import { AdminContext } from '../../Context/AdminContext';
 import { TechnicalContext } from '../../Context/TechnicalContext';
-import { FaClipboardList } from "react-icons/fa";
+import { IoCarSportSharp } from "react-icons/io5";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 
 export default function Navbar() {
@@ -40,18 +40,18 @@ export default function Navbar() {
 
             return (
                 <>
-                    <NavLink to="/home" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Home</NavLink>
+                    <NavLink to="/home" className="nav-link text-white hover:bg-amber-500 rounded px-1  border-b-2 border-transparent hover:border-white">Home</NavLink>
                     <hr className='text-white w-full p-0 m-0 md:hidden' />
-                    <NavLink to="/services" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Services</NavLink>
+                    <NavLink to="/services" className="nav-link text-white hover:bg-amber-500 rounded px-1  border-b-2 border-transparent hover:border-white">Services</NavLink>
                     <hr className='text-white w-full p-0 m-0 md:hidden' />
-                    <NavLink to="/about" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">About</NavLink>
+                    <NavLink to="/about" className="nav-link text-white hover:bg-amber-500 rounded px-1  border-b-2 border-transparent hover:border-white">About</NavLink>
                     <hr className='text-white w-full p-0 m-0 md:hidden' />
-                    <NavLink to="/contactus" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Contact Us</NavLink>
+                    <NavLink to="/contactus" className="nav-link text-white hover:bg-amber-500 rounded px-1  border-b-2 border-transparent hover:border-white">Contact Us</NavLink>
                     <hr className='text-white w-full p-0 m-0 md:hidden' />
-                    <NavLink to="/cars" className="nav-link text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">Cars</NavLink>
+                    <NavLink to="/requestsuser" className="nav-link text-white hover:bg-amber-500 rounded px-1  border-b-2 border-transparent hover:border-white">Requests</NavLink>
                     <hr className='text-white w-full p-0 m-0 md:hidden' />
-                    <NavLink to="/requestsuser" className="text-2xl text-white hover:bg-amber-500 rounded px-2  border-b-2 border-transparent hover:border-white">
-                        <FaClipboardList />
+                    <NavLink to="/cars" className=" text-2xl text-white hover:bg-amber-500 rounded px-1  border-b-2 border-transparent hover:border-white">
+                    <IoCarSportSharp />
                     </NavLink>
                 </>
             );
@@ -83,8 +83,8 @@ export default function Navbar() {
         <div className="bg-[#0B4261] p-3 flex items-center justify-between rounded-lg relative">
             {/* Logo */}
             <div className="flex items-center">
-                <img src={logo} className="w-[50px] h-[50px] mr-2" alt="Logo" />
-                <h1 className="text-3xl text-white font-bold">CarCare</h1>
+                <img src={logo} className="lg:w-[50px] w-[40px] lg:h-[50px] h-[40px] mr-2" alt="Logo" />
+                <h1 className="lg:text-3xl text-2xl text-white font-bold">CarCare</h1>
             </div>
 
             {/* Desktop Links */}
