@@ -62,6 +62,7 @@ export default function RequestsUser() {
         }
       );
 
+      setRequests((prevRequests) => prevRequests.filter((req) => req.id !== requestId));
       console.log("Request deleted:", data);
       alert("Request deleted successfully!");
       getAllRequests();
