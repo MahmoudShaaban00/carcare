@@ -25,6 +25,7 @@ export default function FeedbackComponent () {
   
       if (!feedbackId) {
         console.error("Feedback ID is missing from localStorage.");
+        alert("Feedback ID is missing from localStorage.");
         return;
       }
   
@@ -40,8 +41,10 @@ export default function FeedbackComponent () {
   
       console.log("Feedback Data:", data);
       setFeedback(data);
+      alsert("Feedback data fetched successfully!");
     } catch (error) {
       console.error("Error fetching feedback:", error);
+      alsert("Error fetching feedback:", error);
     }
   }
   
@@ -70,12 +73,14 @@ export default function FeedbackComponent () {
       );
   
       console.log("Feedback deleted successfully");
+      alsert("Feedback deleted successfully!");
   
       setFeedback(null);
       localStorage.removeItem("FeedBackId");
   
     } catch (error) {
       console.error("Error deleting feedback:", error);
+      alsert("Error deleting feedback. Please try again later.");
     }
   }
   

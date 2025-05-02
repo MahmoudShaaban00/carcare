@@ -56,7 +56,7 @@ export default function ProfileTech() {
         nationalId: formData.nationalId // Adding nationalId to the payload
       };
 
-      await axios.put("https://carcareapp.runasp.net/api/account/UpdateTech", updatedData,
+      await axios.put("https://carcareapp.runasp.net/api/account/UpdateAppUser", updatedData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,8 +68,10 @@ export default function ProfileTech() {
       setTechnicalData(updatedData);
       setIsEditing(false);
       console.log("User data updated successfully!");
+      alert("User data updated successfully!");
     } catch (error) {
       console.error("Error updating technical data:", error);
+      alert("Error updating technical data:", error);
     }
   };
 

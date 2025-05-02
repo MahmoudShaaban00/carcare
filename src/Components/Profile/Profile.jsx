@@ -65,12 +65,12 @@ export default function Profile() {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("UserToken");
+      console.log("Token before update request:", token);
       if (!token) return;
 
       const updatedData = { fullName: formData.fullName, email: formData.email, phoneNumber: formData.phoneNumber };
 
-      await axios.put(
-        "https://carcareapp.runasp.net/api/account/UpdateUser", updatedData,
+      await axios.put("https://carcareapp.runasp.net/api/account/UpdateAppUser", updatedData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,8 +82,10 @@ export default function Profile() {
       setUserData(updatedData);
       setIsEditing(false);
       console.log("User data updated successfully!");
+      alert("User data updated successfully!");
     } catch (error) {
       console.error("Error updating user data:", error);
+      alert("Error updating user data:", error);
     }
   };
 
@@ -116,6 +118,7 @@ export default function Profile() {
         }
       });
 
+      alert("Feedback submitted successfully!");
       console.log('Feedback submitted successfully:', response.data);
 
       if (response.data && response.data.id) {
@@ -125,12 +128,17 @@ export default function Profile() {
 
       setIsFeedbackOpen(false);
     } catch (error) {
-      if (error.response?.data?.message === "You Already Add FeedBack Please Update Your FeedBack or Enter a Comment") {
+      const errorMessage = error.response?.data?.message;
+    
+      if (errorMessage === "You Already Add FeedBack Please Update Your FeedBack or Enter a Comment") {
         console.error('Feedback already submitted. Please update your feedback.');
+        alert('Feedback already submitted. Please update your feedback.');
       } else {
         console.error('Error submitting feedback:', error.response?.data || error.message);
+        alert(`Error submitting feedback: ${errorMessage || error.message}`);
       }
     }
+    
   };
 
   useEffect(() => {
