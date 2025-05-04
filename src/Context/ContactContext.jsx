@@ -118,6 +118,7 @@ export const ContactProvider = ({ children }) => {
         },
       });
       setContactMessagesUser(data);
+      console.log("user contact",data);
       return data;
     } catch (error) {
       console.error('Error fetching user contact messages:', error);
@@ -136,6 +137,7 @@ export const ContactProvider = ({ children }) => {
         },
       });
       setContactMessageTechnical(data);
+      console.log("technical contact",data);
       return data;
     } catch (error) {
       console.error('Error fetching user contact messages:', error);

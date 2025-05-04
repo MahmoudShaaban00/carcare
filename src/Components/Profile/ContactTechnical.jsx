@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useContact } from '../../Context/ContactContext';
 
 export default function ContactTechnical() {
   const { getContactMessagesTechnical, contactMessageTechnical } = useContact();
-
+  const [filter, setFilter] = useState('All'); // State for the filter
+  
   useEffect(() => {
     getContactMessagesTechnical();
   }, []);
+
+  // Filter messages based on selected filter
+  const filteredMessages = contactMessageTechnical.filter((msg) => 
+    filter === 'All' || msg.messageFor === filter
+  );
 
   return (
     <div className="px-6 py-10">
@@ -14,9 +20,25 @@ export default function ContactTechnical() {
         📨 Recent Contact Messages
       </h3>
 
+      {/* Filter Options */}
+      <div className="mb-4 flex justify-center space-x-4">
+        <button
+          className={`px-4 py-2 rounded-full ${filter === 'All' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          onClick={() => setFilter('All')}
+        >
+          All
+        </button>
+        <button
+          className={`px-4 py-2 rounded-full ${filter === 'Technical' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          onClick={() => setFilter('Technical')}
+        >
+          Technical
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {Array.isArray(contactMessageTechnical) && contactMessageTechnical.length > 0 ? (
-          contactMessageTechnical.map((msg) => (
+        {Array.isArray(filteredMessages) && filteredMessages.length > 0 ? (
+          filteredMessages.map((msg) => (
             <div
               key={msg.id}
               className="bg-white p-6 rounded-2xl shadow-lg border border-blue-100 hover:shadow-xl transition-shadow duration-300"

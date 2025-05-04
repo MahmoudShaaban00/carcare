@@ -65,7 +65,7 @@ export default function Requests() {
         <div>
             <h1 className="text-3xl font-bold mb-3 text-center mt-2">Requests</h1>
             {/* Pie Chart for user roles */}
-            <div className="mb-6" style={{ height: '400px', width: '70%'  , marginBottom:'100px' , marginLeft:'auto' , marginRight:'auto'}}>
+            <div className="sm:mb-32 mb-56 m-auto" style={{ height: '400px', width: '70%'}}>
                 <RequestsPieChart />
             </div>
 

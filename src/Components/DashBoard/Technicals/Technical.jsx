@@ -189,7 +189,7 @@ export default function Technical() {
       </Typography>
 
       {/* Chart */}
-      <div className="mb-6" style={{ height: '400px', width: '70%', margin: '0 auto 100px auto' }}>
+      <div className="sm:mb-32 mb-56 m-auto" style={{ height: '400px', width: '70%' }}>
         <TechnicalPrefixChart />
       </div>
 

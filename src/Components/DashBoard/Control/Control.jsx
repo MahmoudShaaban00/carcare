@@ -1,182 +1,74 @@
-import React from 'react';
-import { Grid, Button, Box, Paper, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import feedback from '../../../assets/dashboard/feedback.jpg';
-import services from '../../../assets/dashboard/services.jpg';
-import technical from '../../../assets/dashboard/technicals.jpg';
-import vehicles from '../../../assets/dashboard/vhicle.jpg';
-import users from '../../../assets/dashboard/users.jpg';
-import requests from '../../../assets/dashboard/requests.jpg';
-import contact from '../../../assets/dashboard/contact.jpg';
-import RequestsPieChart from '../Requests/RequestsPieChar';
-import PhonePrefixChart from '../team/PhonePrefixChart';
-import TechnicalPrefixChart from '../Technicals/TechnicalPrefixChart';
-import CreateContact from '../Contact/CreateContact';
-
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import RequestsPieChart from "../Requests/RequestsPieChar";
+import PhonePrefixChart from "../team/PhonePrefixChart";
+import TechnicalPrefixChart from "../Technicals/TechnicalPrefixChart";
 
 const Control = () => {
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Box sx={{ textAlign: 'center', margin: 3 }}>
-      {/* Title above the Grid */}
-      <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: 3, marginTop: 3 }}>
-        Control of Dashboard
-      </Typography>
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <div
+        className={`${
+          isOpen ? "xl:w-1/4 w-1/3" : "xl:w-[5%] w--[8%]"
+        } bg-[#0B4261] text-white transition-all duration-300 flex flex-col`}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between md:p-4 px-1 border-b border-gray-700 ">
+          {isOpen && <span className="font-bold text-sm">Dashboard</span>}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-white text-2xl  md:px-0 px-4"
+            title={isOpen ? "Close Sidebar" : "Open Sidebar"}
+          >
+            {isOpen ? "✖" : "☰"}
+          </button>
+        </div>
 
-      <Box
-  sx={{
-    display: 'flex',
-    gap: 3,
-    margin: 5,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 20,
-  }}
->
-  <Box
-    sx={{
-      width: { xs: '100%', sm: 380, md: 380 },
-      height: { xs: 500, sm: 350, md: 350 }, // Increased height on mobile
-      mb: { xs: '100px', sm: '100px', md: '50px' },
-    }}
-  >
-    <RequestsPieChart />
-  </Box>
+        {/* Navigation */}
+        <nav className="flex flex-col p-4 space-y-2">
+          <Link to="/team" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Users" : "👥"}
+          </Link>
+          <Link to="/technical" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Technicals" : "🧑‍🔧"}
+          </Link>
+          <Link to="/servicestype" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Services" : "🛠️"}
+          </Link>
+          <Link to="/vehicle" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Vehicles" : "🚗"}
+          </Link>
+          <Link to="/feedbacks" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Feedback" : "💬"}
+          </Link>
+          <Link to="/requests" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Requests" : "📬"}
+          </Link>
+          <Link to="/createcontact" className="hover:bg-gray-700 p-2 rounded">
+            {isOpen ? "Contact" : "📞"}
+          </Link>
+        </nav>
+      </div>
 
-  <Box
-    sx={{
-      width: { xs: '100%', sm: 380, md: 380 },
-      height: { xs: 500, sm: 350, md: 350 }, // Increased height on mobile
-      mb: { xs: '100px', sm: '100px', md: '50px' },
-    }}
-  >
-    <PhonePrefixChart />
-  </Box>
-
-  <Box
-    sx={{
-      width: { xs: '100%', sm: 380, md: 380 },
-      height: { xs: 500, sm: 350, md: 350 }, // Increased height on mobile
-      mb: { xs: '100px', sm: '100px', md: '50px' },
-      mt: { xs: 0, sm: 0, md: 0 },
-      '@media (min-width:927px) and (max-width:1110px)': {
-        mt: '50px',
-      },
-    }}
-  >
-    <TechnicalPrefixChart />
-  </Box>
-</Box>
-
-
-      <Grid container justifyContent="center" alignItems="center" marginTop={3} spacing={3}>
-        {/* First row: Vehicles, Technicals, and Services */}
-        {/*Users*/}
-        <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-          <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-            <img src={users} alt="Users" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-            <Button variant="contained" onClick={() => navigate("/team")} sx={{
-              width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-              height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-              borderRadius: '8px', marginBottom: '10px'
-            }}>
-              Users
-            </Button>
-          </Paper>
-        </Grid>
-
-        {/*Technicals*/}
-        <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-          <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-            <img src={technical} alt="Technicals" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-            <Button variant="contained" onClick={() => navigate("/technical")} sx={{
-              width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-              height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-              borderRadius: '8px', marginBottom: '10px'
-            }}>
-              Technicals
-            </Button>
-          </Paper>
-        </Grid>
-
-        {/* Services */}
-        <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-          <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-            <img src={services} alt="Services Type" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-            <Button variant="contained" onClick={() => navigate("/servicestype")} sx={{
-              width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-              height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-              borderRadius: '8px', marginBottom: '10px'
-            }}>
-              Services Type
-            </Button>
-          </Paper>
-        </Grid>
-
-        {/* Second row: Users and Feedbacks */}
-        <Grid container justifyContent="center" alignItems="center" marginTop={3} spacing={3}>
-          {/* First row: Vehicles, Technicals, and Services */}
-          {/*Vehicles*/}
-          <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-            <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-              <img src={vehicles} alt="Vehicles" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-              <Button variant="contained" onClick={() => navigate("/vehicle")} sx={{
-                width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-                height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-                borderRadius: '8px', marginBottom: '10px'
-              }}>
-                Vehicles
-              </Button>
-            </Paper>
-          </Grid>
-
-          {/*Feedbacks*/}
-          <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-            <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-              <img src={feedback} alt="Feedbacks" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-              <Button variant="contained" onClick={() => navigate("/feedbacks")} sx={{
-                width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-                height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-                borderRadius: '8px', marginBottom: '10px'
-              }}>
-                FeedBack
-              </Button>
-            </Paper>
-          </Grid>
-
-          {/*Requests*/}
-          <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-            <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-              <img src={requests} alt="Feedbacks" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-              <Button variant="contained" onClick={() => navigate("/requests")} sx={{
-                width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-                height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-                borderRadius: '8px', marginBottom: '10px'
-              }}>
-                Requests
-              </Button>
-            </Paper>
-          </Grid>
-
-        </Grid>
-
-        {/* Contact Form for Sending Messages */}
-        <Grid item xs={12} sm={4} md={4} sx={{ textAlign: 'center' }}>
-          <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 1, boxShadow: 3, borderRadius: 2 }}>
-            <img src={contact} alt="Feedbacks" style={{ width: '400px', height: '250px', marginBottom: '10px', borderRadius: '8px' }} />
-            <Button variant="contained" onClick={() => navigate("/createcontact")} sx={{
-              width: { xs: '100%', sm: '80%', md: '70%', lg: '60%', xl: '50%' },
-              height: { xs: '40px', sm: '45px', md: '50px', lg: '55px', xl: '60px' },
-              borderRadius: '8px', marginBottom: '10px'
-            }}>
-              Contact
-            </Button>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
+      {/* Main Content (Charts) */}
+      <div className="flex-1 bg-gray-100 p-6 transition-all duration-300 overflow-y-auto">
+        <h1 className="text-2xl font-bold text-center mb-6">Control of Dashboard</h1>
+        <div >
+          <div className="sm:w-full lg:h-[350px] w-[250px] m-auto md:h-[200px] bg-white shadow rounded">
+            <RequestsPieChart />
+          </div>
+          <div className="sm:w-full lg:h-[350px] w-[250px] m-auto md:h-[200px] bg-white shadow rounded mt-3 lg:mt-24 md:mt-72 sm:mt-8">
+            <PhonePrefixChart />
+          </div>
+          <div className="sm:w-full lg:h-[350px] w-[250px] m-auto md:h-[200px] bg-white shadow rounded mt-3 lg:mt-24 md:mt-72 sm:mt-8 lg:mb-10 md:mb-56 sm:mb-14">
+            <TechnicalPrefixChart />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
