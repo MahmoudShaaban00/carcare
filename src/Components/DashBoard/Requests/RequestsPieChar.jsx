@@ -26,13 +26,24 @@ const RequestsPieChart = () => {
         params: { userId }
       });
 
-      setRequests(data);
+      console.log("API Response Data:", data); // Log the data to check its structure
+
+      // Ensure the data is an array before setting it
+      if (Array.isArray(data)) {
+        setRequests(data);
+      } else {
+        setError("Unexpected data format received from the server");
+      }
     } catch (err) {
       setError(err.message);
     }
   };
 
   const prepareChartData = () => {
+    if (!Array.isArray(requests)) {
+      return []; // Return an empty array if requests is not an array
+    }
+
     const statuses = ['Pending', 'Completed', 'InProgress', 'Canceled'];
     const counts = statuses.reduce((acc, status) => ({ ...acc, [status]: 0 }), {});
     requests.forEach(req => {

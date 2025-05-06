@@ -7,8 +7,11 @@ const StarRating = ({ value, onChange }) => {
   return (
     <div className="flex justify-center my-3">
       {[1, 2, 3, 4, 5].map((star) => (
-        <button key={star} onClick={() => onChange(star)} className={`text-3xl ${value >= star ? "text-yellow-400" : "text-gray-300"
-          } hover:scale-125 transition-transform`} >
+        <button
+          key={star}
+          onClick={() => onChange(star)}
+          className={`text-3xl ${value >= star ? "text-yellow-400" : "text-gray-300"} hover:scale-125 transition-transform`}
+        >
           ★
         </button>
       ))}
@@ -18,20 +21,21 @@ const StarRating = ({ value, onChange }) => {
 
 export default function RequestsUser() {
   const [requests, setRequests] = useState([]);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showRateDialog, setShowRateDialog] = useState(false);
   const [rate, setRate] = useState(0);
   const [rateTarget, setRateTarget] = useState({ techId: null, requestId: null });
-  const [statusFilter, setStatusFilter] = useState("All");
 
   // Fetch requests
-  async function getAllRequests() {
+  async function getAllRequests(currentPage) {
     try {
       const token = localStorage.getItem("UserToken");
       if (!token) throw new Error("UserToken not found in localStorage");
 
       const { data } = await axios.get(
-        "https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequests",
+        `https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequests?pageSize=6&pageIndex=${currentPage}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -40,7 +44,9 @@ export default function RequestsUser() {
         }
       );
 
-      setRequests(data);
+      setRequests(data.data); // assuming paginated data is in `data.data`
+      setTotalPages(Math.ceil(data.totalCount / data.pageSize)); // assumes your API returns `totalCount` and `pageSize`
+      console.log("Fetched requests:", data.data);
     } catch (error) {
       console.error("Error fetching service requests:", error);
     }
@@ -52,26 +58,22 @@ export default function RequestsUser() {
       const token = localStorage.getItem("UserToken");
       if (!token) throw new Error("UserToken not found in localStorage");
 
-      const { data } = await axios.delete(`https://carcareapp.runasp.net/api/ServiceRequest/DeleteRequestForUser/${requestId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          data: { requestId, serviceId, technicalId },
-        }
-      );
+      await axios.delete(`https://carcareapp.runasp.net/api/ServiceRequest/DeleteRequestForUser/${requestId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        data: { requestId, serviceId, technicalId },
+      });
 
-      setRequests((prevRequests) => prevRequests.filter((req) => req.id !== requestId));
-      console.log("Request deleted:", data);
       alert("Request deleted successfully!");
-      getAllRequests();
+      getAllRequests(pageIndex);
     } catch (error) {
       console.error("Error deleting request:", error);
     }
   }
 
-  // Function to submit rating for a technician
+  // Rate technician
   const rateTechnical = async (rate, technicalid) => {
     try {
       const token = localStorage.getItem("UserToken");
@@ -83,57 +85,35 @@ export default function RequestsUser() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
 
-      console.log("Rating submitted successfully:", data);
       alert("Rating submitted successfully!");
       return data;
-
     } catch (error) {
-      console.error('Error rating technical:', error);
-      alert('Error rating technical: ' + error.message);
+      console.error("Error rating technician:", error);
+      alert("Error rating technician: " + error.message);
       throw error;
     }
   };
 
   useEffect(() => {
-    getAllRequests();
-  }, []);
-
-  // Filter requests based on status
-  const filteredRequests = statusFilter === "All"
-    ? requests
-    : requests.filter((req) => req.busnissStatus === statusFilter);
+    getAllRequests(pageIndex);
+  }, [pageIndex]);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mb-10">
       <h1 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
         Service Requests
       </h1>
 
-      {/* Filter Buttons */}
-      <div className="flex justify-center gap-3 mb-6">
-        {["All", "Pending", "InProgress", "Completed", "Canceled"].map((status) => (
-          <button
-            key={status}
-            onClick={() => setStatusFilter(status)}
-            className={`px-4 py-2 rounded-full border font-semibold transition 
-              ${statusFilter === status ? "bg-blue-600 text-white" : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"}`}
-          >
-            {status}
-          </button>
-        ))}
-      </div>
-
-      {/* Requests List */}
-      {filteredRequests.length === 0 ? (
+      {requests.length === 0 ? (
         <p className="text-center text-gray-500">No requests available</p>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredRequests.map((request) => (
+          {requests.map((request) => (
             <div
               key={request.id}
               className="bg-white shadow-lg rounded-lg p-5 border border-gray-200"
@@ -155,7 +135,6 @@ export default function RequestsUser() {
                 </div>
               </div>
 
-              {/* Buttons */}
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex-1 transition-transform transform hover:scale-105"
@@ -167,9 +146,7 @@ export default function RequestsUser() {
                 {request.busnissStatus === "Pending" && (
                   <button
                     className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 flex-1 transition-transform transform hover:scale-105"
-                    onClick={() =>
-                      deleteRequest(request.id, request.serviceTypeId, request.techId)
-                    }
+                    onClick={() => deleteRequest(request.id, request.serviceTypeId, request.techId)}
                   >
                     Delete
                   </button>
@@ -178,7 +155,11 @@ export default function RequestsUser() {
                 {request.busnissStatus === "Completed" && (
                   <button
                     className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 flex-1 shadow-md transition-transform transform hover:scale-105"
-                    onClick={() => {setShowRateDialog(true); setRateTarget({ techId: request.techId, requestId: request.id });}}>
+                    onClick={() => {
+                      setShowRateDialog(true);
+                      setRateTarget({ techId: request.techId, requestId: request.id });
+                    }}
+                  >
                     Rate Technician
                   </button>
                 )}
@@ -187,6 +168,38 @@ export default function RequestsUser() {
           ))}
         </div>
       )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-10 space-x-4">
+  <button
+    onClick={() => setPageIndex((prev) => Math.max(prev - 1, 1))}
+    disabled={pageIndex === 1}
+    className={`px-5 py-2 rounded-full shadow-md transition-colors duration-200 ${
+      pageIndex === 1
+        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    }`}
+  >
+    ◀ Previous
+  </button>
+
+  <span className="self-center text-lg font-semibold text-gray-700">
+    Page <span className="text-blue-600">{pageIndex}</span>{totalPages ? ` of ${totalPages}` : ""}
+  </span>
+
+  <button
+    onClick={() => setPageIndex((prev) => prev + 1)}
+    disabled={totalPages && pageIndex >= totalPages}
+    className={`px-5 py-2 rounded-full shadow-md transition-colors duration-200 ${
+      totalPages && pageIndex >= totalPages
+        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600"
+    }`}
+  >
+    Next ▶
+  </button>
+</div>
+
 
       {/* Request Details Modal */}
       {selectedRequest && (
@@ -228,7 +241,11 @@ export default function RequestsUser() {
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
             <button
               className="absolute top-3 right-3 text-white bg-red-500 rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600"
-              onClick={() => { setShowRateDialog(false); setRate(0); }}>
+              onClick={() => {
+                setShowRateDialog(false);
+                setRate(0);
+              }}
+            >
               ✕
             </button>
 
@@ -240,13 +257,25 @@ export default function RequestsUser() {
               ))}
             </div>
 
-            <input type="range" min="1" max="5" step="0.1" value={rate}
-              onChange={(e) => setRate(parseFloat(e.target.value))} className="w-full accent-yellow-500"/>
+            <input
+              type="range"
+              min="1"
+              max="5"
+              step="0.1"
+              value={rate}
+              onChange={(e) => setRate(parseFloat(e.target.value))}
+              className="w-full accent-yellow-500"
+            />
             <p className="text-center mt-2 text-gray-600">Rating: {rate.toFixed(1)} / 5</p>
 
             <button
-              onClick={() => { rateTechnical(rate, rateTarget.techId); setShowRateDialog(false); setRate(0);}}
-              className="mt-6 w-full bg-green-500 text-white px-5 py-3 rounded-lg hover:bg-green-600 shadow-md text-lg">
+              onClick={() => {
+                rateTechnical(rate, rateTarget.techId);
+                setShowRateDialog(false);
+                setRate(0);
+              }}
+              className="mt-6 w-full bg-green-500 text-white px-5 py-3 rounded-lg hover:bg-green-600 shadow-md text-lg"
+            >
               Submit Rating
             </button>
           </div>

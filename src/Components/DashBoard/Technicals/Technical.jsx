@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Paper, Typography, Button, Dialog, DialogTitle, DialogContent,
+  Paper, Grid, Typography, Button, Dialog, DialogTitle, DialogContent,
   DialogActions, Checkbox, FormControlLabel, useTheme
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
 import TechnicalPrefixChart from './TechnicalPrefixChart';
+import TechnicalCountCard from './TechnicalCountCard';
 
 export default function Technical() {
   const theme = useTheme();
@@ -14,6 +15,7 @@ export default function Technical() {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState('');
   const [selectedTechnical, setSelectedTechnical] = useState(null);
+  const [technicalCount, setTechnicalCount] = useState(0);
 
   const [roles, setRoles] = useState([
     { id: 1, name: 'Technical', isSelected: true },
@@ -25,6 +27,7 @@ export default function Technical() {
     try {
       const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
       if (Array.isArray(data)) setDataTechnicals(data);
+      setTechnicalCount(data.length);
       console.log('Fetched Technicals:', data);
     } catch (error) {
       console.error("Error fetching technicals", error);
@@ -187,6 +190,12 @@ export default function Technical() {
       <Typography variant="h4" gutterBottom sx={{ color: theme.palette.primary.main }} align="center">
         Technicals List
       </Typography>
+
+      <Grid container spacing={3} alignContent={'center'} justifyContent="center" marginBottom={3}>
+        <Grid item xs={12} sm={6} md={4}>
+          <TechnicalCountCard  /> {/* Pass totalUsers as prop */}
+        </Grid>
+      </Grid>
 
       {/* Chart */}
       <div className="sm:mb-32 mb-56 m-auto" style={{ height: '400px', width: '70%' }}>

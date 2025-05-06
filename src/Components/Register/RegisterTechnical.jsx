@@ -24,26 +24,33 @@ export default function RegisterTechnical() {
             localStorage.setItem('tecId', data.id);
             localStorage.setItem('TechnicalToken', data.token);
             console.log("Technical ID:", data.id);
-
+    
             Swal.fire({
                 title: 'Registered Successfully!',
                 text: 'Welcome on board!',
                 icon: 'success',
                 confirmButtonText: 'Continue',
             });
-
+    
             navigate("/map");
-
+    
         } catch (error) {
             console.error('Registration Failed:', error.response?.data || error.message);
+    
+            // Check if the backend provides specific validation errors
+            const errorMessage = error.response?.data?.errors
+                ? Object.values(error.response.data.errors).join(", ")
+                : error.response?.data?.message || "An unexpected error occurred.";
+    
             Swal.fire({
                 title: 'Registration Failed!',
-                text: error.response?.data?.errors || 'Something went wrong. Please try again.',
+                text: errorMessage,  // Display the specific errors or fallback message
                 icon: 'error',
                 confirmButtonText: 'OK',
             });
         }
     }
+    
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email('Invalid email address').required('Email is required'),

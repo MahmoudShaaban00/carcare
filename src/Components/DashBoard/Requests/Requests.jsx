@@ -2,17 +2,19 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import tecpro from '../../../assets/tecpro.jpg'
 import RequestsPieChart from '../Requests/RequestsPieChar'; // Adjust the import path as necessary
-
-
-
+import RequestCountCard from './RequestCountCard';
+import { Grid } from '@mui/material';
 
 export default function Requests() {
     const [requests, setRequests] = useState([]);
     const [error, setError] = useState(null); // Added state to capture errors
-
+    const [loading, setLoading] = useState(false); // Added loading state
+    const [pageIndex, setPageIndex] = useState(1); // To track the current page
+    const [totalCount, setTotalCount] = useState(0); // Total count of requests to handle pagination
 
     // Function to fetch requests
     const fetchRequests = async () => {
+        setLoading(true); // Set loading true when fetching data
         try {
             const userId = localStorage.getItem('UserId'); // Ensure userId is not empty
             const token = localStorage.getItem('AdminToken');
@@ -39,38 +41,45 @@ export default function Requests() {
                     userId: userId  // Ensure correct header
                 },
                 params: {
-                    userId: userId  // Ensure correct parameter
+                    userId: userId,  // Ensure correct parameter
+                    pageSize: 10,
+                    pageIndex: pageIndex,
                 }
             });
 
-            console.log("✅ Response Data:", data);
-            setRequests(data);
-
+            // Handle the data returned from the API
+            setRequests(data.data); // Set the requests data
+            setTotalCount(data.count); // Set the total count of requests for pagination
+            console.log("✅ Requests data:", data.data); // Log the requests data
         } catch (error) {
-            console.error("❌ Error fetching requests:", error.response?.data || error.message);
+            console.error("❌ Error fetching data:", error.response?.data || error.message);
             setError(`Error: ${error.response?.data?.message || error.message}`);
+        } finally {
+            setLoading(false); // Set loading false after fetch is done
         }
     };
 
-   
-
-
     useEffect(() => {
         fetchRequests();
-    }, []);
+    }, [pageIndex]); // Dependency on pageIndex so it refetches when pageIndex changes
 
     const [selectedRequest, setSelectedRequest] = useState(null);
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-3 text-center mt-2">Requests</h1>
-            {/* Pie Chart for user roles */}
-            <div className="sm:mb-32 mb-56 m-auto" style={{ height: '400px', width: '70%'}}>
-                <RequestsPieChart />
-            </div>
+            {/* Title and Description */}
+            <Grid container spacing={3} alignContent={'center'} justifyContent="center" marginBottom={3} marginTop={3}>
+                <Grid item xs={12} sm={6} md={4}>
+                    <RequestCountCard  /> {/* Pass totalUsers as prop */}
+                </Grid>
+            </Grid>
 
+            {/*list requests*/}
+            <h1 className="text-3xl font-bold mb-3 text-center mt-2">Requests</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            {requests.length === 0 ? (
+            {loading ? (
+                <p>Loading...</p>
+            ) : requests.length === 0 ? (
                 <p>No requests available.</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -97,6 +106,25 @@ export default function Requests() {
                     ))}
                 </div>
             )}
+
+            {/* Pagination */}
+            <div className="flex justify-center gap-4 mb-6">
+                <button
+                    onClick={() => setPageIndex(prev => Math.max(prev - 1, 1))}
+                    disabled={pageIndex === 1}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300"
+                >
+                    ⬅ Previous
+                </button>
+                <span className="text-lg font-medium text-gray-700">Page: {pageIndex}</span>
+                <button
+                    onClick={() => setPageIndex(prev => (pageIndex * 10 < totalCount ? prev + 1 : prev))}
+                    disabled={pageIndex * 10 >= totalCount}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300"
+                >
+                    Next ➡
+                </button>
+            </div>
 
             {/* Modal for Request Details */}
             {selectedRequest && (
