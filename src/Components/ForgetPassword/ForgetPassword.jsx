@@ -5,11 +5,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function ForgetPassword() {
+  const navigate = useNavigate();
 
-
-  let navigate = useNavigate()
-
-  // Function to handle form submission
   async function handleSubmit(formValues) {
     try {
       const response = await axios.post('https://carcareapp.runasp.net/api/account/SendCodeByEmail', {
@@ -24,51 +21,51 @@ export default function ForgetPassword() {
     }
   }
 
-  // Validation schema for form validation
-  let validationSchema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
   });
 
-  // Formik setup for managing form state and validation
-  let formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       email: '',
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: handleSubmit,
   });
 
   return (
-    <div className="mt-2 ">
-      <div className="mt-10 place-items-center">
-        <h1 className="lg:text-5xl text-3xltext-[#0B4261]">Forget Password</h1>
-        <p className="text-lg font-semibold mt-2text-[#0B4261]">Enter your email to reset your password</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#d5d8da] to-[#0B4261] flex items-center justify-center px-4">
+      <div className="bg-white shadow-2xl rounded-xl px-10 py-12 w-full max-w-lg">
+        <h1 className="text-4xl font-bold text-[#0B4261] text-center mb-4">Forget Password</h1>
+        <p className="text-gray-700 text-center mb-8">Enter your email to reset your password</p>
 
-      {/* Form for email input and submit button */}
-      <form onSubmit={formik.handleSubmit} className="place-items-center">
-        {/* Email Input */}
-        <div className="mt-10">
-          <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="email" name="email" id="email" value={formik.values.email}
-            className="border-2 sm:w-[500px] p-3 rounded-full placeholder-black text-left w-[300px]"
-            placeholder="Email Address"
-          />
-          {formik.errors.email && formik.touched.email ? (
-            <div className="flex items-center mx-auto sm:w-[500px] w-[300px] p-4 mt-2 text-sm text-red-800 rounded-lg bg-red-50">
-              {formik.errors.email}
-            </div>
-          ) : null}
-        </div>
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <div>
+            <input
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="email"
+              name="email"
+              id="email"
+              value={formik.values.email}
+              className="w-full px-5 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#0B4261] placeholder-gray-500"
+              placeholder="Email Address"
+            />
+            {formik.errors.email && formik.touched.email && (
+              <p className="text-sm text-red-600 mt-2">{formik.errors.email}</p>
+            )}
+          </div>
 
-        {/* Submit Button */}
-        <div>
-          <button type="submit" className="md:text-lg text-sm mt-10 bg-[#0B4261] text-white sm:w-[500px] w-[300px] p-3 rounded-full cursor-pointer hover:bg-slate-400 hover:text-white">
+          <button
+            type="submit"
+            className="w-full bg-[#0B4261] text-white py-3 rounded-full text-lg hover:bg-blue-900 transition shadow-lg"
+          >
             SEND RESET LINK
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

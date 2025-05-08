@@ -78,12 +78,12 @@ export default function RegisterTechnical() {
     });
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br py-10 from-[#d5d8da] to-[#0B4261]">
             <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
                 <h1 className="text-3xl font-bold text-center text-blue-800">Register Technical</h1>
                 <p className="text-center text-gray-600 mt-2">Nice to see you again!</p>
 
-                <form onSubmit={formik.handleSubmit} className="mt-6 space-y-4">
+                <form onSubmit={formik.handleSubmit} className="mt-6 space-y-4 ">
                     <div>
                         <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="text" name="FullName" value={formik.values.FullName}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"

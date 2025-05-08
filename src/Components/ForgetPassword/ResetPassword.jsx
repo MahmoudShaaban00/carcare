@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
-
     // Initialize navigate for programmatic navigation
     let navigate = useNavigate();
 
@@ -53,7 +52,7 @@ export default function ResetPassword() {
     });
 
     return (
-        <div className='mt-2 '>
+        <div className="bg-gradient-to-br from-[#d5d8da] to-[#0B4261] min-h-screen">
             <div className='mt-10 place-items-center'>
                 <h1 className='md:text-5xl text-3xl text-[#0B4261]'>Reset Password</h1>
                 <p className='text-lg font-semibold mt-2 text-[#0B4261]'>Enter your new password</p>

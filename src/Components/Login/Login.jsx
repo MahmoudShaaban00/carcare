@@ -1,80 +1,57 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
 import { jwtDecode } from "jwt-decode";
 import { AdminContext } from '../../Context/AdminContext';
 import { TechnicalContext } from '../../Context/TechnicalContext';
 import Swal from 'sweetalert2';
-
+import carlogin from '../../assets/carlogin.jpg';
 
 export default function Login() {
-  // Context
-  let { setUserLogin, setUserId } = useContext(UserContext);
-  let { setAdminLogin } = useContext(AdminContext);
-  let { setTechnicalLogin } = useContext(TechnicalContext);
-  let navigate = useNavigate();
+  const { setUserLogin, setUserId } = useContext(UserContext);
+  const { setAdminLogin } = useContext(AdminContext);
+  const { setTechnicalLogin } = useContext(TechnicalContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-  // Function to send data to API
   async function sendToApi(formValues) {
     try {
-      console.log("Sending data:", formValues);
-      const { data } = await axios.post('https://carcareapp.runasp.net/api/account/login', formValues,
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-
-      console.log('Login successful:', data);
+      const { data } = await axios.post('https://carcareapp.runasp.net/api/account/login', formValues, {
+        headers: { 'Content-Type': 'application/json' }
+      });
 
       if (data.token) {
-        try {
-          const decodedToken = jwtDecode(data.token);
-          console.log("Decoded Token:", decodedToken);
+        const decodedToken = jwtDecode(data.token);
+        const userRole = decodedToken.role || decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-          // Extract role correctly
-          const userRole = decodedToken.role || decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-          console.log("Extracted Role:", userRole);
+        Swal.fire({
+          title: 'Login Successful!',
+          text: 'Welcome back!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
 
-          // Display success alert for login success
-          Swal.fire({
-            title: 'Login Successful!',
-            text: 'Welcome back!',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-
-          if (userRole === "Admin") {
-            localStorage.setItem("AdminToken", data.token);
-            setAdminLogin(data.token);
-            navigate("/control");
-
-          } else if (userRole === "Technical") {
-            localStorage.setItem("TechnicalToken", data.token);
-            setTechnicalLogin(data.token);
-            localStorage.setItem('tecId', data.id);
-            navigate("/requeststechnical");
-
-          } else {
-            localStorage.setItem("UserToken", data.token);
-            setUserLogin(data.token);
-            localStorage.setItem("UserId", data.id);
-            console.log("user id is" + data.id);
-            setUserId(data.id);
-            navigate("/home");
-          }
-        } catch (error) {
-          console.error("Error decoding token:", error);
-          Swal.fire({
-            title: 'Error!',
-            text: 'There was an issue with the token.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
+        if (userRole === "Admin") {
+          localStorage.setItem("AdminToken", data.token);
+          setAdminLogin(data.token);
+          navigate("/control");
+        } else if (userRole === "Technical") {
+          localStorage.setItem("TechnicalToken", data.token);
+          setTechnicalLogin(data.token);
+          localStorage.setItem('tecId', data.id);
+          navigate("/requeststechnical");
+        } else {
+          localStorage.setItem("UserToken", data.token);
+          setUserLogin(data.token);
+          localStorage.setItem("UserId", data.id);
+          setUserId(data.id);
+          navigate("/home");
         }
       } else {
-        console.error("Token missing in response");
         Swal.fire({
           title: 'Error!',
           text: 'Login failed. No token received.',
@@ -83,7 +60,6 @@ export default function Login() {
         });
       }
     } catch (error) {
-      console.error("Login failed:", error.response?.data || error.message);
       Swal.fire({
         title: 'Login Failed!',
         text: error.response?.data?.message || 'Something went wrong. Please try again.',
@@ -93,73 +69,114 @@ export default function Login() {
     }
   }
 
-  // Validation schema
-  let validationSchema = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     phoneNumber: Yup.string()
       .matches(/^01[0125][0-9]{8}$/, 'Phone number is invalid')
       .required('Phone is required'),
     password: Yup.string().required('Password is required'),
   });
 
-  // Formik hook
-  let formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       phoneNumber: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: sendToApi,
   });
 
   return (
-    <div className="mt-10 flex flex-col items-center justify-center px-4 sm:px-6 md:px-0">
-      <h1 className="text-5xl font-bold text-[#0B4261]">Log in</h1>
-      <p className="text-lg font-semibold mt-2 text-gray-600">Nice to see you again</p>
-
-      {/* Form for login */}
-      <form onSubmit={formik.handleSubmit} className="w-full max-w-md mt-8">
-        <div className="relative mt-6">
-          <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="tel" name="phoneNumber" id="phoneNumber"
-            value={formik.values.phoneNumber}
-            className="w-full p-4 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-lg placeholder-gray-400 shadow-sm transition-all"
-            placeholder="Phone Number"
-          />
-          {formik.errors.phoneNumber && formik.touched.phoneNumber && (
-            <p className="mt-2 text-sm text-red-600">{formik.errors.phoneNumber}</p>
-          )}
-        </div>
-
-        <div className="relative mt-6">
-          <input onBlur={formik.handleBlur} onChange={formik.handleChange} type="password" name="password" id="password" value={formik.values.password}
-            className="w-full p-4 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-lg placeholder-gray-400 shadow-sm transition-all"
-            placeholder="Password"
-          />
-          {formik.errors.password && formik.touched.password && (
-            <p className="mt-2 text-sm text-red-600">{formik.errors.password}</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="mt-8 w-full bg-[#0B4261] text-white text-lg font-semibold py-3 rounded-lg shadow-lg hover:bg-blue-800 transition-all"
-        >
-          LOGIN
-        </button>
-      </form>
-
-      {/* Links for registration and forget password */}
-      <div className="flex justify-between w-full max-w-md mt-4 text-sm text-gray-600 flex-wrap sm:flex-nowrap">
-        <p className="w-full sm:w-auto text-center sm:text-left">
-          Don't have an account?{' '}
-          <Link to='/register' className="text-blue-600 hover:underline">
-            Create account
+    <>
+      {/* Top navigation for Login/Register */}
+      <div className="w-full flex justify-center py-4 bg-white shadow-md bg-gradient-to-tr from-teal-400 to-teal-600">
+        <div className="space-x-10 text-lg font-medium ">
+          <Link
+            to="/login"
+            className={`pb-2 ${currentPath === "/login" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-600 hover:text-[#0B4261]"}`}
+          >
+            Login
           </Link>
-        </p>
-        <Link to='/forgetpassword' className="text-blue-600 hover:underline sm:text-right w-full sm:w-auto text-center mt-2 sm:mt-0">
-          Forget Password
-        </Link>
+          <Link
+            to="/register"
+            className={`pb-2 ${currentPath === "/register" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-600 hover:text-[#0B4261]"}`}
+          >
+            Register
+          </Link>
+        </div>
       </div>
 
-    </div>
+      {/* Login Page Content */}
+      <div className="flex min-h-screen bg-gradient-to-br from-[#d5d8da] to-[#0B4261] justify-center items-center">
+        <div className="bg-white shadow-xl rounded-xl overflow-hidden flex w-full max-w-5xl">
+          {/* Left side image */}
+          <div className="w-1/2 bg-gradient-to-tr from-teal-400 to-teal-600 flex items-center justify-center p-8">
+            <img
+              src={carlogin}
+              alt="Login Illustration"
+              className="max-h-[90%] object-contain"
+            />
+          </div>
+
+          {/* Right side form */}
+          <div className="w-1/2 p-10">
+            <h1 className="text-4xl font-bold text-[#0B4261] mb-1">Log in</h1>
+            <p className="text-gray-600 text-lg mb-6">Nice to see you again</p>
+
+            <form onSubmit={formik.handleSubmit} className="space-y-5">
+              <div>
+                <input
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="tel"
+                  name="phoneNumber"
+                  id="phoneNumber"
+                  value={formik.values.phoneNumber}
+                  placeholder="Phone Number"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-lg"
+                />
+                {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+                  <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
+                )}
+              </div>
+
+              <div>
+                <input
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={formik.values.password}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-lg"
+                />
+                {formik.errors.password && formik.touched.password && (
+                  <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-[#0B4261] text-white text-lg rounded-lg hover:bg-blue-800 transition shadow-lg"
+              >
+                LOGIN
+              </button>
+            </form>
+
+            <div className="flex justify-between text-sm text-gray-600 mt-4 flex-wrap">
+              <p>
+                Don't have an account?{' '}
+                <Link to="/register" className="text-blue-600 hover:underline">
+                  Create account
+                </Link>
+              </p>
+              <Link to="/forgetpassword" className="text-blue-600 hover:underline mt-2 sm:mt-0">
+                Forget Password
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

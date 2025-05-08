@@ -5,6 +5,20 @@ import Footer from "../Footer/Footer";
 export default function Layout() {
   const location = useLocation();
 
+  const noNavbarRoutes = [
+    "/",
+    "/login",
+    "/register",
+    "/registeruser",
+    "/registertechnical",
+    "/forgetpassword",
+    "/resetpassword",
+    "/legalinformation",
+    "/confiromemail",
+    "/verfiycode",
+    "/map",
+  ];
+
   const noFooterRoutes = [
     "/",
     "/login",
@@ -24,12 +38,12 @@ export default function Layout() {
     "/createcontact"
   ];
 
+  const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
   const shouldShowFooter = !noFooterRoutes.includes(location.pathname);
 
-  
   return (
     <>
-      <Navbar />
+      {shouldShowNavbar && <Navbar />}
       <Outlet />
       {shouldShowFooter && <Footer />}
     </>
