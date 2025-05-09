@@ -106,76 +106,76 @@ export default function Login() {
       </div>
 
       {/* Login Page Content */}
-      <div className="flex min-h-screen bg-gradient-to-br from-[#d5d8da] to-[#0B4261] justify-center items-center">
-        <div className="bg-white shadow-xl rounded-xl overflow-hidden flex w-full max-w-5xl">
-          {/* Left side image */}
-          <div className="w-1/2 bg-gradient-to-tr from-teal-400 to-teal-600 flex items-center justify-center p-8">
-            <img
-              src={carlogin}
-              alt="Login Illustration"
-              className="max-h-[90%] object-contain"
-            />
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-[#d5d8da] to-[#0B4261] flex justify-center items-center p-4">
+  <div className="bg-white shadow-xl rounded-xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
+    {/* Left side image */}
+    <div className="w-full md:w-1/2 bg-gradient-to-tr from-teal-400 to-teal-600 flex items-center justify-center p-6 md:p-8">
+      <img
+        src={carlogin}
+        alt="Login Illustration"
+        className="w-full max-h-64 md:max-h-[90%] object-contain"
+      />
+    </div>
 
-          {/* Right side form */}
-          <div className="w-1/2 p-10">
-            <h1 className="text-4xl font-bold text-[#0B4261] mb-1">Log in</h1>
-            <p className="text-gray-600 text-lg mb-6">Nice to see you again</p>
+    {/* Right side form */}
+    <div className="w-full md:w-1/2 p-6 md:p-10">
+      <h1 className="text-3xl md:text-4xl font-bold text-[#0B4261] mb-2">Log in</h1>
+      <p className="text-gray-600 text-base md:text-lg mb-6">Nice to see you again</p>
 
-            <form onSubmit={formik.handleSubmit} className="space-y-5">
-              <div>
-                <input
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="tel"
-                  name="phoneNumber"
-                  id="phoneNumber"
-                  value={formik.values.phoneNumber}
-                  placeholder="Phone Number"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-lg"
-                />
-                {formik.errors.phoneNumber && formik.touched.phoneNumber && (
-                  <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
-                )}
-              </div>
-
-              <div>
-                <input
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={formik.values.password}
-                  placeholder="Password"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-lg"
-                />
-                {formik.errors.password && formik.touched.password && (
-                  <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3 bg-[#0B4261] text-white text-lg rounded-lg hover:bg-blue-800 transition shadow-lg"
-              >
-                LOGIN
-              </button>
-            </form>
-
-            <div className="flex justify-between text-sm text-gray-600 mt-4 flex-wrap">
-              <p>
-                Don't have an account?{' '}
-                <Link to="/register" className="text-blue-600 hover:underline">
-                  Create account
-                </Link>
-              </p>
-              <Link to="/forgetpassword" className="text-blue-600 hover:underline mt-2 sm:mt-0">
-                Forget Password
-              </Link>
-            </div>
-          </div>
+      <form onSubmit={formik.handleSubmit} className="space-y-5">
+        <div>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            type="tel"
+            name="phoneNumber"
+            id="phoneNumber"
+            value={formik.values.phoneNumber}
+            placeholder="Phone Number"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+          />
+          {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+            <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
+          )}
         </div>
+
+        <div>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            type="password"
+            name="password"
+            id="password"
+            value={formik.values.password}
+            placeholder="Password"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+          />
+          {formik.errors.password && formik.touched.password && (
+            <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg"
+        >
+          LOGIN
+        </button>
+      </form>
+
+      <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-600 mt-4 gap-2">
+        <p>
+          Don't have an account?{' '}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Create account
+          </Link>
+        </p>
+        <Link to="/forgetpassword" className="text-blue-600 hover:underline">
+          Forget Password
+        </Link>
+      </div>
+    </div>
+     </div>
       </div>
     </>
   );
