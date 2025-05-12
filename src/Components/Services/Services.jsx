@@ -322,7 +322,7 @@ export default function Services() {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            const status = response.data.status; // Make sure your API response has this structure
+            const status = "response.data.status"; // Make sure your API response has this structure
             console.log('Current status:', status);
 
             if (status === 'InProgress') {
