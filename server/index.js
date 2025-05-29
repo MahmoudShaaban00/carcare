@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./keys.env" }); // ✅ Load from keys.env
+require("dotenv").config({ path: "../keys.env" }); // ✅ Load from keys.env
 
 const express = require("express");
 const cors = require("cors");
