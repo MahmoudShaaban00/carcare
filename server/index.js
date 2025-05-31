@@ -1,4 +1,5 @@
-require("dotenv").config({ path: "./keys.env" }); // ✅ Load from keys.env
+require("dotenv").config({ path: "../keys.env" });
+console.log("🔍 STRIPE_SECRET_KEY from env:", process.env.STRIPE_SECRET_KEY);
 
 const express = require("express");
 const cors = require("cors");
