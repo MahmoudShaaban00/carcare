@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ResponsivePie } from '@nivo/pie';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import axiosInstance from '../../../api'; // Adjust the import path as necessary
 
 export default function TechnicalPrefixChart() {
   const [dataTechnicals, setDataTechnicals] = useState([]);
@@ -9,7 +10,7 @@ export default function TechnicalPrefixChart() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
+        const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
         if (Array.isArray(data)) {
           setDataTechnicals(data);
         }

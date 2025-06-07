@@ -2,6 +2,7 @@ import { Box, Card, CardContent, Typography, Grid, CircularProgress } from '@mui
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment'; // For date formatting
+import axiosInstance from '../../../api'; // Adjust the import path as necessary
 
 export default function FeedBacks() {
     const [feedBacks, setFeedBacks] = useState([]);
@@ -15,7 +16,7 @@ export default function FeedBacks() {
                 console.error('Error: Admin token not found');
                 return;
             }
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/DashBoard/GetAllFeedBacks?Sort=RateAsc`,
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/DashBoard/GetAllFeedBacks?Sort=RateAsc`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                     'Content-type': 'application/json',

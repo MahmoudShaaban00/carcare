@@ -9,6 +9,7 @@ import LeafletRoutingMachine from "./LeafletRoutingMachine";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { LocationContext } from "../../Context/LocationContext"; // ✅ Import Context
+import axiosInstance from "../../api";
 
 // proporties of marker
 const defaultIcon = L.icon({
@@ -24,6 +25,7 @@ function LocationMarker() {
   const { setCoordinates } = useContext(LocationContext); // ✅ Use Context
   const [position, setPosition] = useState(null);
 
+  // Hook to handle map events
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
@@ -60,7 +62,7 @@ export default function Map() {
         techLongitude: longitude
       };
 
-      await axios.put("https://carcareapp.runasp.net/api/account/Update-Technical-Location", dataTec, {
+      await axiosInstance.put("https://carcareapp.runasp.net/api/account/Update-Technical-Location", dataTec, {
         headers: {
           "Content-Type": "application/json"
         }

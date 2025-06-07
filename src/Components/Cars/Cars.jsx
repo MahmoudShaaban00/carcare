@@ -1,62 +1,52 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../api";
 
 export default function Cars() {
-    const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState([]);
 
-    // Fetch cars from the API
-    async function getCars() {
-        try {
-            const token = localStorage.getItem('UserToken');
-            const userId = localStorage.getItem('UserId');
+  // Function to fetch cars for the logged-in user
+  async function getCars() {
+    try {
+      const userId = localStorage.getItem("UserId");
 
-            if (!token || !userId) {
-                alert('Error: Missing user token or user ID');
-                return;
-            }
+      if (!userId) {
+        alert("Missing User ID");
+        return;
+      }
 
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/Vehicle/Get-All-Vehicle-For-SpecificUser`, {
-                headers: { Authorization: `Bearer ${token}` },
-                params: { userId },
-            });
+      const { data } = await axiosInstance.get("/Vehicle/Get-All-Vehicle-For-SpecificUser", {
+        params: { userId },
+      });
 
-            setCars(data.data);
-        } catch (error) {
-            console.log('Error fetching data:', error.response?.data || error.message);
-        }
+      setCars(data.data);
+      console.log("Cars fetched successfully:", data.data);
+    } catch (error) {
+      console.log("Error fetching cars:", error.response?.data || error.message);
     }
+  }
 
-    // Delete a car by ID
-    async function deleteCar(carId) {
-        try {
-            const token = localStorage.getItem('UserToken');
-            if (!token) {
-                alert('Error: Missing user token');
-                return;
-            }
-
-            await axios.delete(`https://carcareapp.runasp.net/api/DashBoard/Delete-Vehicle/${carId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            alert('Car deleted successfully!');
-            setCars(cars.filter(car => car.id !== carId));
-        } catch (error) {
-            console.log('Error deleting car:', error.response?.data || error.message);
-        }
+  // Function to delete a car
+  async function deleteCar(carId) {
+    try {
+      await axiosInstance.delete(`/DashBoard/Delete-Vehicle/${carId}`);
+      alert("Car deleted successfully!");
+      setCars(cars.filter((car) => car.id !== carId));
+    } catch (error) {
+      console.log("Error deleting car:", error.response?.data || error.message);
     }
+  }
 
-    useEffect(() => {
-        getCars();
-    }, []);
-
+  useEffect(() => {
+    getCars();
+  }, []);
+  
     return (
         <div className="w-full px-4 py-8 md:px-8 bg-slate-50 min-h-screen">
             <h2 className="text-3xl font-bold text-center text-[#0B4261] mb-6">My Cars</h2>
 
             {cars.length > 0 ? (
                 <>
-                    {/* Table for md and up */}
+                    {/* Table for md+ */}
                     <div className="hidden md:block overflow-x-auto">
                         <table className="min-w-full text-sm text-gray-700 bg-white shadow-md rounded-xl overflow-hidden">
                             <thead className="bg-[#0B4261] text-white text-sm uppercase tracking-wider">
@@ -91,7 +81,7 @@ export default function Cars() {
 
                     {/* Cards for mobile */}
                     <div className="block md:hidden space-y-4">
-                        {cars.map((car) => (
+                        {cars.map(car => (
                             <div key={car.id} className="bg-white rounded-xl shadow-md p-4">
                                 <div className="text-lg font-semibold text-[#0B4261] mb-2">Car Name: {car.model}</div>
                                 <p><span className="font-semibold">Color:</span> {car.color}</p>

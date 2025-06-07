@@ -2,6 +2,8 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom"; // ✅ Step 1
+import axiosInstance from "../../api";
+
 
 import axios from "axios";
 
@@ -60,7 +62,7 @@ const CheckoutForm = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:5000/payment", {
+      const response = await axiosInstance.post("http://localhost:5000/payment", {
         paymentMethodId: paymentMethod.id,
         clientSecret,
         paymentIntentId,

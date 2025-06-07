@@ -87,7 +87,6 @@ export default function RequestsTechnical() {
     getPendingRequests(); // Refresh list
   };
 
-
   // complete a request
   const handleComplete = (id) => {
     completeRequest(id);

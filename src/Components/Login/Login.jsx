@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { AdminContext } from '../../Context/AdminContext';
 import { TechnicalContext } from '../../Context/TechnicalContext';
 import Swal from 'sweetalert2';
-import carlogin from '../../assets/carlogin.jpg';
+import logo from '../../assets/logo.png';
 
 export default function Login() {
   const { setUserLogin, setUserId } = useContext(UserContext);
@@ -38,17 +38,20 @@ export default function Login() {
         if (userRole === "Admin") {
           localStorage.setItem("AdminToken", data.token);
           setAdminLogin(data.token);
+          localStorage.setItem("refreshToken", data.refreshToken);
           navigate("/control");
         } else if (userRole === "Technical") {
           localStorage.setItem("TechnicalToken", data.token);
           setTechnicalLogin(data.token);
           localStorage.setItem('tecId', data.id);
+          localStorage.setItem("refreshToken", data.refreshToken);
           navigate("/requeststechnical");
         } else {
           localStorage.setItem("UserToken", data.token);
           setUserLogin(data.token);
           localStorage.setItem("UserId", data.id);
           setUserId(data.id);
+          localStorage.setItem("refreshToken", data.refreshToken);
           navigate("/home");
         }
       } else {
@@ -59,6 +62,7 @@ export default function Login() {
           confirmButtonText: 'Try Again',
         });
       }
+      console.log("Login successful:", data);
     } catch (error) {
       Swal.fire({
         title: 'Login Failed!',
@@ -88,17 +92,21 @@ export default function Login() {
   return (
     <>
       {/* Top navigation for Login/Register */}
-      <div className="w-full flex justify-center py-4 bg-white shadow-md bg-gradient-to-tr from-teal-400 to-teal-600">
-        <div className="space-x-10 text-lg font-medium ">
+      <div className="w-full flex justify-between px-3 py-2 shadow-md  bg-[#0B4261]">
+        <div className="flex items-center">
+          <img src={logo} className="lg:w-[50px] w-[40px] lg:h-[50px] h-[40px] mr-2" alt="Logo" />
+          <h1 className="lg:text-3xl text-2xl text-white font-bold">CarCare</h1>
+        </div>
+        <div className="space-x-10 text-lg pt-2 font-medium text-white flex items-center">
           <Link
             to="/login"
-            className={`pb-2 ${currentPath === "/login" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-600 hover:text-[#0B4261]"}`}
+            className={`pb-2 ${currentPath === "/login" ? "border-b-2 border-[#0B4261] text-white" : "text-white hover:text-[#c9cdcf]"}`}
           >
             Login
           </Link>
           <Link
             to="/register"
-            className={`pb-2 ${currentPath === "/register" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-600 hover:text-[#0B4261]"}`}
+            className={`pb-2 ${currentPath === "/register" ? "border-b-2 border-[#0B4261] text-white" : "text-white hover:text-[#d7dadb]"}`}
           >
             Register
           </Link>
@@ -107,75 +115,64 @@ export default function Login() {
 
       {/* Login Page Content */}
       <div className="min-h-screen bg-gradient-to-br from-[#d5d8da] to-[#0B4261] flex justify-center items-center p-4">
-  <div className="bg-white shadow-xl rounded-xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
-    {/* Left side image */}
-    <div className="w-full md:w-1/2 bg-gradient-to-tr from-teal-400 to-teal-600 flex items-center justify-center p-6 md:p-8">
-      <img
-        src={carlogin}
-        alt="Login Illustration"
-        className="w-full max-h-64 md:max-h-[90%] object-contain"
-      />
-    </div>
 
-    {/* Right side form */}
-    <div className="w-full md:w-1/2 p-6 md:p-10">
-      <h1 className="text-3xl md:text-4xl font-bold text-[#0B4261] mb-2">Log in</h1>
-      <p className="text-gray-600 text-base md:text-lg mb-6">Nice to see you again</p>
+        <div className="bg-white shadow-xl rounded-xl overflow-hidden w-full max-w-xl p-6 md:p-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#0B4261] mb-2 text-center">Log in</h1>
+          <p className="text-gray-600 text-base md:text-lg mb-6 text-center">Nice to see you again</p>
 
-      <form onSubmit={formik.handleSubmit} className="space-y-5">
-        <div>
-          <input
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            type="tel"
-            name="phoneNumber"
-            id="phoneNumber"
-            value={formik.values.phoneNumber}
-            placeholder="Phone Number"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
-          />
-          {formik.errors.phoneNumber && formik.touched.phoneNumber && (
-            <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
-          )}
+          <form onSubmit={formik.handleSubmit} className="space-y-5">
+            <div>
+              <input
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="tel"
+                name="phoneNumber"
+                id="phoneNumber"
+                value={formik.values.phoneNumber}
+                placeholder="Phone Number"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+              />
+              {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+                <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="password"
+                name="password"
+                id="password"
+                value={formik.values.password}
+                placeholder="Password"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+              />
+              {formik.errors.password && formik.touched.password && (
+                <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg"
+            >
+              LOGIN
+            </button>
+          </form>
+
+          <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-600 mt-4 gap-2">
+            <p>
+              Don't have an account?{' '}
+              <Link to="/register" className="text-blue-600 hover:underline">
+                Create account
+              </Link>
+            </p>
+            <Link to="/forgetpassword" className="text-blue-600 hover:underline">
+              Forget Password
+            </Link>
+          </div>
         </div>
-
-        <div>
-          <input
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            type="password"
-            name="password"
-            id="password"
-            value={formik.values.password}
-            placeholder="Password"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
-          />
-          {formik.errors.password && formik.touched.password && (
-            <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg"
-        >
-          LOGIN
-        </button>
-      </form>
-
-      <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-600 mt-4 gap-2">
-        <p>
-          Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Create account
-          </Link>
-        </p>
-        <Link to="/forgetpassword" className="text-blue-600 hover:underline">
-          Forget Password
-        </Link>
-      </div>
-    </div>
-     </div>
       </div>
     </>
   );

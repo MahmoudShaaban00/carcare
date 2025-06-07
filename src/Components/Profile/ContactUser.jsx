@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useContact } from '../../Context/ContactContext';
 
+
 export default function ContactUser() {
   const { getContactMessagesUser, contactMessagesUser } = useContact();
-  const [filter, setFilter] = useState('All'); // State for filter (All or User)
+  const [filter, setFilter] = useState('All'); 
 
   useEffect(() => {
     getContactMessagesUser();

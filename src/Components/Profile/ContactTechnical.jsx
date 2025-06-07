@@ -4,15 +4,20 @@ import { useContact } from '../../Context/ContactContext';
 export default function ContactTechnical() {
   const { getContactMessagesTechnical, contactMessageTechnical } = useContact();
   const [filter, setFilter] = useState('All'); // State for the filter
-  
+
   useEffect(() => {
     getContactMessagesTechnical();
   }, []);
 
-  // Filter messages based on selected filter
-  const filteredMessages = contactMessageTechnical.filter((msg) => 
-    filter === 'All' || msg.messageFor === filter
-  );
+  // Debug: log the value to help trace issues
+  useEffect(() => {
+    console.log("contactMessageTechnical:", contactMessageTechnical);
+  }, [contactMessageTechnical]);
+
+  // Safe filtering
+  const filteredMessages = Array.isArray(contactMessageTechnical)
+    ? contactMessageTechnical.filter((msg) => filter === 'All' || msg.messageFor === filter)
+    : [];
 
   return (
     <div className="px-6 py-10">
@@ -36,8 +41,9 @@ export default function ContactTechnical() {
         </button>
       </div>
 
+      {/* Message Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {Array.isArray(filteredMessages) && filteredMessages.length > 0 ? (
+        {filteredMessages.length > 0 ? (
           filteredMessages.map((msg) => (
             <div
               key={msg.id}

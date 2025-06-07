@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, useTheme } from '@mui/material';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
+import axiosInstance from '../../../api'; // Adjust the import path as necessary
 
 export default function PhonePrefixChart() {
   const theme = useTheme();
@@ -16,7 +17,7 @@ export default function PhonePrefixChart() {
           return;
         }
 
-        const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers', {
+        const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers', {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

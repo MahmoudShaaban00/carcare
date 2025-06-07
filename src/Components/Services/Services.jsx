@@ -5,6 +5,8 @@ import tecpro from '../../assets/tecpro.jpg';
 import Map from "../Map/Map";
 import { LocationContext } from '../../Context/LocationContext';
 import { Link, useNavigate } from 'react-router-dom';
+import axiosInstance from "../../api";
+
 
 export default function Services() {
 
@@ -88,7 +90,7 @@ export default function Services() {
                 alert('Error: Token missing');
                 return;
             }
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetAll`, {
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetAll`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -108,7 +110,7 @@ export default function Services() {
                 alert('Error: Token missing');
                 return;
             }
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetServiceType/${id}`, {
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetServiceType/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -154,38 +156,38 @@ export default function Services() {
     // Function to handle the continue button click
     const handleContinue = async () => {
         console.log("handleContinue triggered");
-    
+
         if (isSubmittingRef.current) return;
         isSubmittingRef.current = true;
-    
+
         if (!selectedService) {
             alert("⚠️ Please select a service.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         // ✅ Check for price/type before location
         if (!selectedOption || !selectedOption.type || !selectedOption.price) {
             alert("⚠️ Please choose both a price and a type before selecting location.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         if (!coordinates) {
             alert("📍 Please choose a location on the map before proceeding.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         const selectedTechnicianId = localStorage.getItem("selectedTechnicianId");
         if (!selectedTechnicianId) {
             alert("🧑‍🔧 No technician selected. Please choose a service and location first.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         const token = localStorage.getItem("UserToken");
-    
+
         const selectedServiceData = {
             serviceTypeId: Number(selectedService.id),
             servicePrice: Number(selectedOption.price),
@@ -193,7 +195,7 @@ export default function Services() {
             userLongitude: parseFloat(coordinates[1]),
             techId: selectedTechnicianId,
         };
-    
+
         if (selectedService.id === 1) selectedServiceData.typeOfWinch = typeOfWinch;
         if (selectedService.id === 2) {
             selectedServiceData.serviceQuantity = parseInt(serviceQuantity);
@@ -208,11 +210,11 @@ export default function Services() {
             selectedServiceData.bettaryType = bettaryType;
         }
         if (selectedService.id === 5) selectedServiceData.typeOfOil = typeOfOil;
-    
+
         console.log("Final Selected Data:", selectedServiceData);
-    
+
         try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 "https://carcareapp.runasp.net/api/ServiceRequest/CreateRequestManually",
                 selectedServiceData,
                 {
@@ -222,7 +224,7 @@ export default function Services() {
                     },
                 }
             );
-    
+
             console.log('Response:', response.data);
             if (response.status === 200) {
                 const { clientSecret, paymentIntentId } = response.data;
@@ -230,7 +232,7 @@ export default function Services() {
                 localStorage.setItem("paymentIntentId", paymentIntentId);
                 localStorage.setItem("RequestId", response.data.id);
                 localStorage.setItem("ServiceId", response.data.serviceTypeId);
-    
+
                 alert("✅ Service request created successfully!");
                 localStorage.removeItem("selectedTechnicianId");
             } else {
@@ -240,12 +242,12 @@ export default function Services() {
             console.error("Error sending service request:", error);
             alert("❌ An error occurred. Please try again.");
         }
-    
+
         isSubmittingRef.current = false;
         setShowMap(false);
         setShowCard(true);
     };
-    
+
 
     // Function to fetch all technicians based on service ID and coordinates
     async function getAllTechnicals(serviceId, longitude, latitude) {
@@ -256,7 +258,7 @@ export default function Services() {
                 return;
             }
 
-            const { data } = await axios.get(
+            const { data } = await axiosInstance.get(
                 `https://carcareapp.runasp.net/api/ServiceRequest/GetAvailableTechincals?serviceid=${serviceId}&userlongitude=${longitude}&userlatitude=${latitude}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -283,7 +285,7 @@ export default function Services() {
                 return;
             }
 
-            let { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceRequest/GetNearestTechincals?serviceId=${serviceId}&UserLatitude=${latitude}&UserLongitude=${longitude}`, {
+            let { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceRequest/GetNearestTechincals?serviceId=${serviceId}&UserLatitude=${latitude}&UserLongitude=${longitude}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-type': 'application-json',
@@ -318,7 +320,7 @@ export default function Services() {
         const RequestId = localStorage.getItem('RequestId');
 
         try {
-            const response = await axios.get(`https://carcareapp.runasp.net/api/ServiceRequest/CheckStatus/${RequestId}`, {
+            const response = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceRequest/CheckStatus/${RequestId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -602,14 +604,20 @@ export default function Services() {
                                         Selected Price: <span className="text-green-600">{selectedOption ? `${selectedOption.price} EGP` : ''}</span>
                                     </p>
 
-                                    <button onClick={() => setShowMap(true) } className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 mr-3">Continue</button>
+                                    <button onClick={() => setShowMap(true)} className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 mr-3">Continue</button>
                                     <button onClick={() => setSelectedService(null)} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">Close</button>
                                 </div>
 
                             ) : (
                                 <div className="bg-white border border-gray-300 rounded-lg shadow-xl hover:scale-105 transition-transform duration-300">
                                     {/*show services */}
-                                    <img src={service.pictureUrl} alt={service.name} className="mt-4 w-full h-[200px] filter brightness-50 saturate-200 hue-rotate-180" />                                <div className="p-5 bg-gray-200 h-[180px]">
+                                    <div className="w-full  bg-gradient-to-tr from-teal-400 to-teal-600 flex items-center justify-center p-6 md:p-8">
+                                        <img src={service.pictureUrl}
+                                            alt="Login Illustration"
+  className="w-full h-[200px] md:max-h-[90%] object-contain filter grayscale brightness-75 contrast-130 hue-rotate-200 saturate-120"
+                                        />
+                                    </div>
+                                    <div className="p-5 bg-gray-200 h-[180px]">
                                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-[#0B4261]">
                                             {service.name}
                                         </h5>

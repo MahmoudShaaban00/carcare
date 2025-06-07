@@ -1,5 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import axiosInstance from "../../api";
+
 
 export default function AddCar() {
 
@@ -22,7 +24,7 @@ export default function AddCar() {
         }
 
         try {
-            const response = await axios.post('https://carcareapp.runasp.net/api/Vehicle/Create-Vehicle', carData,
+            const response = await axiosInstance.post('https://carcareapp.runasp.net/api/Vehicle/Create-Vehicle', carData,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
