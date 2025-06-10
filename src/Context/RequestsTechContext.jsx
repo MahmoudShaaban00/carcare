@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import axiosInstance from "../api"; 
+import axiosInstance from "../api";
 
 const RequestsTechContext = createContext();
 
@@ -44,9 +44,10 @@ export const RequestsProvider = ({ children }) => {
           },
         }
       );
-      getAllTechnicalRequests();
+      // Remove from pending immediately
+      setPendingRequests(prev => prev.filter(req => req.id !== id));
       alert("Request has been accepted.");
-      getPendingRequests()
+      getAllTechnicalRequests(); // optional sync
     } catch (err) {
       console.error("Accept error:", err);
     }
@@ -66,9 +67,10 @@ export const RequestsProvider = ({ children }) => {
           },
         }
       );
+      // Remove from pending immediately
+      setPendingRequests(prev => prev.filter(req => req.id !== id));
       alert("Request has been rejected.");
-      getAllTechnicalRequests();
-      getPendingRequests()
+      getAllTechnicalRequests(); // optional sync
     } catch (err) {
       console.error("Reject error:", err);
     }
@@ -79,7 +81,7 @@ export const RequestsProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("TechnicalToken");
       await axiosInstance.put(
-        `https://carcareapp.runasp.net/api/ServiceRequest/RejectRequest/${id}`,
+        `https://carcareapp.runasp.net/api/ServiceRequest/RejectRequest/${id}`, // 🔁 double-check this endpoint
         {},
         {
           headers: {
@@ -88,15 +90,16 @@ export const RequestsProvider = ({ children }) => {
           },
         }
       );
+      // Remove from in-progress immediately
+      setInProgressRequests(prev => prev.filter(req => req.id !== id));
       alert("Request has been completed.");
-      getAllTechnicalRequests();
-      getCompletedRequests();
+      getAllTechnicalRequests(); // optional sync
     } catch (err) {
-      console.error("Reject error:", err);
+      console.error("Complete error:", err);
     }
   };
 
-  // Function to activate a technical 
+  // Function to activate a technical
   const activateTechnical = async () => {
     try {
       const token = localStorage.getItem("TechnicalToken");
@@ -138,12 +141,12 @@ export const RequestsProvider = ({ children }) => {
     }
   };
 
-  //function to fetch pending requests
-  async function getPendingRequests() {
+  // Function to fetch pending requests
+  const getPendingRequests = async () => {
     try {
-      const token = localStorage.getItem("TechnicalToken")
+      const token = localStorage.getItem("TechnicalToken");
       if (!token) {
-        alert("error of technical token ")
+        alert("Error: Technical token missing");
         return;
       }
       const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=1", {
@@ -151,22 +154,22 @@ export const RequestsProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       setPendingRequests(data);
-      console.log("pending requests", data)
+      console.log("Pending requests", data);
     } catch (err) {
       console.error("Error fetching pending requests:", err);
       alert("Failed to fetch pending requests.");
     }
-  }
+  };
 
-  // Function to fetch InProgress requests
-  async function getInProgressRequests() {
+  // Function to fetch in-progress requests
+  const getInProgressRequests = async () => {
     try {
-      const token = localStorage.getItem("TechnicalToken")
+      const token = localStorage.getItem("TechnicalToken");
       if (!token) {
-        alert("error of technical token ")
+        alert("Error: Technical token missing");
         return;
       }
       const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=2", {
@@ -174,22 +177,22 @@ export const RequestsProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       setInProgressRequests(data);
-      console.log("InProgress requests", data)
+      console.log("In-progress requests", data);
     } catch (err) {
-      console.error("Error fetching InProgress requests:", err);
-      alert("Failed to fetch InProgress requests.");
+      console.error("Error fetching in-progress requests:", err);
+      alert("Failed to fetch in-progress requests.");
     }
-  }
+  };
 
-  // Function to fetch Completed requests
-  async function getCompletedRequests() {
+  // Function to fetch completed requests
+  const getCompletedRequests = async () => {
     try {
-      const token = localStorage.getItem("TechnicalToken")
+      const token = localStorage.getItem("TechnicalToken");
       if (!token) {
-        alert("error of technical token ")
+        alert("Error: Technical token missing");
         return;
       }
       const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=3", {
@@ -197,23 +200,22 @@ export const RequestsProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       setCompletedRequests(data);
-      console.log("Completed requests", data)
+      console.log("Completed requests", data);
+    } catch (err) {
+      console.error("Error fetching completed requests:", err);
+      alert("Failed to fetch completed requests.");
     }
-    catch (err) {
-      console.error("Error fetching Completed requests:", err);
-      alert("Failed to fetch Completed requests.");
-    }
-  }
+  };
 
-  // Function to fetch Cancled requests
-  async function getCancledRequests() {
+  // Function to fetch cancelled requests
+  const getCancledRequests = async () => {
     try {
-      const token = localStorage.getItem("TechnicalToken")
+      const token = localStorage.getItem("TechnicalToken");
       if (!token) {
-        alert("error of technical token ")
+        alert("Error: Technical token missing");
         return;
       }
       const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=4", {
@@ -221,16 +223,15 @@ export const RequestsProvider = ({ children }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       setCancledRequests(data);
-      console.log("Cancled requests", data)
+      console.log("Canceled requests", data);
     } catch (err) {
-      console.error("Error fetching Cancled requests:", err);
-      alert("Failed to fetch Cancled requests.");
+      console.error("Error fetching canceled requests:", err);
+      alert("Failed to fetch canceled requests.");
     }
-  }
-
+  };
 
   return (
     <RequestsTechContext.Provider
@@ -243,19 +244,18 @@ export const RequestsProvider = ({ children }) => {
         acceptRequest,
         rejectRequest,
         completeRequest,
-        activateTechnical,     // 👈 Add this
-        deactivateTechnical,   // 👈 Add this
+        activateTechnical,
+        deactivateTechnical,
         getPendingRequests,
-        getInProgressRequests,  // 👈 Add this
-        getCancledRequests, // 👈 Add this
+        getInProgressRequests,
+        getCancledRequests,
         getCompletedRequests,
         completedRequests,
         pendingRequests,
         InProgressRequests,
-        cancledRequests
+        cancledRequests,
       }}
     >
-
       {children}
     </RequestsTechContext.Provider>
   );
