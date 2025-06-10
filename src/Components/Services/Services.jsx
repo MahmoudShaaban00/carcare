@@ -154,38 +154,38 @@ export default function Services() {
     // Function to handle the continue button click
     const handleContinue = async () => {
         console.log("handleContinue triggered");
-    
+
         if (isSubmittingRef.current) return;
         isSubmittingRef.current = true;
-    
+
         if (!selectedService) {
             alert("⚠️ Please select a service.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         // ✅ Check for price/type before location
         if (!selectedOption || !selectedOption.type || !selectedOption.price) {
             alert("⚠️ Please choose both a price and a type before selecting location.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         if (!coordinates) {
             alert("📍 Please choose a location on the map before proceeding.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         const selectedTechnicianId = localStorage.getItem("selectedTechnicianId");
         if (!selectedTechnicianId) {
             alert("🧑‍🔧 No technician selected. Please choose a service and location first.");
             isSubmittingRef.current = false;
             return;
         }
-    
+
         const token = localStorage.getItem("UserToken");
-    
+
         const selectedServiceData = {
             serviceTypeId: Number(selectedService.id),
             servicePrice: Number(selectedOption.price),
@@ -193,7 +193,7 @@ export default function Services() {
             userLongitude: parseFloat(coordinates[1]),
             techId: selectedTechnicianId,
         };
-    
+
         if (selectedService.id === 1) selectedServiceData.typeOfWinch = typeOfWinch;
         if (selectedService.id === 2) {
             selectedServiceData.serviceQuantity = parseInt(serviceQuantity);
@@ -208,9 +208,9 @@ export default function Services() {
             selectedServiceData.bettaryType = bettaryType;
         }
         if (selectedService.id === 5) selectedServiceData.typeOfOil = typeOfOil;
-    
+
         console.log("Final Selected Data:", selectedServiceData);
-    
+
         try {
             const response = await axios.post(
                 "https://carcareapp.runasp.net/api/ServiceRequest/CreateRequestManually",
@@ -222,7 +222,7 @@ export default function Services() {
                     },
                 }
             );
-    
+
             console.log('Response:', response.data);
             if (response.status === 200) {
                 const { clientSecret, paymentIntentId } = response.data;
@@ -230,7 +230,7 @@ export default function Services() {
                 localStorage.setItem("paymentIntentId", paymentIntentId);
                 localStorage.setItem("RequestId", response.data.id);
                 localStorage.setItem("ServiceId", response.data.serviceTypeId);
-    
+
                 alert("✅ Service request created successfully!");
                 localStorage.removeItem("selectedTechnicianId");
             } else {
@@ -240,12 +240,12 @@ export default function Services() {
             console.error("Error sending service request:", error);
             alert("❌ An error occurred. Please try again.");
         }
-    
+
         isSubmittingRef.current = false;
         setShowMap(false);
         setShowCard(true);
     };
-    
+
 
     // Function to fetch all technicians based on service ID and coordinates
     async function getAllTechnicals(serviceId, longitude, latitude) {
@@ -602,147 +602,151 @@ export default function Services() {
                                         Selected Price: <span className="text-green-600">{selectedOption ? `${selectedOption.price} EGP` : ''}</span>
                                     </p>
 
-                                    <button onClick={() => setShowMap(true) } className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 mr-3">Continue</button>
+                                    <button onClick={() => setShowMap(true)} className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 mr-3">Continue</button>
                                     <button onClick={() => setSelectedService(null)} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">Close</button>
                                 </div>
 
                             ) : (
                                 <div className="bg-white border border-gray-300 rounded-lg shadow-xl hover:scale-105 transition-transform duration-300">
                                     {/*show services */}
-                                    <img src={service.pictureUrl} alt={service.name} className="mt-4 w-full h-[200px] filter brightness-50 saturate-200 hue-rotate-180" />                                <div className="p-5 bg-gray-200 h-[180px]">
-                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-[#0B4261]">
-                                            {service.name}
-                                        </h5>
-                                        <p className="mb-3 font-normal text-lg text-[#0B4261]">
-                                            {service.description}
-                                        </p>
-                                        <button
-                                            onClick={() => getServiceById(service.id)}
-                                            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#0B4261] rounded-lg hover:bg-blue-800">
-                                            Create Request
-                                        </button>
-                                    </div>
+                                    <div className='bg-teal-500 rounded-t-lg overflow-hidden'>
+                                        <img src={service.pictureUrl} alt={service.name} className="mt-4 w-full h-[200px] filter brightness-50 saturate-200 hue-rotate-180" />
+                                        </div>  
+
+                                        <div className='p-5 bg-gray-200 h-[180px]'>          
+                                       <h5 className="mb-2 text-2xl font-bold tracking-tight text-[#0B4261]">
+                                        {service.name}
+                                    </h5>
+                                    <p className="mb-3 font-normal text-lg text-[#0B4261]">
+                                        {service.description}
+                                    </p>
+                                    <button
+                                        onClick={() => getServiceById(service.id)}
+                                        className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#0B4261] rounded-lg hover:bg-blue-800">
+                                        Create Request
+                                    </button>
                                 </div>
-                            )}
-                        </div>
-                    ))}
+                                </div>
+                    )}
                 </div>
+                    ))}
+            </div>
 
-                {/* Show Map */}
-                {showMap && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full h-[95vh] flex flex-col relative">
-                            <h2 className="text-2xl font-bold mb-4">Map View</h2>
-                            <div className="flex-1 overflow-hidden">
-                                <Map className="w-full h-full" />
-                            </div>
-                            <div className="flex gap-3">
-                                <button onClick={() => setShowMap(false)} className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">Close</button>
-
-                                {coordinates && (
-                                    <div className="mt-4 text-center text-[#0B4261] font-semibold">
-                                        Selected Location: {coordinates[0]}, {coordinates[1]}
-                                    </div>
-                                )}
-
-                                <button onClick={() => setShowCard(true)} className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800">Continue</button>
-                            </div>
+            {/* Show Map */}
+            {showMap && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full h-[95vh] flex flex-col relative">
+                        <h2 className="text-2xl font-bold mb-4">Map View</h2>
+                        <div className="flex-1 overflow-hidden">
+                            <Map className="w-full h-full" />
                         </div>
-                    </div>
-                )}
+                        <div className="flex gap-3">
+                            <button onClick={() => setShowMap(false)} className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">Close</button>
 
-                {/* Loading Modal */}
-                {showLoadingModal && (
-                    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-60">
-                        <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-80 text-center">
-                            <div className="mb-4">
-                                <div className="w-12 h-12 mx-auto border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Processing Request</h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-300 mt-2">Please wait while we confirm technician availability.</p>
-                        </div>
-                    </div>
-                )}
-
-
-                {/* Show Card */}
-                {showCard && technicals.length > 0 && (
-                    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                        <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 overflow-y-auto max-h-[80vh]">
-                            <h2 className="text-xl font-semibold text-center mb-4">Available Technicians</h2>
-
-                            {technicals.map((technician, index) => (
-                                <div key={technician.id || index} className="border-b pb-4 mb-4 last:border-none last:pb-0">
-                                    <div className="flex items-center gap-4">
-                                        <img className="w-16 h-16 rounded-full shadow-lg" src={tecpro} alt="Technician" />
-                                        <div>
-                                            <h5 className="text-lg font-medium text-gray-900 dark:text-white">{technician.fullName}</h5>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">📞 {technician.phoneNumber}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">🛠 {technician.serviceName}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">📍 Distance: {technician.distance?.toFixed(2)} meters</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex mt-3">
-                                        <button
-                                            className={`px-4 py-2 text-white ${loading ? 'bg-gray-500' : 'bg-blue-700'} rounded-lg hover:bg-blue-800`}
-                                            onClick={async () => {
-                                                setLoading(true);
-
-                                                if (isCanceled) {
-                                                    // Only update technician
-                                                    await updateTechnical(technician.id);
-                                                } else {
-                                                    // Only for new request flow
-                                                    await handleSelectTechnician(technician.id);
-                                                    await handleContinue();
-                                                }
-
-                                                handleRequestClick(); // Starts 5-minute status check
-                                                setShowCard(false);
-                                                setLoading(false);
-                                            }}
-                                            disabled={loading}
-                                        >
-                                            {loading ? 'Processing...' : isCanceled ? 'Update' : 'Request'}
-                                        </button>
-
-
-                                    </div>
-                                </div>
-                            ))}
-
-                            {/* Button to Fetch Nearest Technician */}
-                            <button
-                                onClick={handleGetNearestTechnical}
-                                className="mt-4 w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800"
-                            >
-                                Show Nearest Technician
-                            </button>
-
-                            {/* Display the Nearest Technician if Available */}
-                            {nearestTechnical && (
-                                <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white text-center">Nearest Technician</h3>
-                                    <div className="flex items-center gap-4 mt-2">
-                                        <img className="w-16 h-16 rounded-full shadow-lg" src={tecpro} alt="Technician" />
-                                        <div>
-                                            <h5 className="text-lg font-medium text-gray-900 dark:text-white">{nearestTechnical.fullName}</h5>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">📞 {nearestTechnical.phoneNumber}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">🛠 {nearestTechnical.serviceName}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">📍 Distance: {nearestTechnical.distance?.toFixed(2)} meters</p>
-                                        </div>
-                                    </div>
+                            {coordinates && (
+                                <div className="mt-4 text-center text-[#0B4261] font-semibold">
+                                    Selected Location: {coordinates[0]}, {coordinates[1]}
                                 </div>
                             )}
 
-                            <button onClick={() => setShowCard(false)} className="mt-4 w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">
-                                Close
-                            </button>
+                            <button onClick={() => setShowCard(true)} className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800">Continue</button>
                         </div>
                     </div>
-                )}
+                </div>
+            )}
 
-            </div >
-        </div>
+            {/* Loading Modal */}
+            {showLoadingModal && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-60">
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-80 text-center">
+                        <div className="mb-4">
+                            <div className="w-12 h-12 mx-auto border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Processing Request</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-300 mt-2">Please wait while we confirm technician availability.</p>
+                    </div>
+                </div>
+            )}
+
+
+            {/* Show Card */}
+            {showCard && technicals.length > 0 && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 overflow-y-auto max-h-[80vh]">
+                        <h2 className="text-xl font-semibold text-center mb-4">Available Technicians</h2>
+
+                        {technicals.map((technician, index) => (
+                            <div key={technician.id || index} className="border-b pb-4 mb-4 last:border-none last:pb-0">
+                                <div className="flex items-center gap-4">
+                                    <img className="w-16 h-16 rounded-full shadow-lg" src={tecpro} alt="Technician" />
+                                    <div>
+                                        <h5 className="text-lg font-medium text-gray-900 dark:text-white">{technician.fullName}</h5>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">📞 {technician.phoneNumber}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">🛠 {technician.serviceName}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">📍 Distance: {technician.distance?.toFixed(2)} meters</p>
+                                    </div>
+                                </div>
+                                <div className="flex mt-3">
+                                    <button
+                                        className={`px-4 py-2 text-white ${loading ? 'bg-gray-500' : 'bg-blue-700'} rounded-lg hover:bg-blue-800`}
+                                        onClick={async () => {
+                                            setLoading(true);
+
+                                            if (isCanceled) {
+                                                // Only update technician
+                                                await updateTechnical(technician.id);
+                                            } else {
+                                                // Only for new request flow
+                                                await handleSelectTechnician(technician.id);
+                                                await handleContinue();
+                                            }
+
+                                            handleRequestClick(); // Starts 5-minute status check
+                                            setShowCard(false);
+                                            setLoading(false);
+                                        }}
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Processing...' : isCanceled ? 'Update' : 'Request'}
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Button to Fetch Nearest Technician */}
+                        <button
+                            onClick={handleGetNearestTechnical}
+                            className="mt-4 w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800"
+                        >
+                            Show Nearest Technician
+                        </button>
+
+                        {/* Display the Nearest Technician if Available */}
+                        {nearestTechnical && (
+                            <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white text-center">Nearest Technician</h3>
+                                <div className="flex items-center gap-4 mt-2">
+                                    <img className="w-16 h-16 rounded-full shadow-lg" src={tecpro} alt="Technician" />
+                                    <div>
+                                        <h5 className="text-lg font-medium text-gray-900 dark:text-white">{nearestTechnical.fullName}</h5>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">📞 {nearestTechnical.phoneNumber}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">🛠 {nearestTechnical.serviceName}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">📍 Distance: {nearestTechnical.distance?.toFixed(2)} meters</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <button onClick={() => setShowCard(false)} className="mt-4 w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+
+        </div >
+        </div >
     );
 }

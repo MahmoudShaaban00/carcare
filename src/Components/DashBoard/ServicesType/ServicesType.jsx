@@ -5,8 +5,8 @@ import winch from '../../../assets/winch.jpg'
 export default function Services() {
     const [services, setServices] = useState([]);
     const [selectedService, setSelectedService] = useState(null);
-    const [selectedPrice, setSelectedPrice] = useState(0);
-    const [updateData, setUpdateData] = useState({ name: '', description: '', pictureUrl: '' });
+    // Removed selectedPrice and updateData since they were mostly for update
+    // If you want to keep them for something else, you can keep, but here I removed updateData for simplicity
 
     function replaceBaseUrl(imageUrl) {
         if (!imageUrl) return '';
@@ -31,7 +31,7 @@ export default function Services() {
         }
     }
 
-    // function to get service by id
+    // function to get service by id (only for viewing)
     async function getServiceById(id) {
         try {
             const token = localStorage.getItem('AdminToken');
@@ -43,41 +43,11 @@ export default function Services() {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setSelectedService(data);
-            setUpdateData({ name: data.name, description: data.description, pictureUrl: data.pictureUrl });
-            setSelectedPrice(0);
+            // No need to set updateData anymore
         } catch (error) {
             console.error(`Error fetching service with ID ${id}:`, error);
             alert("Failed to fetch service. Please try again.");
         }
-    }
-
-    // function to delete service
-    async function updateService() {
-        try {
-            const token = localStorage.getItem('AdminToken');
-            if (!token) {
-                alert('Error: Token missing');
-                return;
-            }
-            await axios.put(
-                `https://carcareapp.runasp.net/api/ServiceTypes/Update/${selectedService.id}`,
-                updateData,
-                {
-                    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-                }
-            );
-            alert('Service updated successfully!');
-            getServices();
-            setSelectedService(null);
-        } catch (error) {
-            console.error("Error updating service:", error);
-            alert("Failed to update service. Please try again.");
-        }
-    }
-
-    // function to delete service
-    function handleChange(e) {
-        setUpdateData({ ...updateData, [e.target.name]: e.target.value });
     }
 
     useEffect(() => {
@@ -101,15 +71,12 @@ export default function Services() {
                             <div key={service.id} className="max-w-sm">
                                 {selectedService && selectedService.id === service.id ? (
                                     <div className="p-4 border rounded-lg shadow-lg bg-white">
-                                        <h3 className="text-2xl font-semibold">Edit Service</h3>
-                                        <input type="text" name="name" value={updateData.name} onChange={handleChange} className="w-full p-2 border rounded mt-2"/>
-                                        <textarea name="description" value={updateData.description}  onChange={handleChange} className="w-full p-2 border rounded mt-2"/>
-                                        <input type="text" name="pictureUrl" value={updateData.pictureUrl} onChange={handleChange} className="w-full p-2 border rounded mt-2"/>
-                                        <button onClick={updateService} className="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800">
-                                            Save Changes
-                                        </button>
+                                        <h3 className="text-2xl font-semibold">Service Details</h3>
+                                        <p className="mt-2"><strong>Name:</strong> {selectedService.name}</p>
+                                        <p className="mt-2"><strong>Description:</strong> {selectedService.description}</p>
+                                        <p className="mt-2"><strong>Picture URL:</strong> {selectedService.pictureUrl}</p>
                                         <button onClick={() => setSelectedService(null)} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800">
-                                            Cancel
+                                            Close
                                         </button>
                                     </div>
                                 ) : (
@@ -119,7 +86,7 @@ export default function Services() {
                                             <h5 className="mb-2 text-2xl font-bold tracking-tight text-blue-800">{service.name}</h5>
                                             <p className="mb-3 font-normal text-lg text-blue-800">{service.description}</p>
                                             <button onClick={() => getServiceById(service.id)} className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800">
-                                                View / Edit
+                                                View Details
                                             </button>
                                         </div>
                                     </div>

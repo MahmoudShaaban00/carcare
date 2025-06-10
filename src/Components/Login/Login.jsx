@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -8,7 +8,8 @@ import { jwtDecode } from "jwt-decode";
 import { AdminContext } from '../../Context/AdminContext';
 import { TechnicalContext } from '../../Context/TechnicalContext';
 import Swal from 'sweetalert2';
-import carlogin from '../../assets/carlogin.jpg';
+import logo from '../../assets/logo.png'; // Make sure to have your logo file here
+
 
 export default function Login() {
   const { setUserLogin, setUserId } = useContext(UserContext);
@@ -17,8 +18,11 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const [isLoading, setIsLoading] = useState(false);
+
 
   async function sendToApi(formValues) {
+    setIsLoading(true);
     try {
       const { data } = await axios.post('https://carcareapp.runasp.net/api/account/login', formValues, {
         headers: { 'Content-Type': 'application/json' }
@@ -35,6 +39,7 @@ export default function Login() {
           confirmButtonText: 'OK',
         });
 
+        // Store the token in localStorage based on user role
         if (userRole === "Admin") {
           localStorage.setItem("AdminToken", data.token);
           setAdminLogin(data.token);
@@ -66,6 +71,8 @@ export default function Login() {
         icon: 'error',
         confirmButtonText: 'OK',
       });
+      console.error('Login error:', error);
+      setIsLoading(false);
     }
   }
 
@@ -87,18 +94,22 @@ export default function Login() {
 
   return (
     <>
-      {/* Top navigation for Login/Register */}
-      <div className="w-full flex justify-center py-4 bg-white shadow-md bg-gradient-to-tr from-teal-400 to-teal-600">
-        <div className="space-x-10 text-lg font-medium ">
+      {/* Top navigation with logo */}
+      <div className="w-full flex justify-between items-center py-2 px-6 bg-[#0B4261]">
+        <div className="flex items-center">
+          <img src={logo} className="lg:w-[50px] w-[40px] lg:h-[50px] h-[40px] mr-2" alt="Logo" />
+          <h1 className="lg:text-3xl text-2xl text-white font-bold">CarCare</h1>
+        </div>
+        <div className="space-x-10 text-lg font-medium">
           <Link
             to="/login"
-            className={`pb-2 ${currentPath === "/login" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-600 hover:text-[#0B4261]"}`}
+            className={`pb-2 ${currentPath === "/login" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-100 hover:text-[#0B4261]"}`}
           >
             Login
           </Link>
           <Link
             to="/register"
-            className={`pb-2 ${currentPath === "/register" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-600 hover:text-[#0B4261]"}`}
+            className={`pb-2 ${currentPath === "/register" ? "border-b-2 border-[#0B4261] text-[#1a1b1b]" : "text-gray-100 hover:text-[#0B4261]"}`}
           >
             Register
           </Link>
@@ -107,75 +118,74 @@ export default function Login() {
 
       {/* Login Page Content */}
       <div className="min-h-screen bg-gradient-to-br from-[#d5d8da] to-[#0B4261] flex justify-center items-center p-4">
-  <div className="bg-white shadow-xl rounded-xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
-    {/* Left side image */}
-    <div className="w-full md:w-1/2 bg-gradient-to-tr from-teal-400 to-teal-600 flex items-center justify-center p-6 md:p-8">
-      <img
-        src={carlogin}
-        alt="Login Illustration"
-        className="w-full max-h-64 md:max-h-[90%] object-contain"
-      />
-    </div>
+        <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#0B4261] mb-2">Log in</h1>
+          <p className="text-gray-600 text-base md:text-lg mb-6">Nice to see you again</p>
 
-    {/* Right side form */}
-    <div className="w-full md:w-1/2 p-6 md:p-10">
-      <h1 className="text-3xl md:text-4xl font-bold text-[#0B4261] mb-2">Log in</h1>
-      <p className="text-gray-600 text-base md:text-lg mb-6">Nice to see you again</p>
+          <form onSubmit={formik.handleSubmit} className="space-y-5">
+            <div>
+              <input
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="tel"
+                name="phoneNumber"
+                id="phoneNumber"
+                value={formik.values.phoneNumber}
+                placeholder="Phone Number"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+              />
+              {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+                <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
+              )}
+            </div>
 
-      <form onSubmit={formik.handleSubmit} className="space-y-5">
-        <div>
-          <input
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            type="tel"
-            name="phoneNumber"
-            id="phoneNumber"
-            value={formik.values.phoneNumber}
-            placeholder="Phone Number"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
-          />
-          {formik.errors.phoneNumber && formik.touched.phoneNumber && (
-            <p className="text-sm text-red-600 mt-1">{formik.errors.phoneNumber}</p>
-          )}
+            <div>
+              <input
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                type="password"
+                name="password"
+                id="password"
+                value={formik.values.password}
+                placeholder="Password"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
+              />
+              {formik.errors.password && formik.touched.password && (
+                <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
+              )}
+            </div>
+
+     <button
+  type="submit"
+  className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg flex justify-center items-center"
+  disabled={isLoading}
+>
+  {isLoading ? (
+    <>
+      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      PROCESSING...
+    </>
+  ) : (
+    "LOGIN"
+  )}
+</button>
+          </form>
+
+          <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-600 mt-4 gap-2">
+            <p>
+              Don't have an account?{' '}
+              <Link to="/register" className="text-blue-600 hover:underline">
+                Create account
+              </Link>
+            </p>
+            <Link to="/forgetpassword" className="text-blue-600 hover:underline">
+              Forget Password
+            </Link>
+          </div>
         </div>
-
-        <div>
-          <input
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            type="password"
-            name="password"
-            id="password"
-            value={formik.values.password}
-            placeholder="Password"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-base"
-          />
-          {formik.errors.password && formik.touched.password && (
-            <p className="text-sm text-red-600 mt-1">{formik.errors.password}</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg"
-        >
-          LOGIN
-        </button>
-      </form>
-
-      <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-600 mt-4 gap-2">
-        <p>
-          Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Create account
-          </Link>
-        </p>
-        <Link to="/forgetpassword" className="text-blue-600 hover:underline">
-          Forget Password
-        </Link>
-      </div>
-    </div>
-     </div>
       </div>
     </>
   );
