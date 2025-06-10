@@ -48,6 +48,7 @@ import ProtectedRouteUser from './Components/ProtectedRoute/ProtectedRouteUser';
 import ProtectedRouteAdmin from './Components/ProtectedRoute/ProtectedRouteAdmin';
 import ProtectedRouteTechnical from './Components/ProtectedRoute/ProtectedRouteTechnical';
 import { useEffect } from 'react';
+import { ServicesProvider } from './Context/ServicesDashboard';
 
 function App() {
   // Initialize AOS (Animate On Scroll) library
@@ -111,7 +112,9 @@ function App() {
             <AdminContextProvider>
               <RequestsProvider>
                 <ContactProvider>
+                  <ServicesProvider>
                   <RouterProvider router={x}></RouterProvider>
+                  </ServicesProvider>
                 </ContactProvider>
               </RequestsProvider>
             </AdminContextProvider>

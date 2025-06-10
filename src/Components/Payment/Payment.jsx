@@ -60,7 +60,7 @@ const CheckoutForm = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:5000/payment", {
+      const response = await axios.post("https://stripe-production-ddc5.up.railway.app/payment", {
         paymentMethodId: paymentMethod.id,
         clientSecret,
         paymentIntentId,
