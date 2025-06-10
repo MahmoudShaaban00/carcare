@@ -3,14 +3,17 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from '../../api';
-import { toast } from "react-toastify"; // ✅ Toast import
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+// Stripe public key
 const stripePromise = loadStripe("pk_test_51QPMWrJqPNUV240JiWLMmVP7St5TrTBUlrY3jPdmSxCFRlFJPorrk4xgBLA4rYmocqEmgMuOmdAQXs0p0eSWzdw700pBnZfokd");
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,13 +28,14 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!stripe || !elements) return;
     setLoading(true);
 
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
-      console.error("❌ CardElement is missing");
-      toast.error("Payment form is incomplete.");
+      toast.error("❌ Payment form is incomplete.");
+      setLoading(false);
       return;
     }
 
@@ -41,51 +45,116 @@ const CheckoutForm = () => {
     });
 
     if (error) {
-      console.error("❌ Payment Method Error:", error);
       toast.error(error.message || "Payment method creation failed.");
       setLoading(false);
       return;
     }
 
-    let clientSecret = localStorage.getItem("clientSecret");
-    let paymentIntentId = localStorage.getItem("paymentIntentId");
+    const clientSecret = localStorage.getItem("clientSecret");
+    const paymentIntentId = localStorage.getItem("paymentIntentId");
 
     if (!clientSecret || !paymentIntentId) {
-      toast.error("No active payment session found.");
+      toast.error("❌ No active payment session found.");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await axiosInstance.post("https://stripe-production-ddc5.up.railway.app/payment", {
+      await axiosInstance.post("https://stripe-production-ddc5.up.railway.app/payment", {
         paymentMethodId: paymentMethod.id,
         clientSecret,
         paymentIntentId,
       });
 
-      console.log("✅ Payment Confirmation Response:", response.data);
-      toast.success("🎉 Payment successful!");
-      navigate("/requestsuser");
+      toast.success("🎉 Payment successful!", {
+        position: "top-center",
+        theme: "colored",
+      });
+
+      setTimeout(() => {
+        navigate("/requestsuser");
+      }, 2000);
 
     } catch (err) {
-      console.error("❌ Payment Confirmation Failed:", err.response?.data || err.message);
-      toast.error("Payment failed. Please try again.");
+      toast.error("❌ Payment failed. Please try again.");
     }
 
     setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-lg max-w-md mx-auto">
-      <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} className="block w-full p-2 border rounded" required />
-      <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="block w-full p-2 border rounded" required />
-      <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} className="block w-full p-2 border rounded" required />
-      <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="block w-full p-2 border rounded" required />
-      <CardElement options={{ hidePostalCode: true }} className="p-2 border rounded" />
-      <button type="submit" disabled={!stripe || loading} className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-        {loading ? "Processing..." : "Pay Now"}
-      </button>
-    </form>
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-5 border border-purple-300"
+        >
+          <h2 className="text-2xl font-bold text-purple-700 text-center">Secure Payment</h2>
+
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            required
+          />
+          <input
+            type="text"
+            name="address"
+            placeholder="Address"
+            value={formData.address}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            required
+          />
+
+          <div className="p-4 border rounded-lg bg-gray-50">
+            <CardElement options={{ hidePostalCode: true }} />
+          </div>
+
+          <button
+            type="submit"
+            disabled={!stripe || loading}
+            className="w-full bg-purple-600 text-white font-semibold py-2 rounded-lg hover:bg-purple-700 transition-all duration-300"
+          >
+            {loading ? "Processing..." : "Pay Now"}
+          </button>
+        </form>
+      </div>
+
+      {/* Toasts */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        pauseOnHover
+        theme="colored" // colorful toast
+      />
+    </>
   );
 };
 
