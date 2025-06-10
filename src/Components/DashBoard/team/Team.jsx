@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PhonePrefixChart from './PhonePrefixChart'; 
 import UserCountCard from './UserCountCard'; 
+import axiosInstance from '../../../api'; 
+
 
 export default function Team() {
   const theme = useTheme();
@@ -33,7 +35,7 @@ export default function Team() {
         return;
       }
 
-      let { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers', {
+      let { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -100,7 +102,7 @@ export default function Team() {
 
       const apiUrl = `https://carcareapp.runasp.net/api/DashBoard/DeleteUser/${userId}`;
 
-      const response = await axios.delete(apiUrl, {
+      const response = await axiosInstance.delete(apiUrl, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
 
@@ -144,7 +146,7 @@ export default function Team() {
 
       const apiUrl = `https://carcareapp.runasp.net/api/DashBoard/UpdateUser/${selectedRow.id}`;
 
-      const response = await axios.put(apiUrl, { roles: selectedRoles },
+      const response = await axiosInstance.put(apiUrl, { roles: selectedRoles },
         {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         }
@@ -211,8 +213,6 @@ export default function Team() {
     console.log('Current Roles:', currentRoles);
     setOpenDialog(true);
   };
-
-
 
   useEffect(() => {
     getDataUser();

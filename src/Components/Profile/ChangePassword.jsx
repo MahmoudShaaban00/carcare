@@ -3,6 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../api'; 
+
 
 export default function ChangePassword() {
 
@@ -17,7 +19,7 @@ export default function ChangePassword() {
         return;
       }
 
-      const { data } = await axios.post("https://carcareapp.runasp.net/api/Account/Change-Password", formValues,
+      const { data } = await axiosInstance.post("https://carcareapp.runasp.net/api/Account/Change-Password", formValues,
         {
           headers: {
             Authorization: `Bearer ${token}`,

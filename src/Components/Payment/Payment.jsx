@@ -2,7 +2,7 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom"; // ✅ Step 1
-
+import axiosInstance from '../../api'; 
 import axios from "axios";
 
 const stripePromise = loadStripe("pk_test_51QPMWrJqPNUV240JiWLMmVP7St5TrTBUlrY3jPdmSxCFRlFJPorrk4xgBLA4rYmocqEmgMuOmdAQXs0p0eSWzdw700pBnZfokd");
@@ -60,7 +60,7 @@ const CheckoutForm = () => {
     }
   
     try {
-      const response = await axios.post("https://stripe-production-ddc5.up.railway.app/payment", {
+      const response = await axiosInstance.post("https://stripe-production-ddc5.up.railway.app/payment", {
         paymentMethodId: paymentMethod.id,
         clientSecret,
         paymentIntentId,

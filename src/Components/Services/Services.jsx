@@ -5,6 +5,8 @@ import tecpro from '../../assets/tecpro.jpg';
 import Map from "../Map/Map";
 import { LocationContext } from '../../Context/LocationContext';
 import { Link, useNavigate } from 'react-router-dom';
+import axiosInstance from '../../api'; 
+
 
 export default function Services() {
 
@@ -88,7 +90,7 @@ export default function Services() {
                 alert('Error: Token missing');
                 return;
             }
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetAll`, {
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetAll`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -108,7 +110,7 @@ export default function Services() {
                 alert('Error: Token missing');
                 return;
             }
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetServiceType/${id}`, {
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetServiceType/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -212,7 +214,7 @@ export default function Services() {
         console.log("Final Selected Data:", selectedServiceData);
 
         try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 "https://carcareapp.runasp.net/api/ServiceRequest/CreateRequestManually",
                 selectedServiceData,
                 {
@@ -256,7 +258,7 @@ export default function Services() {
                 return;
             }
 
-            const { data } = await axios.get(
+            const { data } = await axiosInstance.get(
                 `https://carcareapp.runasp.net/api/ServiceRequest/GetAvailableTechincals?serviceid=${serviceId}&userlongitude=${longitude}&userlatitude=${latitude}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -283,7 +285,7 @@ export default function Services() {
                 return;
             }
 
-            let { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceRequest/GetNearestTechincals?serviceId=${serviceId}&UserLatitude=${latitude}&UserLongitude=${longitude}`, {
+            let { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceRequest/GetNearestTechincals?serviceId=${serviceId}&UserLatitude=${latitude}&UserLongitude=${longitude}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-type': 'application-json',
@@ -318,7 +320,7 @@ export default function Services() {
         const RequestId = localStorage.getItem('RequestId');
 
         try {
-            const response = await axios.get(`https://carcareapp.runasp.net/api/ServiceRequest/CheckStatus/${RequestId}`, {
+            const response = await axiosInstance.get(`https://carcareapp.runasp.net/api/ServiceRequest/CheckStatus/${RequestId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -356,7 +358,7 @@ export default function Services() {
                 return;
             }
 
-            const { data } = await axios.put(
+            const { data } = await axiosInstance.put(
                 `https://carcareapp.runasp.net/api/ServiceRequest/Update-Technical-in-Request?RequestId=${requestId}&ServiceId=${serviceId}&TechnicalId=${technicalId}`,
                 {},
                 {

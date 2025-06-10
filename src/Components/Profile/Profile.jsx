@@ -8,6 +8,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import axios from 'axios';
 import { UserContext } from '../../Context/UserContext';
+import axiosInstance from '../../api';
 
 
 export default function Profile() {
@@ -38,7 +39,7 @@ export default function Profile() {
       const token = localStorage.getItem("UserToken");
       if (!token) return;
 
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/Account/GetCurrentUserByRole",
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/Account/GetCurrentUserByRole",
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -70,7 +71,7 @@ export default function Profile() {
 
       const updatedData = { fullName: formData.fullName, email: formData.email, phoneNumber: formData.phoneNumber };
 
-      await axios.put("https://carcareapp.runasp.net/api/account/UpdateAppUser", updatedData,
+      await axiosInstance.put("https://carcareapp.runasp.net/api/account/UpdateAppUser", updatedData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,7 +112,7 @@ export default function Profile() {
 
       console.log('Feedback Data:', feedbackData);
 
-      const response = await axios.post('https://carcareapp.runasp.net/api/FeedBack/CreateFeedBack', feedbackData, {
+      const response = await axiosInstance.post('https://carcareapp.runasp.net/api/FeedBack/CreateFeedBack', feedbackData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, useTheme } from '@mui/material';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
+import axiosInstance from '../../../api'; 
+
 
 export default function PhonePrefixChart() {
   const theme = useTheme();
   const [users, setUsers] = useState([]);
 
+  // Fetch users from the API
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -16,7 +19,7 @@ export default function PhonePrefixChart() {
           return;
         }
 
-        const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers', {
+        const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers', {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -32,6 +35,7 @@ export default function PhonePrefixChart() {
     fetchUsers();
   }, []);
 
+  // Prepare data for the bar chart
   const prepareChartData = () => {
     const validPrefixes = ['010', '011', '012', '015'];
     const prefixCounts = validPrefixes.reduce((acc, prefix) => {

@@ -4,6 +4,7 @@ import tecpro from '../../../assets/tecpro.jpg'
 import RequestsPieChart from '../Requests/RequestsPieChar'; // Adjust the import path as necessary
 import RequestCountCard from './RequestCountCard';
 import { Grid } from '@mui/material';
+import axiosInstance from '../../../api'; 
 
 export default function Requests() {
     const [requests, setRequests] = useState([]);
@@ -34,7 +35,7 @@ export default function Requests() {
             console.log("✅ UserId:", userId);
             console.log("✅ Token Admin:", token);
 
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/DashBoard/GetUserRequests`, {
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/DashBoard/GetUserRequests`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import tecpro from "../../assets/tecpro.jpg";
+import axiosInstance from "../../api"; 
 
 // Star rating component
 const StarRating = ({ value, onChange }) => {
@@ -34,7 +35,7 @@ export default function RequestsUser() {
       const token = localStorage.getItem("UserToken");
       if (!token) throw new Error("UserToken not found in localStorage");
 
-      const { data } = await axios.get(
+      const { data } = await axiosInstance.get(
         `https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequests?pageSize=6&pageIndex=${currentPage}`,
         {
           headers: {
@@ -58,7 +59,7 @@ export default function RequestsUser() {
       const token = localStorage.getItem("UserToken");
       if (!token) throw new Error("UserToken not found in localStorage");
 
-      await axios.delete(`https://carcareapp.runasp.net/api/ServiceRequest/DeleteRequestForUser/${requestId}`, {
+      await axiosInstance.delete(`https://carcareapp.runasp.net/api/ServiceRequest/DeleteRequestForUser/${requestId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -79,7 +80,7 @@ export default function RequestsUser() {
       const token = localStorage.getItem("UserToken");
       if (!token) throw new Error("UserToken not found in localStorage");
 
-      const { data } = await axios.post(
+      const { data } = await axiosInstance.post(
         `https://carcareapp.runasp.net/api/account/RateTechnical?rate=${rate}&technicalid=${technicalid}`,
         {},
         {

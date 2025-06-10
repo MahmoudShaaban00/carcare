@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import axiosInstance from '../../api'; // Adjust the import path as necessary
 
 export default function Cars() {
     const [cars, setCars] = useState([]);
@@ -15,7 +16,7 @@ export default function Cars() {
                 return;
             }
 
-            const { data } = await axios.get(`https://carcareapp.runasp.net/api/Vehicle/Get-All-Vehicle-For-SpecificUser`, {
+            const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/Vehicle/Get-All-Vehicle-For-SpecificUser`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { userId },
             });
@@ -35,7 +36,7 @@ export default function Cars() {
                 return;
             }
 
-            await axios.delete(`https://carcareapp.runasp.net/api/DashBoard/Delete-Vehicle/${carId}`, {
+            await axiosInstance.delete(`https://carcareapp.runasp.net/api/DashBoard/Delete-Vehicle/${carId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

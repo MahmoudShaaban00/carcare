@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import tecpro from '../../assets/tecpro.jpg'
 import UserLocationMap from "../Map/UserLocationMap"; // Adjust the import path as necessary
 import { useRequests } from '../../Context/RequestsTechContext';
+import axiosInstance from '../../api'; 
+
 
 export default function RequestsSorted() {
 
@@ -27,7 +29,7 @@ export default function RequestsSorted() {
       }
       console.log(token)
 
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllPendingRequestsToTechnical",
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllPendingRequestsToTechnical",
         {
           headers: {
             "Content-Type": "application/json",

@@ -5,6 +5,8 @@ import { GrCircleInformation } from 'react-icons/gr';
 import { IoIosLogOut } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import { AdminContext } from '../../Context/AdminContext';
+import axiosInstance from '../../api'; 
+
 export default function ProfileAdmin() {
 
     let {setAdminLogin} = useContext(AdminContext);
@@ -18,7 +20,7 @@ export default function ProfileAdmin() {
             const token = localStorage.getItem("AdminToken");
             if (!token) return;
 
-            const { data } = await axios.get("https://carcareapp.runasp.net/api/Account/GetCurrentUserByRole",
+            const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/Account/GetCurrentUserByRole",
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import axios from 'axios';
+import axiosInstance from '../api';
 
 const ContactContext = createContext();
 
@@ -17,7 +18,7 @@ export const ContactProvider = ({ children }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('AdminToken');
-      const { data } = await axios.post(
+      const { data } = await axiosInstance.post(
         'https://carcareapp.runasp.net/api/DashBoard/CreateMessage',
         {
           message: message,
@@ -44,7 +45,7 @@ export const ContactProvider = ({ children }) => {
   const getContactMessages = async () => {
     try {
       const token = localStorage.getItem('AdminToken');
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
+      const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -61,7 +62,7 @@ export const ContactProvider = ({ children }) => {
   const deleteMessage = async (id) => {
     try {
       const token = localStorage.getItem('AdminToken');
-      const { data } = await axios.delete(
+      const { data } = await axiosInstance.delete(
         `https://carcareapp.runasp.net/api/DashBoard/DeleteMessage/${id}`,
         {
           headers: {
@@ -82,7 +83,7 @@ export const ContactProvider = ({ children }) => {
   const updateContactMessage = async (id, updatedMessage, updatedMessageFor) => {
     try {
       const token = localStorage.getItem('AdminToken');
-      const { data } = await axios.put(
+      const { data } = await axiosInstance.put(
         `https://carcareapp.runasp.net/api/DashBoard/UpdateMessage/${id}`,
         {
           message: updatedMessage,
@@ -112,7 +113,7 @@ export const ContactProvider = ({ children }) => {
   const getContactMessagesUser = async () => {
     try {
       const token = localStorage.getItem('UserToken');
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
+      const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -131,7 +132,7 @@ export const ContactProvider = ({ children }) => {
   const getContactMessagesTechnical = async () => {
     try {
       const token = localStorage.getItem('TechnicalToken');
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
+      const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/Contact/GetAllMessages', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

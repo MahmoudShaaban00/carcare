@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ResponsivePie } from '@nivo/pie';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import axiosInstance from '../../../api'; 
+
 
 export default function TechnicalPrefixChart() {
   const [dataTechnicals, setDataTechnicals] = useState([]);
 
+  // Fetch technical data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
+        const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
         if (Array.isArray(data)) {
           setDataTechnicals(data);
         }
@@ -21,6 +24,7 @@ export default function TechnicalPrefixChart() {
     fetchData();
   }, []);
 
+  // Prepare data for the pie chart
   const prepareChartData = () => {
     const validPrefixes = ['010', '011', '012', '015'];
     const prefixCounts = validPrefixes.reduce((acc, prefix) => {

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import axiosInstance from '../api';
 
 export const ServicesContext = createContext();
 
@@ -9,91 +10,112 @@ export function ServicesProvider({ children }) {
   const [updateData, setUpdateData] = useState({ name: '', description: '', pictureUrl: '' });
   const [createData, setCreateData] = useState({ name: '', description: '' });
   const [imageFile, setImageFile] = useState(null);
+  const [updateImageFile, setUpdateImageFile] = useState(null);
 
-  function replaceBaseUrl(imageUrl) {
-    if (!imageUrl) return '';
-    return imageUrl.replace('localhost:7225', 'carcareapp.runasp.net');
-  }
+  const BASE_URL = 'https://carcareapp.runasp.net';
 
   async function getServices() {
     try {
       const token = localStorage.getItem('AdminToken');
-      if (!token) {
-        alert('Error: Token missing');
-        return;
-      }
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/ServiceTypes/GetAll', {
+      if (!token) return alert('Error: Token missing');
+
+      const { data } = await axiosInstance.get(`${BASE_URL}/api/ServiceTypes/GetAll`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setServices(data);
+      console.log('Fetched services:', data);
+
+      // Ensure pictureUrl is absolute
+      const updatedData = data.map(service => ({
+        ...service,
+        pictureUrl: service.pictureUrl?.startsWith('http')
+          ? service.pictureUrl
+          : `${BASE_URL}/${service.pictureUrl}`,
+      }));
+
+      setServices(updatedData);
     } catch (error) {
       console.error('Error fetching services:', error);
-      alert('Failed to fetch services. Please try again.');
+      alert('Failed to fetch services.');
     }
   }
 
   async function getServiceById(id) {
     try {
       const token = localStorage.getItem('AdminToken');
-      if (!token) {
-        alert('Error: Token missing');
-        return;
-      }
-      const { data } = await axios.get(`https://carcareapp.runasp.net/api/ServiceTypes/GetServiceType/${id}`, {
+      if (!token) return alert('Error: Token missing');
+
+      const { data } = await axiosInstance.get(`${BASE_URL}/api/ServiceTypes/GetServiceType/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setSelectedService(data);
-      setUpdateData({ name: data.name, description: data.description, pictureUrl: data.pictureUrl });
+      setUpdateData({
+        name: data.name,
+        description: data.description,
+        pictureUrl: data.pictureUrl?.startsWith('http')
+          ? data.pictureUrl
+          : `${BASE_URL}/${data.pictureUrl}`,
+      });
     } catch (error) {
-      console.error(`Error fetching service with ID ${id}:`, error);
-      alert('Failed to fetch service. Please try again.');
+      console.error(`Error fetching service ${id}:`, error);
+      alert('Failed to fetch service.');
     }
   }
 
   async function updateService() {
     try {
       const token = localStorage.getItem('AdminToken');
-      if (!token) {
-        alert('Error: Token missing');
-        return;
+      if (!token || !selectedService) return alert('Error: Missing data');
+
+      const formData = new FormData();
+      formData.append('Name', updateData.name.trim());
+      formData.append('Description', updateData.description.trim());
+      if (updateImageFile) {
+        formData.append('PictureUrl', updateImageFile);  // <-- key changed here
       }
-      await axios.put(
-        `https://carcareapp.runasp.net/api/ServiceTypes/Update/${selectedService.id}`,
-        updateData,
+
+      await axiosInstance.put(
+        `${BASE_URL}/api/DashBoard/Update-Service-Type/${selectedService.id}`,
+        formData,
         {
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
         }
       );
+
       alert('Service updated successfully!');
       getServices();
       setSelectedService(null);
+      setUpdateImageFile(null);
     } catch (error) {
       console.error('Error updating service:', error);
-      alert('Failed to update service. Please try again.');
+      alert('Failed to update service.');
     }
   }
 
-  const handleDeleteService = async (id) => {
-    const token = localStorage.getItem('AdminToken');
-    if (!token) {
-      alert('❌ Admin token is missing.');
-      return;
-    }
+ const handleDeleteService = async (id) => {
+  const token = localStorage.getItem('AdminToken');
+  if (!token) return alert('Token missing');
 
-    if (!window.confirm('Are you sure you want to delete this service?')) return;
+  if (!window.confirm('Are you sure you want to delete this service?')) return;
 
-    try {
-      await axios.delete(`https://carcareapp.runasp.net/api/DashBoard/Delete-ServiceType/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert('✅ Service deleted successfully.');
-      setServices((prev) => prev.filter((service) => service.id !== id));
-      getServices();
-    } catch (error) {
-      console.error('Error deleting service:', error.response);
-      alert(error.response?.data?.message || '❌ Failed to delete service.');
-    }
-  };
+  try {
+    const url = `${BASE_URL}/api/DashBoard/Delete-ServiceType/${id}`;
+    console.log('Deleting service with URL:', url);
+
+    await axiosInstance.delete(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    alert('Service deleted');
+    getServices();
+  } catch (error) {
+    console.error('Delete error:', error);
+    alert('Failed to delete service.');
+  }
+};
 
   function handleChange(e) {
     setUpdateData({ ...updateData, [e.target.name]: e.target.value });
@@ -107,28 +129,25 @@ export function ServicesProvider({ children }) {
     setImageFile(e.target.files[0]);
   }
 
+  function handleUpdateFileChange(e) {
+    setUpdateImageFile(e.target.files[0]);
+  }
+
   async function createService() {
     const token = localStorage.getItem('AdminToken');
-    if (!token) {
-      alert('Error: Token missing');
-      return;
-    }
-    if (!createData.name.trim() || !createData.description.trim()) {
-      alert('Name and Description are required.');
-      return;
-    }
-    if (!imageFile) {
-      alert('Please select an image file.');
-      return;
+    if (!token) return alert('Token missing');
+
+    if (!createData.name.trim() || !createData.description.trim() || !imageFile) {
+      return alert('All fields including image are required.');
     }
 
     try {
       const formData = new FormData();
       formData.append('Name', createData.name.trim());
       formData.append('Description', createData.description.trim());
-      formData.append('PictureFile', imageFile);
+      formData.append('PictureUrl', imageFile);  // <-- key here is PictureUrl as well
 
-      await axios.post('https://carcareapp.runasp.net/api/DashBoard/Create-Service-Type', formData, {
+      await axios.post(`${BASE_URL}/api/DashBoard/Create-Service-Type`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -140,30 +159,28 @@ export function ServicesProvider({ children }) {
       setImageFile(null);
       getServices();
     } catch (error) {
-      console.error('Error creating service:', error.response?.data || error.message);
-      alert('Failed to create service. Please try again.');
+      console.error('Create error:', error);
+      alert('Failed to create service.');
     }
   }
-
-  useEffect(() => {
-    getServices();
-  }, []);
 
   return (
     <ServicesContext.Provider
       value={{
+        getServices,
         services,
         selectedService,
         updateData,
+        updateImageFile,
         createData,
         imageFile,
-        replaceBaseUrl,
         getServiceById,
         updateService,
         handleDeleteService,
-        handleChange,
+        handleUpdateChange: handleChange,
         handleCreateChange,
         handleFileChange,
+        handleUpdateFileChange,
         createService,
         setSelectedService,
       }}

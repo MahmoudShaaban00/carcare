@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import axios from 'axios';
+import axiosInstance from '../../../api'; 
+
 
 export default function TechnicalCountCard() {
   const [technicalCount, setTechnicalCount] = useState(0);
@@ -8,7 +10,7 @@ export default function TechnicalCountCard() {
   // Fetch technical data
   const getDataTechnicals = async () => {
     try {
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
+      const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
       setTechnicalCount(data.length); // Set the count of technicals
       console.log('Fetched Technicals:', data);
     } catch (error) {

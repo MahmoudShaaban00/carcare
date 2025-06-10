@@ -1,6 +1,8 @@
 import {  useEffect, useState } from "react";
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
+import axiosInstance from '../../api'; 
+
 
 export default function FeedbackComponent () {
 
@@ -29,7 +31,7 @@ export default function FeedbackComponent () {
         return;
       }
   
-      const { data } = await axios.get(
+      const { data } = await axiosInstance.get(
         `https://carcareapp.runasp.net/api/FeedBack/GetFeedBack/${feedbackId}`,
         {
           headers: {
@@ -62,7 +64,7 @@ export default function FeedbackComponent () {
       const isConfirmed = window.confirm("Are you sure you want to delete this feedback?");
       if (!isConfirmed) return;
   
-      await axios.delete(
+      await axiosInstance.delete(
         `https://carcareapp.runasp.net/api/FeedBack/DeleteFeedBack/${feedbackId}`,
         {
           headers: {
@@ -107,7 +109,7 @@ export default function FeedbackComponent () {
   
       console.log('Feedback Data:', feedbackData);  
   
-      let { data } = await axios.put(
+      let { data } = await axiosInstance.put(
         `https://carcareapp.runasp.net/api/FeedBack/UpdateFeedBack/${feedbackId}`,
         feedbackData,
         {

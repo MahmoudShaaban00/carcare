@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import axiosInstance from "../api"; 
 
 const RequestsTechContext = createContext();
 
@@ -15,7 +16,7 @@ export const RequestsProvider = ({ children }) => {
   const getAllTechnicalRequests = async () => {
     try {
       const token = localStorage.getItem("TechnicalToken");
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical", {
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -33,7 +34,7 @@ export const RequestsProvider = ({ children }) => {
   const acceptRequest = async (id) => {
     try {
       const token = localStorage.getItem("TechnicalToken");
-      await axios.put(
+      await axiosInstance.put(
         `https://carcareapp.runasp.net/api/ServiceRequest/AcceptRequest/${id}`,
         {},
         {
@@ -55,7 +56,7 @@ export const RequestsProvider = ({ children }) => {
   const rejectRequest = async (id) => {
     try {
       const token = localStorage.getItem("TechnicalToken");
-      await axios.put(
+      await axiosInstance.put(
         `https://carcareapp.runasp.net/api/ServiceRequest/RejectRequest/${id}`,
         {},
         {
@@ -77,7 +78,7 @@ export const RequestsProvider = ({ children }) => {
   const completeRequest = async (id) => {
     try {
       const token = localStorage.getItem("TechnicalToken");
-      await axios.put(
+      await axiosInstance.put(
         `https://carcareapp.runasp.net/api/ServiceRequest/RejectRequest/${id}`,
         {},
         {
@@ -99,7 +100,7 @@ export const RequestsProvider = ({ children }) => {
   const activateTechnical = async () => {
     try {
       const token = localStorage.getItem("TechnicalToken");
-      await axios.put(
+      await axiosInstance.put(
         "https://carcareapp.runasp.net/api/ServiceRequest/TechincalBeActive",
         {},
         {
@@ -120,7 +121,7 @@ export const RequestsProvider = ({ children }) => {
   const deactivateTechnical = async () => {
     try {
       const token = localStorage.getItem("TechnicalToken");
-      await axios.put(
+      await axiosInstance.put(
         "https://carcareapp.runasp.net/api/ServiceRequest/TechincalBeInActive",
         {},
         {
@@ -145,7 +146,7 @@ export const RequestsProvider = ({ children }) => {
         alert("error of technical token ")
         return;
       }
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=1", {
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=1", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -168,7 +169,7 @@ export const RequestsProvider = ({ children }) => {
         alert("error of technical token ")
         return;
       }
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=2", {
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=2", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -191,7 +192,7 @@ export const RequestsProvider = ({ children }) => {
         alert("error of technical token ")
         return;
       }
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=3", {
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=3", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -215,7 +216,7 @@ export const RequestsProvider = ({ children }) => {
         alert("error of technical token ")
         return;
       }
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=4", {
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/ServiceRequest/GetAllRequestsToTechnical?status=4", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

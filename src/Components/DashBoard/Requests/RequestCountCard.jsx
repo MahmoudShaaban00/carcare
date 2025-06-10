@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, CardContent, Typography } from '@mui/material';
+import axiosInstance from '../../../api'; // Adjust the import path as necessary
 
 export default function RequestCountCard() {
   const [totalCount, setTotalCount] = useState(0); // Store total request count
@@ -20,7 +21,7 @@ export default function RequestCountCard() {
         return;
       }
 
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetUserRequests', {
+      const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetUserRequests', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

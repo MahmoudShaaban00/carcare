@@ -43,16 +43,20 @@ export default function Login() {
         if (userRole === "Admin") {
           localStorage.setItem("AdminToken", data.token);
           setAdminLogin(data.token);
+          localStorage.setItem("refreshToken", data.refreshToken);
+
           navigate("/control");
         } else if (userRole === "Technical") {
           localStorage.setItem("TechnicalToken", data.token);
           setTechnicalLogin(data.token);
           localStorage.setItem('tecId', data.id);
+          localStorage.setItem("refreshToken", data.refreshToken);
           navigate("/requeststechnical");
         } else {
           localStorage.setItem("UserToken", data.token);
           setUserLogin(data.token);
           localStorage.setItem("UserId", data.id);
+          localStorage.setItem("refreshToken", data.refreshToken);
           setUserId(data.id);
           navigate("/home");
         }
@@ -76,6 +80,7 @@ export default function Login() {
     }
   }
 
+  // Validation schema for formik
   const validationSchema = Yup.object().shape({
     phoneNumber: Yup.string()
       .matches(/^01[0125][0-9]{8}$/, 'Phone number is invalid')
@@ -83,6 +88,7 @@ export default function Login() {
     password: Yup.string().required('Password is required'),
   });
 
+  // Formik setup
   const formik = useFormik({
     initialValues: {
       phoneNumber: '',
@@ -155,23 +161,23 @@ export default function Login() {
               )}
             </div>
 
-     <button
-  type="submit"
-  className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg flex justify-center items-center"
-  disabled={isLoading}
->
-  {isLoading ? (
-    <>
-      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      PROCESSING...
-    </>
-  ) : (
-    "LOGIN"
-  )}
-</button>
+            <button
+              type="submit"
+              className="w-full py-3 bg-[#0B4261] text-white text-base rounded-lg hover:bg-blue-800 transition shadow-lg flex justify-center items-center"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  PROCESSING...
+                </>
+              ) : (
+                "LOGIN"
+              )}
+            </button>
           </form>
 
           <div className="flex flex-col sm:flex-row justify-between text-sm text-gray-600 mt-4 gap-2">

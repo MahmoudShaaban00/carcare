@@ -4,6 +4,7 @@ import {
     Box, Typography, Table, TableBody, TableCell, TextField,
     TableContainer, TableHead, TableRow, Paper, Button
 } from '@mui/material';
+import axiosInstance from '../../../api'; 
 
 export default function Vehicle() {
     const [vehicleData, setVehicleData] = useState({});
@@ -15,7 +16,7 @@ export default function Vehicle() {
     async function getUsers() {
         try {
             const token = localStorage.getItem("AdminToken");
-            const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers',
+            const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetUsers',
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -40,7 +41,7 @@ export default function Vehicle() {
             }
 
             const url = `https://carcareapp.runasp.net/api/DashBoard/Get-All-Vehicle?userid=${userId}`;
-            const { data } = await axios.get(url, {
+            const { data } = await axiosInstance.get(url, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -60,7 +61,7 @@ export default function Vehicle() {
         if (!window.confirm("Are you sure you want to delete this vehicle?")) return;
         try {
             const token = localStorage.getItem("AdminToken");
-            await axios.delete(`https://carcareapp.runasp.net/api/DashBoard/Delete-Vehicle/${vehicleId}`, {
+            await axiosInstance.delete(`https://carcareapp.runasp.net/api/DashBoard/Delete-Vehicle/${vehicleId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setVehicleData(prevState => {
@@ -101,7 +102,7 @@ export default function Vehicle() {
     
         try {
             const url = `https://carcareapp.runasp.net/api/DashBoard/Get-All-Vehicle?Search=${vinNumber}`; // Fixed string interpolation
-            const response = await axios.get(url, {
+            const response = await axiosInstance.get(url, {
                 headers: { Authorization: `Bearer ${token}` },
             });
         

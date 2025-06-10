@@ -5,6 +5,8 @@ import { FaRegEdit } from "react-icons/fa";
 import { GrCircleInformation } from 'react-icons/gr';
 import { IoIosLogOut } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../api'; 
+
 
 
 export default function ProfileTech() {
@@ -19,7 +21,7 @@ export default function ProfileTech() {
       const token = localStorage.getItem("TechnicalToken");
       if (!token) return;
 
-      const { data } = await axios.get("https://carcareapp.runasp.net/api/Account/GetCurrentUserByRole",
+      const { data } = await axiosInstance.get("https://carcareapp.runasp.net/api/Account/GetCurrentUserByRole",
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -56,7 +58,7 @@ export default function ProfileTech() {
         nationalId: formData.nationalId // Adding nationalId to the payload
       };
 
-      await axios.put("https://carcareapp.runasp.net/api/account/UpdateAppUser", updatedData,
+      await axiosInstance.put("https://carcareapp.runasp.net/api/account/UpdateAppUser", updatedData,
         {
           headers: {
             Authorization: `Bearer ${token}`,

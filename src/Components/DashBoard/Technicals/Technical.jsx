@@ -8,6 +8,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
 import TechnicalPrefixChart from './TechnicalPrefixChart';
 import TechnicalCountCard from './TechnicalCountCard';
+import axiosInstance from '../../../api'; 
+
 
 export default function Technical() {
   const theme = useTheme();
@@ -25,7 +27,7 @@ export default function Technical() {
   // Fetch technical data
   const getDataTechnicals = async () => {
     try {
-      const { data } = await axios.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
+      const { data } = await axiosInstance.get('https://carcareapp.runasp.net/api/DashBoard/GetTechnicals');
       if (Array.isArray(data)) setDataTechnicals(data);
       setTechnicalCount(data.length);
       console.log('Fetched Technicals:', data);
@@ -51,7 +53,7 @@ export default function Technical() {
       if (!token) return alert('Authentication error: Please log in again.');
 
       const url = `https://carcareapp.runasp.net/api/DashBoard/DeleteTechnical/${id}`;
-      const response = await axios.delete(url, {
+      const response = await axiosInstance.delete(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -79,7 +81,7 @@ export default function Technical() {
         .map(r => ({ id: r.id, name: r.name }));
 
       const url = `https://carcareapp.runasp.net/api/DashBoard/UpdateTechnical/${selectedTechnical.id}`;
-      const response = await axios.put(url, { roles: selectedRoles }, {
+      const response = await axiosInstance.put(url, { roles: selectedRoles }, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',

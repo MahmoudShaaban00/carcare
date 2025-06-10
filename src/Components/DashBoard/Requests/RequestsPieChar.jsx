@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ResponsivePie } from '@nivo/pie';
 import { Typography, Box, Card, CardContent } from '@mui/material';
+import axiosInstance from '../../../api'; 
 
 const RequestsPieChart = () => {
   const [requests, setRequests] = useState([]);
   const [error, setError] = useState(null);
 
+  // Fetch requests from the API
   const fetchRequests = async () => {
     try {
       const userId = localStorage.getItem('UserId');
@@ -17,7 +19,7 @@ const RequestsPieChart = () => {
         return;
       }
 
-      const { data } = await axios.get(`https://carcareapp.runasp.net/api/DashBoard/GetUserRequests`, {
+      const { data } = await axiosInstance.get(`https://carcareapp.runasp.net/api/DashBoard/GetUserRequests`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
