@@ -198,6 +198,7 @@ export default function RequestsTechnical() {
                 <img className="w-16 h-16 rounded-full shadow-lg" src={tecpro} alt="User" />
                 <div>
                   <h5 className="text-lg font-medium text-gray-900">{request.userName}</h5>
+                  <h5 className="text-lg font-medium text-gray-900">Id: {request.id}</h5>
                   <p className="text-sm text-gray-500">🛠 {request.techJop}</p>
                   <p className="text-sm text-gray-500">💲 ${request.servicePrice}</p>
                   <p className="text-sm text-gray-500">📍 Distance: {request.distance.toFixed(2)} km</p>

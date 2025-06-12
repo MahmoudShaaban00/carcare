@@ -5,7 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { GrCircleInformation } from 'react-icons/gr';
 import { IoIosLogOut } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import axiosInstance from '../../api'; 
+import axiosInstance from '../../api';
 
 
 
@@ -53,8 +53,8 @@ export default function ProfileTech() {
 
       const updatedData = {
         fullName: formData.fullName,
-        email: formData.email ,
-        phoneNumber: formData.phoneNumber ,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
         nationalId: formData.nationalId // Adding nationalId to the payload
       };
 
@@ -103,6 +103,9 @@ export default function ProfileTech() {
           <p className="text-gray-700">Email: {technicalData.email}</p>
           <p className="text-gray-700">Phone: {technicalData.phoneNumber}</p>
           <p className="text-gray-700">National ID: {technicalData.nationalId}</p>
+          <p className="text-gray-700">Profit: {technicalData.profit}$</p>
+          <p className="text-gray-700">techRate: {technicalData.techRate}</p>
+
 
           {/* edit profile */}
           <div className="flex justify-center  bg-blue-800 text-white w-28 rounded-xl p-2 mt-2 cursor-pointer" onClick={toggleEdit}>
@@ -149,7 +152,7 @@ export default function ProfileTech() {
           <span onClick={logOut} className="text-lg cursor-pointer">Logout</span>
         </div>
       </div>
-      
+
     </div>
   )
 }

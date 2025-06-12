@@ -22,6 +22,10 @@ export default function Navbar() {
         localStorage.removeItem("TechnicalToken");
         localStorage.removeItem("AdminToken");
         localStorage.removeItem("tecId");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("paymentIntentId");
+        localStorage.removeItem("clientSecret");
+        localStorage.removeItem("ServicePrice");
 
         setUserLogin(null);
         setTechnicalLogin(null);

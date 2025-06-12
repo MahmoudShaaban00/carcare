@@ -81,7 +81,7 @@ export const RequestsProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("TechnicalToken");
       await axiosInstance.put(
-        `https://carcareapp.runasp.net/api/ServiceRequest/RejectRequest/${id}`, // 🔁 double-check this endpoint
+        `https://carcareapp.runasp.net/api/ServiceRequest/CompleteRequest/${id}`, // 🔁 double-check this endpoint
         {},
         {
           headers: {

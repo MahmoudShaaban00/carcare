@@ -82,6 +82,9 @@ const CheckoutForm = () => {
     setLoading(false);
   };
 
+  // Retrieve and format service-related data from localStorage
+  const servicePrice = parseFloat(localStorage.getItem("ServicePrice") || "0").toFixed(2);
+
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">
@@ -90,6 +93,12 @@ const CheckoutForm = () => {
           className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-5 border border-purple-300"
         >
           <h2 className="text-2xl font-bold text-purple-700 text-center">Secure Payment</h2>
+
+          <p className="text-lg text-purple-600 text-center mb-2">
+            Total Amount: <span className="font-semibold">${servicePrice}</span>
+          </p>
+
+        
 
           <input
             type="text"
@@ -142,7 +151,6 @@ const CheckoutForm = () => {
         </form>
       </div>
 
-      {/* Toasts */}
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -152,7 +160,7 @@ const CheckoutForm = () => {
         rtl={false}
         pauseOnFocusLoss
         pauseOnHover
-        theme="colored" // colorful toast
+        theme="colored"
       />
     </>
   );

@@ -232,6 +232,7 @@ export default function Services() {
                 localStorage.setItem("paymentIntentId", paymentIntentId);
                 localStorage.setItem("RequestId", response.data.id);
                 localStorage.setItem("ServiceId", response.data.serviceTypeId);
+                localStorage.setItem("ServicePrice", response.data.servicePrice);
 
                 alert("✅ Service request created successfully!");
                 localStorage.removeItem("selectedTechnicianId");
@@ -442,7 +443,6 @@ export default function Services() {
                                         </div>
                                     )}
 
-
                                     {/* Tire Size options for Service 2 */}
                                     {selectedService.id === 2 && (
                                         <div className="mt-6 p-4 border rounded-lg shadow-lg bg-white">
@@ -566,7 +566,6 @@ export default function Services() {
                                             </div>
                                         </div>
                                     )}
-
 
                                     {/* oil options for Service 5 */}
                                     {selectedService.id === 5 && (
