@@ -27,6 +27,7 @@ export default function Navbar() {
         localStorage.removeItem("clientSecret");
         localStorage.removeItem("ServicePrice");
 
+        
         setUserLogin(null);
         setTechnicalLogin(null);
         setAdminLogin(null);
