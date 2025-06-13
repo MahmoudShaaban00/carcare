@@ -4,15 +4,21 @@ import { useContact } from '../../Context/ContactContext';
 export default function ContactTechnical() {
   const { getContactMessagesTechnical, contactMessageTechnical } = useContact();
   const [filter, setFilter] = useState('All'); // State for the filter
-  
+
+  // Fetch messages when component mounts
   useEffect(() => {
     getContactMessagesTechnical();
   }, []);
 
-  // Filter messages based on selected filter
-  const filteredMessages = contactMessageTechnical.filter((msg) => 
-    filter === 'All' || msg.messageFor === filter
-  );
+  // Debug log to verify data shape
+  useEffect(() => {
+    console.log('contactMessageTechnical:', contactMessageTechnical);
+  }, [contactMessageTechnical]);
+
+  // Ensure the messages are an array before filtering
+  const filteredMessages = Array.isArray(contactMessageTechnical)
+    ? contactMessageTechnical.filter((msg) => filter === 'All' || msg.messageFor === filter)
+    : [];
 
   return (
     <div className="px-6 py-10">
@@ -20,7 +26,7 @@ export default function ContactTechnical() {
         📨 Recent Contact Messages
       </h3>
 
-      {/* Filter Options */}
+      {/* Filter Buttons */}
       <div className="mb-4 flex justify-center space-x-4">
         <button
           className={`px-4 py-2 rounded-full ${filter === 'All' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
@@ -36,8 +42,9 @@ export default function ContactTechnical() {
         </button>
       </div>
 
+      {/* Messages Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {Array.isArray(filteredMessages) && filteredMessages.length > 0 ? (
+        {filteredMessages.length > 0 ? (
           filteredMessages.map((msg) => (
             <div
               key={msg.id}
