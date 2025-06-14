@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
+import Footer from "../Footer/FooterUser";
+import FooterTech from "../Footer/FooterTech";
 
 export default function Layout() {
   const location = useLocation();
@@ -35,17 +36,36 @@ export default function Layout() {
     "/verfiycode",
     "/resetpassword",
     "/control",
-    "/createcontact"
+    "/seservicestype",
+    "/createcontact",
+    "/requests",
+    "/profileadmin",
+  ];
+
+  const footerTechRoutes = [
+    "/requeststechnical",
+    "/requestspending",
+    "/requestssorted",
+    "/profiletech",
+    "/contacttechnical",
   ];
 
   const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
   const shouldShowFooter = !noFooterRoutes.includes(location.pathname);
+  const shouldShowFooterTech = footerTechRoutes.includes(location.pathname);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       {shouldShowNavbar && <Navbar />}
-      <Outlet />
-      {shouldShowFooter && <Footer />}
-    </>
+
+      {/* Main content grows to fill vertical space */}
+      <main className="flex-1">
+        <Outlet />
+      </main>
+
+      {/* Footer will stay at bottom even when content is empty */}
+      {shouldShowFooter && !shouldShowFooterTech && <Footer />}
+      {shouldShowFooterTech && <FooterTech />}
+    </div>
   );
 }

@@ -109,6 +109,7 @@ export default function Team() {
       if (response.status === 200) {
         setRows((prevRows) => prevRows.filter((row) => row.id !== userId));
         setOpenDialog(false);
+        alert('User deleted successfully');
       }
     } catch (error) {
       if (error.response?.status === 401) {
@@ -164,6 +165,7 @@ export default function Team() {
           )
         );
         setOpenDialog(false);
+             alert('User role updated successfully')
       }
     } catch (error) {
       console.error('Error updating user role:', error);
