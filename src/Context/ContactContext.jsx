@@ -13,7 +13,7 @@ export const ContactProvider = ({ children }) => {
   const [contactMessagesUser, setContactMessagesUser] = useState([]);
   const [contactMessageTechnical, setContactMessageTechnical] = useState({});
 
-  // Function to create a contact message
+  // Create a new contact message
   const createContact = async (e) => {
     e.preventDefault();
     try {
@@ -41,7 +41,7 @@ export const ContactProvider = ({ children }) => {
     }
   };
 
-  // Function to get contact messages
+  // Fetch all contact messages (admin)
   const getContactMessages = async () => {
     try {
       const token = localStorage.getItem('AdminToken');
@@ -58,7 +58,7 @@ export const ContactProvider = ({ children }) => {
     }
   };
 
-  // Function to delete a contact message
+  // Delete a contact message by ID
   const deleteMessage = async (id) => {
     try {
       const token = localStorage.getItem('AdminToken');
@@ -79,37 +79,38 @@ export const ContactProvider = ({ children }) => {
     }
   };
 
-  // Function to update a contact message
-  const updateContactMessage = async (id, updatedMessage, updatedMessageFor) => {
-    try {
-      const token = localStorage.getItem('AdminToken');
-      const { data } = await axiosInstance.put(
-        `https://carcareapp.runasp.net/api/DashBoard/UpdateMessage/${id}`,
-        {
-          message: updatedMessage,
-          messageFor: parseInt(updatedMessageFor), // 👈 Make sure it's a number (1, 0, or 3)
+  // Update a contact message by ID
+ const updateContactMessage = async (id, updatedMessage, updatedMessageFor) => {
+  try {
+    const token = localStorage.getItem('AdminToken');
+    const { data } = await axiosInstance.put(
+      `https://carcareapp.runasp.net/api/DashBoard/UpdateMessage/${id}`,
+      {
+        message: updatedMessage,
+        messageFor: parseInt(updatedMessageFor), // Ensure it's a number
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      setFeedback({ type: 'success', text: 'Message updated successfully!' });
-      setContactMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === id ? { ...msg, message: updatedMessage, messageFor: updatedMessageFor } : msg
-        )
-      );
-      return data;
-    } catch (error) {
-      setFeedback({ type: 'error', text: 'Failed to update message. Please try again.' });
-      console.error('Error updating contact message:', error);
-    }
-  };
+      }
+    );
 
-  // Function to get messages for user (not admin)
+    setFeedback({ type: 'success', text: 'Message updated successfully!' });
+
+    // Refresh messages from the server
+    getContactMessages();
+
+    return data;
+  } catch (error) {
+    setFeedback({ type: 'error', text: 'Failed to update message. Please try again.' });
+    console.error('Error updating contact message:', error);
+  }
+};
+
+
+  // Fetch contact messages for normal user
   const getContactMessagesUser = async () => {
     try {
       const token = localStorage.getItem('UserToken');
@@ -119,7 +120,7 @@ export const ContactProvider = ({ children }) => {
         },
       });
       setContactMessagesUser(data);
-      console.log("user contact",data);
+      console.log("user contact", data);
       return data;
     } catch (error) {
       console.error('Error fetching user contact messages:', error);
@@ -128,7 +129,7 @@ export const ContactProvider = ({ children }) => {
     }
   };
 
-  // Function to get messages for user (not admin)
+  // Fetch contact messages for technical user
   const getContactMessagesTechnical = async () => {
     try {
       const token = localStorage.getItem('TechnicalToken');
@@ -138,15 +139,14 @@ export const ContactProvider = ({ children }) => {
         },
       });
       setContactMessageTechnical(data);
-      console.log("technical contact",data);
+      console.log("technical contact", data);
       return data;
     } catch (error) {
-      console.error('Error fetching user contact messages:', error);
+      console.error('Error fetching technical contact messages:', error);
       alert('Error fetching contact messages. Please try again later.');
       throw error;
     }
   };
-
 
   return (
     <ContactContext.Provider

@@ -85,7 +85,7 @@ export default function Map() {
   };
 
   return (
-    <div style={{ width: "100%", height: "510px" }}>
+    <div style={{ width: "100%", height: "610px" }}>
       <MapContainer center={[30.06, 31.25]} zoom={13} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -96,12 +96,15 @@ export default function Map() {
         <LeafletRoutingMachine />
       </MapContainer>
 
-      <div className="flex justify-center items-center">
-        <button className="p-2 bg-red-700 text-white rounded mt-2"
-          onClick={handleSendCoordinates}>
-          Send Coordinates
-        </button>
-      </div>
+     <div className="absolute bottom left-1/2 transform -translate-x-1/2 z-[1000]">
+  <button
+    className="px-4 py-2 bg-red-700 text-white rounded shadow-md"
+    onClick={handleSendCoordinates}
+  >
+    Send Coordinates
+  </button>
+</div>
+
     </div>
   );
 }
