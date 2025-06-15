@@ -53,7 +53,7 @@ export default function ResetPassword() {
 
     return (
         <div className="bg-gradient-to-br from-[#d5d8da] to-[#0B4261] min-h-screen">
-            <div className='mt-10 place-items-center'>
+            <div className='pt-20 place-items-center'>
                 <h1 className='md:text-5xl text-3xl text-[#0B4261]'>Reset Password</h1>
                 <p className='text-lg font-semibold mt-2 text-[#0B4261]'>Enter your new password</p>
             </div>

@@ -160,7 +160,6 @@ export const RequestsProvider = ({ children }) => {
       console.log("Pending requests", data);
     } catch (err) {
       console.error("Error fetching pending requests:", err);
-      alert("Failed to fetch pending requests.");
     }
   };
 
@@ -183,7 +182,6 @@ export const RequestsProvider = ({ children }) => {
       console.log("In-progress requests", data);
     } catch (err) {
       console.error("Error fetching in-progress requests:", err);
-      alert("Failed to fetch in-progress requests.");
     }
   };
 
@@ -206,7 +204,6 @@ export const RequestsProvider = ({ children }) => {
       console.log("Completed requests", data);
     } catch (err) {
       console.error("Error fetching completed requests:", err);
-      alert("Failed to fetch completed requests.");
     }
   };
 
@@ -229,7 +226,6 @@ export const RequestsProvider = ({ children }) => {
       console.log("Canceled requests", data);
     } catch (err) {
       console.error("Error fetching canceled requests:", err);
-      alert("Failed to fetch canceled requests.");
     }
   };
 

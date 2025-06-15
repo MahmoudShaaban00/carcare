@@ -40,6 +40,7 @@ export default function Layout() {
     "/createcontact",
     "/requests",
     "/profileadmin",
+    "/map"
   ];
 
   const footerTechRoutes = [
@@ -48,6 +49,7 @@ export default function Layout() {
     "/requestssorted",
     "/profiletech",
     "/contacttechnical",
+    "/map"
   ];
 
   const shouldShowNavbar = !noNavbarRoutes.includes(location.pathname);
