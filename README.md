@@ -80,3 +80,10 @@
    ```bash
    git clone https://github.com/mahmoudshaaban00/carcare.git
    cd carcare
+
+   ### 📦 Steps to Run the Project Locally
+
+1. **Install Node.js**
+
+   Download and install it from: https://nodejs.org
+   and write in cmd or powreshell "npm run dev"
