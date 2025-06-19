@@ -86,4 +86,4 @@
 1. **Install Node.js**
 
    Download and install it from: https://nodejs.org
-   and write in cmd or powreshell "npm run dev"
+   and write in cmd or powershell "npm run dev"
