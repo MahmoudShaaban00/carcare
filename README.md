@@ -10,6 +10,17 @@
 
 ---
 
+---
+
+## Test User Account
+
+You can use the following test user credentials to log in and explore the app:
+
+- **Phone:** 01000405726 
+- **Password:** 01000405726
+
+---
+
 ## 🛠 Features
 
 ### 🚘 Paid Services
